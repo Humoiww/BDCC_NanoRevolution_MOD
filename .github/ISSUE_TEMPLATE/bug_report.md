@@ -6,14 +6,14 @@ labels: bug
 
 **Describe the bug**
 A clear and concise description of what the bug is. 
-There's usually two kinds of bugs, please specific which kind of bug you meet: 
+There are usually two kinds of bugs, please mention which kind of bug you meet: 
 program bug:
 The game accidentally crash/not behave normal in some condition.
 
 story bug:
-Some plot in this mod is not logically correct, possible out of character. 
+a plot (or plots) in this mod is not logically correct, possible out of character. 
 If you meet this, please clarify why you think this is not correct.
-If you think some stories are just too sucks and you don't like it, please choose feature request to report. Thanks owo!
+If you think some stories are just too sucks `:(` and you don't like it, please choose feature request to report. Thanks owo!
 
 **To Reproduce**
 Just clarify how do you trigger this bug.
