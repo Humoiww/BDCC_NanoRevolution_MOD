@@ -7,6 +7,10 @@ func registerTriggers(es):
 	es.addTrigger(self, Trigger.HighExposureInmateEvent)
 
 func react(_triggerID, _args):
+	if(!getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false)):
+		runScene("NanoExposureForceCheckScene")
+		return true
+
 	var encounterLevel = RNG.randi_range(0, 5)
 	if(_args.size() > 0):
 		encounterLevel = _args[0]

@@ -43,7 +43,6 @@ func onDynamicNpcCreation(_npc, _args):
 	var _breasts = _npc.getBodypart(BodypartSlot.Breasts)
 	if(_breasts.size > BreastsSize.FOREVER_FLAT):
 		if(_breasts.size < BreastsSize.O):
-			
 			_breasts.size = BreastsSize.O
 	else:
 		var NewBreasts = GlobalRegistry.createBodypart("humanbreasts")

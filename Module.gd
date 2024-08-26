@@ -8,6 +8,12 @@ func getFlags():
 		"NanoCheckHappened": flag(FlagType.Bool),
 		"NanoAttackSceneHappened": flag(FlagType.Bool),
 		"NanoCraftingTableEnabled": flag(FlagType.Bool),
+		"NanoMeetHumoi": flag(FlagType.Bool),
+		"NanoAndroidMaxCockSize": flag(FlagType.Number),
+		"NanoAndroidMinCockSize": flag(FlagType.Number),
+		"NanoAndroidMaxCupSize": flag(FlagType.Number),
+		"NanoAndroidMinCupSize": flag(FlagType.Number),
+		"NanoAndroidSpeciesDistr": flag(FlagType.Dict),
 	}
 
 func _init():
