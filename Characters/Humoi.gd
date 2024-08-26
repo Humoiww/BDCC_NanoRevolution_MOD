@@ -21,7 +21,7 @@ func _init():
 	}
 	
 	npcPersonality = {
-		PersonalityStat.Brat: 0.6,
+		PersonalityStat.Brat: 0.7,
 		PersonalityStat.Mean: -0.8,
 		PersonalityStat.Subby: 1.0,
 		PersonalityStat.Impatient: -0.6,
