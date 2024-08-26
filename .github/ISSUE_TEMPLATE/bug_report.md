@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report about bugs (or possible bugs) when you playing X3
+about: Create a report about bugs (or potential bugs) when you playing X3
 labels: bug
 ---
 
