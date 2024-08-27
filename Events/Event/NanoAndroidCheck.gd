@@ -9,6 +9,8 @@ func registerTriggers(es):
 
 func run(_triggerID, _args):
 	# saynn("Hello owo")
+	var allevents = GlobalRegistry.getEvents()
+	print(allevents)
 	var thePC = GM.pc
 	var pcColor = thePC.getBaseSkinColors()
 	print(thePC.getSpecies().has("nanoAndroid"))

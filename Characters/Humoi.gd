@@ -8,25 +8,22 @@ func _init():
 	npcBaseLust = 80
 	npcCharacterType = CharacterType.Inmate
 	
-	pickedSkin="SoftSpikySkin"
-	pickedSkinRColor=Color("ffecd5d0")
-	pickedSkinGColor=Color("ff7f4f45")
-	pickedSkinBColor=Color("ff8a8cac")
+	pickedSkin="MonsterGirl"
+	pickedSkinRColor=Color("ffffffff")
+	pickedSkinGColor=Color("ff227f81")
+	pickedSkinBColor=Color("ff43e0ec")
 	npcSkinData={
-		"head": {"skin": "NovaSkin","g": Color("ff0d0909"),"b": Color("ff8a6161"),},
-		"hair": {"r": Color("ff5a0e2e"),"g": Color("ffd165fd"),"b": Color("ff250202"),},
-		"ears": {"g": Color("ffac4545"),"b": Color("ffb615b7"),},
-		"penis": {"g": Color("ff9f2c90"),"b": Color("ffc41111"),},
-		"tail": {"skin": "ArconSkin","b": Color("ffb24695"),},
+		"head": {"skin": "EmptySkin","g": Color("ff0d0909"),"b": Color("ff8a6161"),},
+		"tail": {"skin": "CyberneticSkin","b": Color("ffb24695"),},
 	}
 	
 	npcPersonality = {
-		PersonalityStat.Brat: 0.5,
+		PersonalityStat.Brat: -1.0,
 		PersonalityStat.Mean: -0.8,
 		PersonalityStat.Subby: 1.0,
 		PersonalityStat.Impatient: -0.6,
 		PersonalityStat.Naive: -0.8,
-		PersonalityStat.Coward: -0.3,
+		PersonalityStat.Coward: -0.8,
 	}
 	
 	npcFetishes = {
@@ -57,7 +54,7 @@ func _init():
 		InterestTopic.SlimBody: Interest.KindaLikes,
 		InterestTopic.MediumBreasts: Interest.Likes,
 		InterestTopic.BigBreasts: Interest.ReallyLikes,
-		InterestTopic.LactatingBreasts: Interest.SlightlyLikes,
+		InterestTopic.LactatingBreasts: Interest.KindaLikes,
 		InterestTopic.StuffedPussy: Interest.Neutral,
 		InterestTopic.Pregnant: Interest.Neutral,
 		InterestTopic.StuffedThroat: Interest.KindaLikes,
@@ -91,7 +88,7 @@ func getGender():
 	return Gender.Androgynous
 	
 func getChatColor():
-	return "#E866f4"
+	return "#43e0ec"
 	
 func getSmallDescription() -> String:
 	return "A lilac fluffy dragon inmate. Holding a datapad for some reason."
@@ -110,16 +107,16 @@ func getFemininity() -> int:
 
 func createBodyparts():
 	giveBodypartUnlessSame(GlobalRegistry.createBodypart("dragonhead"))
-	giveBodypartUnlessSame(GlobalRegistry.createBodypart("overeyehair"))
-	giveBodypartUnlessSame(GlobalRegistry.createBodypart("dragonears"))
+	giveBodypartUnlessSame(GlobalRegistry.createBodypart("messyhair2"))
 	giveBodypartUnlessSame(GlobalRegistry.createBodypart("anthrobody"))
 	giveBodypartUnlessSame(GlobalRegistry.createBodypart("anthroarms"))
+	giveBodypartUnlessSame(GlobalRegistry.createBodypart("dragonhorns"))
 	giveBodypartUnlessSame(GlobalRegistry.createBodypart("wolfears"))
 	var breasts = GlobalRegistry.createBodypart("humanbreasts")
 	breasts.size = 10
 	giveBodypartUnlessSame(breasts)
 	var penis = GlobalRegistry.createBodypart("dragonpenis")
-	penis.lengthCM = 20
+	penis.lengthCM = 28
 	penis.ballsScale = 1
 	giveBodypartUnlessSame(penis)
 	giveBodypartUnlessSame(GlobalRegistry.createBodypart("vagina"))
