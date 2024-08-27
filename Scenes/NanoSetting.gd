@@ -1,7 +1,7 @@
 extends SceneBase
 
-var nanoSpeciesDict
-var events = GlobalRegistry.getEvents()
+var nanoSpeciesDict = {}
+var eventsDict = {}
 
 
 func are_keys_equal(dict1: Dictionary, dict2: Dictionary) -> bool:
@@ -134,8 +134,7 @@ func _run():
 
 		saynn("=============================================")
 
-		var allevents = GlobalRegistry.getEvents()
-		print(allevents)
+
 		saynn("Question 4:")
 
 		saynn("Now among all events when you walk around in cell area, you have probality to get frisked by nano guard.")

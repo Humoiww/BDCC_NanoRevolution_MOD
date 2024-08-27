@@ -9,8 +9,12 @@ func registerTriggers(es):
 
 func run(_triggerID, _args):
 	# saynn("Hello owo")
-	var allevents = GlobalRegistry.getEvents()
-	print(allevents)
+	# test even
+
+	var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]
+	for i in range(weighEvents.events.size()):
+		print(weighEvents.events[i].id)
+		print(weighEvents.weights[i])
 	var thePC = GM.pc
 	var pcColor = thePC.getBaseSkinColors()
 	print(thePC.getSpecies().has("nanoAndroid"))
