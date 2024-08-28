@@ -342,7 +342,7 @@ func _run():
 
 	if(state == "Alex_plain"):
 		saynn("[say=pc]It’s {pc.name}. I…[/say]")
-		saynn("[say=alexrynard]Shhh, stop talking, it's over, now I'm here. Sit down, and let's figure out what just happened.[/say]")
+		saynn("[say=alexrynard]Shhh, stop talking. It’s over now, and I’m here. Sit down, and let’s figure out what just happened.[/say]")
 		addButton("Sit","Explain every thing","Alex_explain")
 	if(state == "Alex_joke"):
 		saynn("[say=pc]Android {pc.inmateNumber}, what can I help you sir.[/say]")
@@ -350,40 +350,40 @@ func _run():
 		saynn("[say=pc]OK, OK! Sorry! Just kidding. I'm {pc.name}. You're Alex, my best friend.[/say]")
 		saynn("Alex hugs you tighter.")
 		saynn("[say=pc]Sorry, I..[/say]")
-		saynn("[say=alexrynard]Shhh, stop talking, it's over, now I'm here. Sit down, and let's figure out what just happened.[/say]")
+		saynn("[say=alexrynard]Shhh, stop talking. It’s over now, and I’m here. Sit down, and let’s figure out what just happened.[/say]")
 		addButton("Sit","Explain every thing","Alex_explain")
 	if(state == "Alex_explain"):
 		playAnimation(StageScene.Duo, "sit", {pc = "pc", npc="alexrynard",
 		})
 		saynn("You explain your thoughts and actions after entering the assembling room.")
 
-		saynn("[say=alexrynard]That's why we setup the restricted engineering area. “Curiosity kill the cat”, sometimes we use this to joke some feline colleagues or inmates, but it does important when we encounter something unfamiliar.[/say]")
+		saynn("[say=alexrynard]That's why we set up a restricted engineering area. \"Curiosity killed the cat.\" We sometimes use this to tease our feline coworkers, but it also serves as a reminder to be cautious when faced with something unfamiliar. Your curiosity really got you into trouble this time. You weren't meant to be in that area, and now look at what's happened.[/say]")
 		
-		saynn("You start to check your skin. It covered by some kind of shiny black goo like substance. You try to stretch these covering out, but it doesn’t work.")
+		saynn("You start inspecting your skin, now covered in some kind of shiny, black, goo-like substance. You try to stretch it out, but it doesn’t budge.")
 		
 		addButton("My Body?","Made of goo?","Alex_explain_2")
 
 	if(state == "Alex_explain_2"):
 
-		saynn("[say=alexrynard]Well, your old body. It became carbon-based fuel for your new silicon-based body. In other words, your entire body, including your brain, heart, etc, is replaced by nano systems. [/say]")
+		saynn("[say=alexrynard]Well, your old body? It’s been converted into carbon-based fuel for your new silicon-based form. In other words, your entire body—brain, heart, everything—has been replaced by nanosystems.[/say]")
 		
-		saynn("You feel that you are still in that nightmare. But your clearer mind makes you hard to doubt his intentions.")
+		saynn("You still feel like you’re trapped in that nightmare, but with a clearer mind, it’s hard to doubt his intentions.")
 		
 		saynn("[say=pc]Am I, I mean {pc.name}, dead?[/say]")
 
-		saynn("[say=alexrynard]Yes, and no. It's actually the Ship of Theseus paradox. It seems that you are just a nano duplicate of {pc.name} injected with {pc.hisHer} memory. But remember this, all of cells in our body will replace with new cells at least once every ten years. And this nano assembling process actually simulates this. So, theoratically, you are still alive, just change the body material.[/say]")
+		saynn("[say=alexrynard]Yes and no. It’s like the Ship of Theseus paradox. You might seem like just a nano-duplicate of {pc.name} with {pc.hisHer} memories, but consider this: all the cells in our bodies are replaced at least once every ten years. This nano-assembly process just speeds that up. So, theoretically, you’re still alive—you’ve just changed the material of your body.[/say]")
 
-		saynn("Seeing you are still somewhat confused, Alex added")
+		saynn("Seeing you are still a bit confused, Alex added")
 
-		saynn("[say=alexrynard]The assembling machine you encoutered, is actually a beta version of current assembling line, which can generate nano android perfectly simulate living thought, but in the end of test, we just notice that this plan actually require a living subject. Therefore, we pause this plan, and create less vivid, but more reliable nano Android[/say]")
+		saynn("[say=alexrynard]The assembly machine you encountered is actually a beta version of our current production line. It can generate nano-androids that perfectly simulate living thoughts. However, at the end of testing, we realized that this process actually requires a living subject. So, we paused that plan and instead created less vivid, but more reliable—and, well, ethically correct—nano-androids.[/say]")
 
 		saynn("[say=pc]So I'm the only one.[/say]")
 
-		saynn("[say=alexrynard]Yes, you are the prototype of this version. Luckily, that beta version works, and you still keep your memory. And since this prototype is design for simulating intelligent creature. You can still react with different outside stimulus as before.[/say]")
+		saynn("[say=alexrynard]Yes, you are the prototype of this version. Fortunately, the beta version worked, and you’ve retained your memories. Since this prototype was designed to simulate intelligent life, you can still respond to external stimuli just as you did before.[/say]")
 
-		saynn("You check your body, thinking how could you tell your friends this truth.")
+		saynn("You check your body, wondering how you’ll ever explain this truth to your friends..")
 
-		saynn("[say=alexrynard]To avoid excessive panic, I add a cognitive filtering system on your inmate collar. This will lead everyone still recognize you as a normal inmate, but with strange skin color, which means that you still ne identified as an normal inmate.[/say]")
+		saynn("[say=alexrynard]To avoid excessive panic, I added a cognitive filtering system to your collar. This will make everyone see you as a normal inmate, though with a strange skin color. In other words, you’ll still be recognized as a regular inmate.[/say]")
 
 		addButton("Collar?","why?","Alex_explain_3")
 
@@ -391,13 +391,13 @@ func _run():
 		
 		saynn("You point to the inmate collar around your neck")
 
-		saynn("[say=pc]But why this collar? Can't you just... well, program myself to generate this filter? I mean this could be much safer if you want to control the panic from myself.[/say]")
+		saynn("[say=pc]But why this collar? Can't you just... well, program myself to generate this filter? I mean this could be much safer if you want to control the panic from others.[/say]")
 
-		saynn("[say=alexrynard]First, as I said, I still treat you as a living life with free will, so I will never program you unless in very urgent condition. \n \nSecond, I reprogram the collar system, so it becomes a kind of respawn point for your safety. You see, when you defeat and extract core from some nano androids, they will colapse into black goo and slip away. And there's a working assembling line in this jail, constantly collecting these nano goo and regenerate new android. This mechanic, however, could be dangerous when you accidentally clapse into a pad of goo for some reasons. [/say]")
+		saynn("[say=alexrynard]First, as I said, I still see you as a living being with free will, so I’d never program you unless absolutely necessary.\n\nSecond, I’ve reprogrammed the collar system to act as a sort of respawn point for your safety. When you defeat and extract the core from some nano-androids, they collapse into black goo and slip away. There’s a working assembly line in this facility that constantly collects this nano-goo and regenerates new androids. This mechanism, however, could be dangerous if you were to accidentally collapse into a pool of goo for some reason.[/say]")
 
-		saynn("Alex reviews his datapad, and continue.")
+		saynn("Alex glances at his datapad and continues")
 
-		saynn("[say=alexrynard]Therefore, you can treat your collar as an unique assembling line just for you. An archar that stablize your system. Thus, I strongely suggest you do NOT take off this collar unless you are determined to facing the captain. He manage the whole nano android system, and it could be a trouble if he notice that you are converted into an nano android.[/say]")
+		saynn("[say=alexrynard]Think of your collar as a unique assembly line just for you—an anchor that stabilizes your system. So, I strongly advise you not to remove it unless you’re prepared to face the captain. He controls the entire nano-android system, and it could cause serious trouble if he realizes you’ve been converted into a nano-android.[/say]")
 
 		saynn("(Note: That's all the transformation content for now. There will be more system related to your new form in future update.(Yeah that's list in my plan owo))")
 
