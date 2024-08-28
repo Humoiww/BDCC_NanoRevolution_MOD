@@ -1,10 +1,13 @@
 extends SceneBase
 
 var nanoSpeciesDict = {}
+var nanoGenderDict = {}
+var baseGenderDict = {}
 var eventsDict = {}
 var timesCame = 0
 var totalWeight = 0
 var pickedSpeciesToChange = ""
+var pickedgenderToChange = ""
 
 func are_keys_equal(dict1: Dictionary, dict2: Dictionary) -> bool:
 	var keys1 = dict1.keys()
@@ -27,6 +30,10 @@ func setSpeciesWeight(species,chance):
 	nanoSpeciesDict[species] = chance
 	setModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",nanoSpeciesDict)
 
+func setGenderWeight(gender,chance):
+	nanoGenderDict[gender] = chance
+	setModuleFlag("NanoRevolutionModule", "NanoAndroidGuardGenderDistr",nanoGenderDict)
+
 func _init():
 	sceneID = "NanoSetting"
 	
@@ -47,6 +54,13 @@ func _initScene(_args = []):
 		print("different key detect, erase original")
 		nanoSpeciesDict = basicSpeciesDict
 		setModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",nanoSpeciesDict)
+
+	var allgenders = NpcGender.getAll()
+	for gender in allgenders:
+		baseGenderDict[gender] = NpcGender.getDefaultWeight(gender)
+	nanoGenderDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
+	
+
 	timesCame = 0
 	if(_args.size() > 0):
 		setState(_args[0])
@@ -147,9 +161,38 @@ func _run():
 
 		saynn("Currently our android gender distribution is:")
 
+		nanoGenderDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
+		for gender in nanoGenderDict:
+			var weight = nanoGenderDict[gender]
+			sayn(str(gender)+": "+str(Util.roundF(weight*100.0, 1))+"%")
+			
+		sayn("")
+
+
 		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes.")
 		
 		addButton("Yes","go to question 2","Q2")
+
+	if(state == "Q1_menu"):
+		addButton("Back", "Close this menu", "")
+		
+		sayn("Relative chances for the gender of encountered npcs:")
+		nanoGenderDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
+		for gender in nanoGenderDict:
+			var genderName = gender
+			var weight = nanoGenderDict[gender]
+			sayn(str(genderName)+": "+str(Util.roundF(weight*100.0, 1))+"%")
+			addButton(gender,"Change the chance of this gender", "genderchancemenu", [gender])
+		sayn("")
+
+	if(state == "genderchancemenu"):
+		var gender = pickedgenderToChange
+		saynn("The current chance for "+gender +" is "+str(Util.roundF(nanoGenderDict[gender]*100.0, 1))+"%")
+
+		addButton("Back", "Go back to the previous menu", "Q3_menu")
+		# addButton("Default", "Set back to default chance", "setgenderchance", [gender, -1.0])
+		for chance in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.5, 2.0, 3.0]:
+			addButton(str(Util.roundF(chance*100.0))+"%", "Pick this chance", "setgenderchance", [gender, chance])
 
 	if(state == "Q2"):
 
@@ -167,7 +210,7 @@ func _run():
 			
 			var weight = nanoSpeciesDict[speciesID]
 			sayn(str(speciesName)+": "+str(Util.roundF(weight*100.0, 1))+"%")
-
+		sayn("")
 		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes.")
 		
 		saynn("Please note that if a new species enters or leaves BDCC, your record for this section will be erased. You'll need to submit a new record afterward.")
@@ -268,7 +311,6 @@ func _run():
 		for i in range(weighEvents.events.size()):
 			
 			if(weighEvents.events[i].id == "NanoExposureForceCheckEvent"):
-				print("Howdy")
 				weighEvents.weights[i] = getModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", 10)
 				targetWeight = weighEvents.weights[i]
 			else:
