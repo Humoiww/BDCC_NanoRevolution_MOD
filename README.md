@@ -1,7 +1,7 @@
 # NanoRevolution Mod
 This is the mod of a kinky game [BDCC](https://github.com/Alexofp/BDCC)
 
-If you meet and bug, and have any suggestions. Feel free to add a new [issue](https://github.com/Humoiww/BDCC_NanoRevolution_MOD/issues)
+If you meet any bug, and have any suggestions. Feel free to add a new [issue](https://github.com/Humoiww/BDCC_NanoRevolution_MOD/issues)
 
 ## How to use
 ### Option 1
