@@ -6,7 +6,7 @@ If you meet any bug, and have any suggestions. Feel free to add a new [issue](ht
 ## How to use
 ### Option 1
 Check [this tutorial](https://github.com/Alexofp/BDCC/wiki/User-Support) for install most recent stable version mod. 
-### Option 2 (if you want to build something base on this mod or if you want to try newest test version, not recommand for normal user)
+### Option 2 (if you want to build something base on this mod or if you want to try newest test version, not recommend for normal user)
 Down load zip file of this repo, unzip into a folder, rename the root folder in name: **NanoRevolution**. Clone the git repo (download also work) [BDCC](https://github.com/Alexofp/BDCC), put this NanoRevolution folder under Modules folder. You should get something like this:
 ```shell
 BDCC
@@ -14,7 +14,7 @@ BDCC
 |---Modules
     |---some_other_in_game_mods
     |---NanoRevolution
-        |---Charcters
+        |---Characters
         |---Events
         |---...
         |---Module.gd
