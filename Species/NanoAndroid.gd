@@ -44,10 +44,6 @@ func onDynamicNpcCreation(_npc, _args):
 	if(_breasts.size > BreastsSize.FOREVER_FLAT):
 		if(_breasts.size < BreastsSize.O):
 			_breasts.size = BreastsSize.O
-	else:
-		var NewBreasts = GlobalRegistry.createBodypart("humanbreasts")
-		NewBreasts.size = BreastsSize.O
-		_npc.giveBodypartUnlessSame(NewBreasts)
 		
 
 	var npcSkinData={

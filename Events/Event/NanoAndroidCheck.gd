@@ -7,14 +7,20 @@ func _init():
 func registerTriggers(es):
 	es.addTrigger(self, Trigger.EnteringRoom)
 
+func updateEverything():
+	# update occurance
+	var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]	
+	for i in range(weighEvents.events.size()):
+		print("brute force load flag")
+		if(weighEvents.events[i].id == "NanoExposureForceCheckEvent"):
+			weighEvents.weights[i] = getModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", 10)
+
 func run(_triggerID, _args):
 	# saynn("Hello owo")
 	# test even
+	# so, a brute force way to keep the save
+	updateEverything()
 
-	var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]
-	for i in range(weighEvents.events.size()):
-		print(weighEvents.events[i].id)
-		print(weighEvents.weights[i])
 	var thePC = GM.pc
 	var pcColor = thePC.getBaseSkinColors()
 	print(thePC.getSpecies().has("nanoAndroid"))

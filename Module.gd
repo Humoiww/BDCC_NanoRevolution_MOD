@@ -14,6 +14,8 @@ func getFlags():
 		"NanoAndroidMaxCupSize": flag(FlagType.Number),
 		"NanoAndroidMinCupSize": flag(FlagType.Number),
 		"NanoAndroidSpeciesDistr": flag(FlagType.Dict),
+		"NanoAndroidGuardAppearWeight": flag(FlagType.Number),
+		"NanoAndroidGuardGenderDistr": flag(FlagType.Dict),
 	}
 
 func _init():

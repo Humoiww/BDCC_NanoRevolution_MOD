@@ -1,6 +1,16 @@
 extends CharacterGeneratorBase
 class_name NanoGuardGenerator
 
+func are_keys_equal(dict1: Dictionary, dict2: Dictionary) -> bool:
+	var keys1 = dict1.keys()
+	var keys2 = dict2.keys()
+	if keys1.size() != keys2.size():
+		return false
+	for key in keys1:
+		if not keys2.has(key):
+			return false
+	return true
+
 func pickCharacterType(character:DynamicCharacter, _args = {}):
 	character.npcCharacterType = "NanoGuard"
 
@@ -8,30 +18,39 @@ func pickGender(character:DynamicCharacter, _args = {}):
 	character.npcGeneratedGender = NpcGender.Herm
 
 func pickSpecies(character:DynamicCharacter, _args = {}):
-	# if(_args.has(NpcGen.Species)):
-	# 	character.npcSpecies = [_args[NpcGen.Species]]
-	# 	return
-	
-
-	
+	# so, we use default species here xwx, and change part in next
 	# character.npcSpecies = [randomSpecies]
 	character.npcSpecies = ["nanoAndroid"]
 
 func createBodyparts(character:DynamicCharacter, _args = {}):
 	# When a new nano Android appear, it will randomly simulate one existed species
-	
-	var speciesType = pickedSpeciesType(_args)
+	# Size should be something in species part
 	var allSpecies = GlobalRegistry.getAllSpecies()
-	var possible = []
+	
+	
+
+
+	
+	var basicSpeciesDict = {}
 	for speciesID in allSpecies:
 		var specie = allSpecies[speciesID]
-		if(!specie.canBeUsedForNPCType(speciesType)):
+		if(!specie.canBeUsedForNPCType("guard")):
 			continue
 		
 		var weight = GM.main.getEncounterSettings().getSpeciesWeight(speciesID)
 		if(weight != null && weight > 0.0):
-			possible.append([speciesID, weight])
-	
+			basicSpeciesDict[speciesID] =  weight
+	var speciesDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",{})
+	if (are_keys_equal(speciesDict,basicSpeciesDict)):
+		print("different key detect, erase original -- generater")
+		speciesDict = basicSpeciesDict
+		GM.main.setModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",speciesDict)
+
+	var possible = []
+	for species in speciesDict:
+		possible.append([species, speciesDict[species]])
+
+
 	var randomSpecies = RNG.pickWeightedPairs(possible)
 	if(randomSpecies == null):
 		randomSpecies = Species.Canine
