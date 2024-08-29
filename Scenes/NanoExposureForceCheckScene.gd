@@ -7,6 +7,31 @@ var bribeSuccess = false
 var subOffered = ""
 var extractAmount = 0
 var refuseTime = 0
+var severity = ""
+var initialSize = -1
+
+func showAndroidStatus(possibility):
+	if(possibility > 90):
+		saynn("The android seems very stable.")
+	elif(possibility > 80):
+		saynn("The android appears mostly stable.")
+	elif(possibility > 70):
+		saynn("The android is generally stable.")
+	elif(possibility > 60):
+		saynn("The android shows slight signs of instability.")
+	elif(possibility > 50):
+		saynn("The android’s stability is somewhat questionable.")
+	elif(possibility > 40):
+		saynn("The android is showing noticeable instability.")
+	elif(possibility > 30):
+		saynn("The android is becoming increasingly unstable.")
+	elif(possibility > 20):
+		saynn("The android is highly unstable.")
+	elif(possibility > 10):
+		saynn("The android’s system is on the verge of collapse.")
+	else:
+		saynn("The android is completely unstable and close to failure.")
+		saynn("That's... ridiculous! I mean, it's nearly impossible to succeed so many times just to see this message!")
 
 func _init():
 	sceneID = "NanoExposureForceCheckScene"
@@ -137,10 +162,10 @@ func _run():
 		saynn("The guard straightens eye start to flash")
 		increaseModuleFlag("NanoRevolutionModule", "NanoCheckSRefuseTimes", 1)
 		refuseTime = getModuleFlag("NanoRevolutionModule", "NanoCheckSRefuseTimes", 0)
-		var severity = "tough"
+		severity = "tough"
 		if(refuseTime < 5):
 			severity = "slight"
-		elif(refuseTime < 10):
+		elif((refuseTime < 10)||(getModuleFlag("NanoRevolutionModule", "NanoToughEnable", true))):
 			severity = "moderate"
 		if(refuseTime < 2):
 			saynn("[say=npc]I see, {pc.name}. Since this is the first time, we will let you leave. But let me explain our rule, after this time, we will force punishment on you. The severity of punishment is depending on your total refusing times. You can leave now.[/say]")
@@ -154,20 +179,17 @@ func _run():
 			addButton("Fight", "Start the fight", "fight")
 
 	if(state == "lost_fight"):
-		var severity = "tough"
-		if(refuseTime < 5):
-			severity = "slight"
-		elif(refuseTime < 10):
-			severity = "moderate"
 		if(severity == "slight"):
 			playAnimation(StageScene.Duo, "Standing", {pc = npcID, npc="pc"})
+			saynn("Defeated, you fall to your knees.")
 		else:
 			playAnimation(StageScene.Choking, "idle", {pc = npcID, npc="pc", bodyState={exposedCrotch=true,hard=true}})
-		saynn("Defeated, you fall to your knees. But then the sticky android chock your neck!")
+			saynn("Defeated, you fall to your knees. But then the sticky android chock your neck!")
 
-		saynn("[say=npc]Confrontation ended successfully. Intruder's status: completely submissive. Securing. Excuting "+ severity +" punishment mode.[/say]")
+		saynn("[say=npc]Confrontation ended successfully. Inmate's status: completely submissive. Securing. Excuting "+ severity +" punishment mode.[/say]")
 
 		saynn("Before your realize, some BDSM devices magically bonds on you.")
+
 		if(severity == "slight"):
 			saynn("[say=npc]Attach slight BDSM device success. All possible illegal items collected. You can leave now inmate.[/say]")
 			saynn("Well, at least you've learnt some nano stuff from this fight.")
@@ -180,7 +202,7 @@ func _run():
 	if(state == "bring_to_stock"):
 		GM.pc.setLocation("main_punishment_spot")
 		aimCamera("main_punishment_spot")
-		if(refuseTime < 10):
+		if(severity == "moderate"):
 			playAnimation(StageScene.Stocks, "idle")
 			saynn("[say=npc]Inmate Secured. {pc.name}, hope you will follow our instruction next time.[/say]")
 			saynn("Now you need to figure out how to escape here")
@@ -191,7 +213,7 @@ func _run():
 
 			saynn("The android guard cock erect out. You estimate it about 40 cm long.")
 
-			saynn("[say=pc]Wait! That size won't fit..[/say]")
+			saynn("[say=pc]Wait! That won't fit..[/say]")
 
 			addButton("Resist", "That just... too big", "force_anal")			
 	if(state == "force_anal"):
@@ -246,7 +268,11 @@ func _run():
 
 			var possibility = fermidistribution(extractAmount,GM.pc.getSkillLevel("NanoENGR"))
 			possibility = 100*possibility
-			addButton("Continue", str(possibility).pad_decimals(2) + "%" + "find an extra core\n" + str(100-possibility).pad_decimals(2) + "%" + "loss all the core you find in this fight\n","extract_continue")
+			showAndroidStatus(possibility)
+			if false:
+				addButton("Continue", str(possibility).pad_decimals(2) + "%" + "find an extra core\n" + str(100-possibility).pad_decimals(2) + "%" + "loss all the core you find in this fight\n","extract_continue")
+			else:
+				addButton("Continue", "Extract More","extract_continue")
 			addButton("Done", "That is", "extract_end")
 		else:
 			var anEgg = GlobalRegistry.createItem("NanoCore")
@@ -272,18 +298,22 @@ func _run():
 				npcBodyState={exposedCrotch=true,hard=true},
 			})
 			extractAmount += 1	
-			saynn("Great! You carefully extract one more core from androids body.")
+			saynn("Great! You successfully extract one more core from the android's body.")
 
 			saynn("Now you have " + str(extractAmount) + " cores. Wanna have another try?")
-			
+
+			showAndroidStatus(possibility)
 			possibility = fermidistribution(extractAmount,GM.pc.getSkillLevel("NanoENGR"))*100
-			addButton("Continue", str(possibility).pad_decimals(2) + "%" + "find an extra core\n" + str(100-possibility).pad_decimals(2) + "%" + "loss all the core you find in this fight\n","extract_continue")
+			if false:
+				addButton("Continue", str(possibility).pad_decimals(2) + "%" + "find an extra core\n" + str(100-possibility).pad_decimals(2) + "%" + "loss all the core you find in this fight\n","extract_continue")
+			else:
+				addButton("Continue", "Extract More","extract_continue")
 			addButton("Done", "That is", "extract_end")
 		else:
 			playAnimation(StageScene.Sleeping, "idle", {pc=npcID, pcCum=true, bodyState={naked=true}})
-			saynn("Saddly, when you try to grab more core in your hand, you accidently collide a core with one core in your hand.")
+			saynn("Unfortunately, when you try to grab another core, the android can't handle the additional extraction. Its body collapses into a pool of black goo and slips away.")
 
-			saynn("This lead the android system unstable. Its body colapses and becomes a pad of black goo, slip away")
+			saynn("You’ve just lost all the cores you collected in this extraction.")
 			addButton("Well", "Better luck next time", "allowFullAndendthescene")
 	if(state == "extract_end"):
 		playAnimation(StageScene.SexFisting, "tease", {
@@ -296,9 +326,9 @@ func _run():
 		anEgg.setAmount(extractAmount)
 		GM.pc.getInventory().addItem(anEgg)
 		if(extractAmount > 1):
-			saynn("You pull " + str(extractAmount) + " cores out, and suddenly, the android guard colapse and become a pad of black goo, slip away")
+			saynn("You pull " + str(extractAmount) + " cores out. Suddenly, the android guard collapses into a pool of black goo and slips away.")
 		else:
-			saynn("You make a conservative choice, getting only one core from the android, and suddenly, the android guard colapse and become a pad of black goo, slip away")
+			saynn("You make a cautious choice, taking only one core from the android. Suddenly, the android guard collapses into a pool of black goo and slips away.")
 
 		saynn("You have a feeling that you will never meet {npc.name} again")
 		GM.main.removeDynamicCharacterFromAllPools(npcID)
@@ -355,7 +385,6 @@ func _react(_action: String, _args):
 		GM.pc.cummedInMouthBy(npcID, FluidSource.Penis)
 		GM.pc.addSkillExperience(Skill.SexSlave, 20)
 	if(_action == "allowFullAndendthescene"):
-		setModuleFlag("CellblockModule", "Cellblock_FreeToPassCheckpoint", true)
 		endScene()
 		return
 
@@ -367,16 +396,25 @@ func _react(_action: String, _args):
 	if(_action == "loseandendthescene"):
 		GM.pc.getInventory().removeItemsList(GM.pc.getInventory().getItemsWithTag(ItemTag.Illegal))
 		GM.pc.getInventory().removeEquippedItemsList(GM.pc.getInventory().getEquippedItemsWithTag(ItemTag.Illegal))
+		if(severity == "tough"):
+			# reset npc status
+			var _npc = getCharacter(npcID)
+			if(initialSize > 0):
+				var _penis = _npc.getBodypart(BodypartSlot.Penis)
+				_penis.lengthCM = initialSize
+			else:
+				var _penis = _npc.removeBodypart(BodypartSlot.Penis)
 		runScene("StocksPunishmentScene")
 		endScene()
 		return
+		
 
 	if(_action == "endthescene"):
 		endScene()
 		return
 
 	if(_action == "fight"):
-		runScene("FightScene", [npcID], "cpguardfight")
+		runScene("FightScene", [npcID], "nanoguardfight")
 	
 	if(_action == "extract_core"):
 		GM.pc.addSkillExperience("NanoENGR", 25)
@@ -406,6 +444,39 @@ func _react(_action: String, _args):
 		runScene("StrugglingScene")
 		return
 	
+	if(_action == "bring_to_stock"):
+		if(severity == "tough"):
+			var _npc = getCharacter(npcID)
+			if(_npc.hasPenis()):
+				var _penis = _npc.getBodypart(BodypartSlot.Penis)
+				initialSize = _penis.lengthCM
+				_penis.lengthCM = 40
+			else:
+				var penis = GlobalRegistry.createBodypart("equinepenis")
+				_npc.giveBodypartUnlessSame(penis)
+				var _penis = _npc.getBodypart(BodypartSlot.Penis)
+				initialSize = -1
+				_penis.lengthCM = 40
+				var npcSkinData={
+				"penis": {"r": Color("ff242424"),"g": Color("ff070707"),"b": Color("ff01b2f9"),},
+				}
+				for bodypartSlot in npcSkinData:
+					if(!_npc.hasBodypart(bodypartSlot)):
+						#Log.error(getID()+" doesn't have "+str(bodypartSlot)+" slot but we're trying to paint it anyway inside paintBodyparts()")
+						continue
+					var bodypart = _npc.getBodypart(bodypartSlot)
+					var bodypartSkinData = npcSkinData[bodypartSlot]
+					if(bodypartSkinData.has("skin")):
+						bodypart.pickedSkin = bodypartSkinData["skin"]
+					if(bodypartSkinData.has("r")):
+						bodypart.pickedRColor = bodypartSkinData["r"]
+					if(bodypartSkinData.has("g")):
+						bodypart.pickedGColor = bodypartSkinData["g"]
+					if(bodypartSkinData.has("b")):
+						bodypart.pickedBColor = bodypartSkinData["b"]
+			_npc.updateAppearance()
+				
+	
 	setState(_action)
 
 
@@ -414,7 +485,7 @@ func _react_scene_end(_tag, _result):
 		# setModuleFlag("CellblockModule", "Cellblock_FreeToPassCheckpoint", true)
 		endScene()
 	
-	if(_tag == "cpguardfight"):
+	if(_tag == "nanoguardfight"):
 		processTime(20 * 60)
 		var battlestate = _result[0]
 		if(battlestate == "win"):

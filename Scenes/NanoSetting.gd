@@ -4,10 +4,13 @@ var nanoSpeciesDict = {}
 var nanoGenderDict = {}
 var baseGenderDict = {}
 var eventsDict = {}
+var sizeDict = {}
+var defaultSizeDict = {}
 var timesCame = 0
 var totalWeight = 0
 var pickedSpeciesToChange = ""
-var pickedgenderToChange = ""
+var pickedGenderToChange = ""
+var pickedPartToChange = []
 
 func are_keys_equal(dict1: Dictionary, dict2: Dictionary) -> bool:
 	var keys1 = dict1.keys()
@@ -32,8 +35,11 @@ func setSpeciesWeight(species,chance):
 
 func setGenderWeight(gender,chance):
 	nanoGenderDict[gender] = chance
-	setModuleFlag("NanoRevolutionModule", "NanoAndroidGuardGenderDistr",nanoGenderDict)
+	setModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",nanoGenderDict)
 
+func setSizeDict(size):
+	sizeDict[pickedPartToChange[0]][pickedPartToChange[1]] = size
+	setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
 func _init():
 	sceneID = "NanoSetting"
 	
@@ -47,7 +53,7 @@ func _initScene(_args = []):
 			continue
 		
 		var weight = GM.main.getEncounterSettings().getSpeciesWeight(speciesID)
-		if(weight != null && weight > 0.0):
+		if(weight != null):
 			basicSpeciesDict[speciesID] =  weight
 	nanoSpeciesDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",{})
 	if (!are_keys_equal(nanoSpeciesDict,basicSpeciesDict)):
@@ -59,6 +65,8 @@ func _initScene(_args = []):
 	for gender in allgenders:
 		baseGenderDict[gender] = NpcGender.getDefaultWeight(gender)
 	nanoGenderDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
+
+	defaultSizeDict = getModule("NanoRevolutionModule").getDefaultSize()
 	
 
 	timesCame = 0
@@ -85,7 +93,7 @@ func _run():
 
 		saynn("[say=pc]Psychological status?[/say]")
 
-		saynn("[say=humoi]Yeah, a few months ago, XYZ launched the android assistant program, where androids help with tough tasks, like inspecting inmates. It seemed to work at first, but over time, multiple cases showed that these androids—especially their punishment mechanisms—might be causing some mental health issues.[/say]")
+		saynn("[say=humoi]Yeah, a few months ago, BDCC launched the android assistant program, where androids help with tough tasks, like inspecting inmates. It seemed to work at first, but over time, multiple cases showed that these androids—especially their punishment mechanisms—might be causing some mental health issues.[/say]")
 
 		saynn("She sighs a little, and continues.")
 
@@ -108,7 +116,7 @@ func _run():
 		saynn("[say=humoi]Oh, hi {pc.name}. Up for another round?[/say]")
 
 		addButton("Certainly","Do the survey","Start_survey")
-		addButton("Sex?","You just come here for ","skip_and_sex")
+		addButton("Sex?","You just come here for sex","skip_and_sex")
 		addButton("Leave","Sorry, wrong cell","endthescene")
 		
 	if(state == "Start_survey"):
@@ -169,13 +177,17 @@ func _run():
 		sayn("")
 
 
-		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes.")
+		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes. Otherwise, click \"Next\" to proceed to the next question")
 		
-		addButton("Yes","go to question 2","Q2")
+		addButton("Next","go to question 2","Q2")
+		addButton("Edit","I want to edit","Q1_menu")
+		addDisabledButton("Last ","This is the first question")
+		addButtonAt(10,"Menu","Back to main menu","menu")
+		addButtonAt(14,"End","End the survey","finish_answer")
 
 	if(state == "Q1_menu"):
-		addButton("Back", "Close this menu", "")
-		
+		addButton("Back", "Close this menu", "Q1")
+		add_panel()
 		sayn("Relative chances for the gender of encountered npcs:")
 		nanoGenderDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
 		for gender in nanoGenderDict:
@@ -186,10 +198,10 @@ func _run():
 		sayn("")
 
 	if(state == "genderchancemenu"):
-		var gender = pickedgenderToChange
+		var gender = pickedGenderToChange
 		saynn("The current chance for "+gender +" is "+str(Util.roundF(nanoGenderDict[gender]*100.0, 1))+"%")
 
-		addButton("Back", "Go back to the previous menu", "Q3_menu")
+		addButton("Back", "Go back to the previous menu", "Q1_menu")
 		# addButton("Default", "Set back to default chance", "setgenderchance", [gender, -1.0])
 		for chance in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.5, 2.0, 3.0]:
 			addButton(str(Util.roundF(chance*100.0))+"%", "Pick this chance", "setgenderchance", [gender, chance])
@@ -211,11 +223,11 @@ func _run():
 			var weight = nanoSpeciesDict[speciesID]
 			sayn(str(speciesName)+": "+str(Util.roundF(weight*100.0, 1))+"%")
 		sayn("")
-		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes.")
+		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes. Otherwise, click \"Next\" to proceed to the next question")
 		
 		saynn("Please note that if a new species enters or leaves BDCC, your record for this section will be erased. You'll need to submit a new record afterward.")
 
-		addButton("Yes","go to question 3","Q3")
+		addButton("Next","go to question 3","Q3")
 		addButton("Edit","I want to edit","Q2_menu")
 		addButton("Last","I want to review the last question","Q1")
 		addButtonAt(10,"Menu","Back to main menu","menu")
@@ -223,8 +235,8 @@ func _run():
 
 
 	if(state == "Q2_menu"):
-		addButton("Back", "Close this menu", "")
-		
+		addButton("Back", "Close this menu", "Q2")
+		add_panel()
 		sayn("Relative chances for the species of encountered npcs:")
 		var species = GlobalRegistry.getAllPlayableSpecies()
 		for speciesID in species:
@@ -242,7 +254,7 @@ func _run():
 		var speciesName = speciesObject.getVisibleName()
 		saynn("The current chance for "+speciesName+" is "+str(Util.roundF(nanoSpeciesDict[species]*100.0, 1))+"%")
 
-		addButton("Back", "Go back to the previous menu", "Q3_menu")
+		addButton("Back", "Go back to the previous menu", "Q2_menu")
 		# addButton("Default", "Set back to default chance", "setspecieschance", [species, -1.0])
 		for chance in [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.5, 2.0, 3.0]:
 			addButton(str(Util.roundF(chance*100.0))+"%", "Pick this chance", "setspecieschance", [species, chance])
@@ -253,22 +265,56 @@ func _run():
 		saynn("Question 3:")
 
 		saynn("Currently our android visible component size range is:")
-		var cockMin = getModuleFlag("NanoRevolutionModule", "NanoAndroidMinCockSize",0)
-		var cockMax = getModuleFlag("NanoRevolutionModule", "NanoAndroidMaxCockSize",40)
-		var breastMin = getModuleFlag("NanoRevolutionModule", "NanoAndroidMinCupSize",BreastsSize.FLAT)
-		var breastMax = getModuleFlag("NanoRevolutionModule", "NanoAndroidMaxCupSize",BreastsSize.O)
-		sayn("Penis Length :" + str(cockMin) + "~" + str(cockMax) + "cm")
-		sayn("Breast Size :" + BreastsSize.breastSizeToCupString(breastMin) + " ~ " + BreastsSize.breastSizeToCupString(breastMax))
+		sizeDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
 
-		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes.")
+		sayn("Minimum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][1]))
+		sayn("Maximum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][2]))
+		sayn("Minimum Breast Size : " + BreastsSize.breastSizeToCupString(sizeDict[BodypartSlot.Breasts][1]))
+		sayn("Maximum Breast Size : " + BreastsSize.breastSizeToCupString(sizeDict[BodypartSlot.Breasts][2]))
 
-		addButton("Yes","go to question 4","Q4")
+		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes. Otherwise, click \"Next\" to proceed to the next question")
+		
+		addButton("Next","go to question 4","Q4")
 		addButton("Edit","I want to edit","Q3_menu")
 		addButton("Last","I want to review the last question","Q2")
 		addButtonAt(10,"Menu","Back to main menu","menu")
 		addButtonAt(14,"End","End the survey","finish_answer")
+	if(state == "Q3_menu"):
+		add_panel()
 
+		saynn("Currently our android visible component size range is:")
+		sizeDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
 
+		sayn("Minimum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][1]))
+		sayn("Maximum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][2]))
+		sayn("Minimum Breast Size : " + BreastsSize.breastSizeToCupString(sizeDict[BodypartSlot.Breasts][1]))
+		sayn("Maximum Breast Size : " + BreastsSize.breastSizeToCupString(sizeDict[BodypartSlot.Breasts][2]))
+		addButton("Min Cock", "Change the minimum of this", "sizemenu", [BodypartSlot.Penis,1])
+		addButton("Max Cock", "Change the maximum of this", "sizemenu", [BodypartSlot.Penis,2])
+		addButton("Min Breast", "Change the minimum of this", "sizemenu", [BodypartSlot.Breasts,1])
+		addButton("Max Breast", "Change the maximum of this", "sizemenu", [BodypartSlot.Breasts,2])
+
+	if(state == "sizemenu"):
+		add_panel()
+		var minMax = "min" if pickedGenderToChange[1] == 1 else "max"
+		if(pickedGenderToChange[0] == BodypartSlot.Penis):
+			var bodypart = BodypartPenis.new()
+			var attributes = bodypart.getPickableAttributes()
+			var currentAttribute = attributes["cocksize"]
+			
+			saynn(currentAttribute["text"] +":" + minMax)
+			for option in currentAttribute["options"]:
+				addButton(option[1], option[2], "setAttribute", [option[0]])
+		elif(pickedGenderToChange[0] == BodypartSlot.Breasts):
+			var bodypart = BodypartBreasts.new()
+			var attributes = bodypart.getPickableAttributes()
+			var currentAttribute = attributes["breastsize"]
+			
+			saynn(currentAttribute["text"] +":" + minMax)
+			for option in currentAttribute["options"]:
+				addButton(option[1], option[2], "setAttribute", [option[0]])
+		
+		addButton("Back", "Go back a menu", "Q3_menu")
 
 	if(state == "Q4"):
 		var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]
@@ -276,7 +322,6 @@ func _run():
 		
 		var targetWeight = 0
 		for i in range(weighEvents.events.size()):
-			
 			if(weighEvents.events[i].id == "NanoExposureForceCheckEvent"):
 				weighEvents.weights[i] = getModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", 10)
 				targetWeight = weighEvents.weights[i]
@@ -293,10 +338,10 @@ func _run():
 
 		saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
 
-		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes.")
+		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes. Otherwise, click \"Next\" to proceed to the next question")
 		
 		
-		addButton("Yes","go to the last question","Q_end")
+		addButton("Next","go to the last question","Q_end")
 		addButton("Edit","I want to edit","Q4_menu")
 		addButton("Last","I want to review the last question","Q3")
 		addButtonAt(10,"Menu","Back to main menu","menu")
@@ -430,7 +475,7 @@ func _react(_action: String, _args):
 				continue
 			
 			var weight = GM.main.getEncounterSettings().getSpeciesWeight(speciesID)
-			if(weight != null && weight > 0.0):
+			if(weight != null):
 				basicSpeciesDict[speciesID] =  weight
 		nanoSpeciesDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",{})
 		if (!are_keys_equal(nanoSpeciesDict,basicSpeciesDict)):
@@ -467,11 +512,23 @@ func _react(_action: String, _args):
 		return
 	if(_action == "specieschancemenu"):
 		pickedSpeciesToChange = _args[0]	
-
-
+	if(_action == "genderchancemenu"):
+		pickedGenderToChange = _args[0]	
+	if(_action == "sizemenu"):
+		pickedGenderToChange = [_args[0],_args[1]]
+	if(_action == "setgenderchance"):
+		setGenderWeight(_args[0], _args[1])
+		
+		setState("Q1_menu")
+		return
 	if(_action == "setspecieschance"):
 		setSpeciesWeight(_args[0], _args[1])
 		
+		setState("Q2_menu")
+		return
+
+	if(_action == "setAttribute"):
+		setSizeDict(_args[0])
 		setState("Q3_menu")
 		return
 	setState(_action)

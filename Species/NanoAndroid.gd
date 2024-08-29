@@ -36,14 +36,13 @@ func onDynamicNpcCreation(_npc, _args):
 
 	# _npc.setGender(Gender.Androgynous)
 
-
-		
-	var _penis = _npc.getBodypart(BodypartSlot.Penis)
-	_penis.lengthCM = 40
-	var _breasts = _npc.getBodypart(BodypartSlot.Breasts)
-	if(_breasts.size > BreastsSize.FOREVER_FLAT):
-		if(_breasts.size < BreastsSize.O):
-			_breasts.size = BreastsSize.O
+	if(_npc.hasPenis()):
+		var _penis = _npc.getBodypart(BodypartSlot.Penis)
+		_penis.lengthCM = GM.main.getModule("NanoRevolutionModule").getNanoCockSize()
+	if !(_npc.getGender() in [Gender.Male]):
+		var _breasts = _npc.getBodypart(BodypartSlot.Breasts)
+		if(_breasts.size > BreastsSize.FOREVER_FLAT):
+			_breasts.size = GM.main.getModule("NanoRevolutionModule").getNanoBreastSize()
 		
 
 	var npcSkinData={

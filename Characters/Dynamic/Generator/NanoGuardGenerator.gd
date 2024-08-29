@@ -15,7 +15,19 @@ func pickCharacterType(character:DynamicCharacter, _args = {}):
 	character.npcCharacterType = "NanoGuard"
 
 func pickGender(character:DynamicCharacter, _args = {}):
-	character.npcGeneratedGender = NpcGender.Herm
+	var allgenders = NpcGender.getAll()
+	var baseGenderDict = {}
+	for gender in allgenders:
+		baseGenderDict[gender] = NpcGender.getDefaultWeight(gender)
+	var nanoGenderDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
+	var stuff = []
+	for gender in NpcGender.getAll():
+		var weight = nanoGenderDict[gender]
+		
+		stuff.append([gender, weight])
+	var pickedGender = RNG.pickWeightedPairs(stuff)
+
+	character.npcGeneratedGender = pickedGender
 
 func pickSpecies(character:DynamicCharacter, _args = {}):
 	# so, we use default species here xwx, and change part in next

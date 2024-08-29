@@ -9,14 +9,35 @@ func getFlags():
 		"NanoAttackSceneHappened": flag(FlagType.Bool),
 		"NanoCraftingTableEnabled": flag(FlagType.Bool),
 		"NanoMeetHumoi": flag(FlagType.Bool),
-		"NanoAndroidMaxCockSize": flag(FlagType.Number),
-		"NanoAndroidMinCockSize": flag(FlagType.Number),
-		"NanoAndroidMaxCupSize": flag(FlagType.Number),
-		"NanoAndroidMinCupSize": flag(FlagType.Number),
+		# "NanoAndroidMaxCockSize": flag(FlagType.Number),
+		# "NanoAndroidMinCockSize": flag(FlagType.Number),
+		# "NanoAndroidMaxCupSize": flag(FlagType.Number),
+		# "NanoAndroidMinCupSize": flag(FlagType.Number),
+		"NanoAndroidSizePara": flag(FlagType.Dict),
 		"NanoAndroidSpeciesDistr": flag(FlagType.Dict),
 		"NanoAndroidGuardAppearWeight": flag(FlagType.Number),
 		"NanoAndroidGenderDistr": flag(FlagType.Dict),
+		"NanoToughEnable": flag(FlagType.Bool),
 	}
+
+func getDefaultSize():
+	var defaultSizePara = {}
+	defaultSizePara[BodypartSlot.Penis] = ["Cock Length",1,40]
+	defaultSizePara[BodypartSlot.Breasts] = ["Cup Size",BreastsSize.FLAT,BreastsSize.O]
+	return defaultSizePara
+
+func getSizeDict():
+	var defaultSizeDict = GM.main.getModule("NanoRevolutionModule").getDefaultSize()
+	var sizeDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
+	return sizeDict
+
+func getNanoCockSize():
+	var sizeDict = getSizeDict()
+	return RNG.randi_range(sizeDict[BodypartSlot.Penis][1],sizeDict[BodypartSlot.Penis][2])
+
+func getNanoBreastSize():
+	var sizeDict = getSizeDict()
+	return RNG.randi_range(sizeDict[BodypartSlot.Breasts][1],sizeDict[BodypartSlot.Breasts][2])
 
 func _init():
 	id = "NanoRevolutionModule"
@@ -41,6 +62,7 @@ func _init():
 		"res://Modules/NanoRevolution/Events/Event/NanoCraftingTableEvent.gd", 
 		"res://Modules/NanoRevolution/Events/Event/NanoAndroidMeetAssembleEvent.gd", 
 		"res://Modules/NanoRevolution/Events/Event/NanoAndroidCheck.gd",
+		"res://Modules/NanoRevolution/Events/Event/NanoVisitHumoiEvent.gd",
 	]
 	perks = [
 		"res://Modules/NanoRevolution/Skills/Perk/NanoBetterExtration.gd",
