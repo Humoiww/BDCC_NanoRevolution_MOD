@@ -47,7 +47,8 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/NanoAttackScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoCraftScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoExposureForceCheckScene.gd",
-		"res://Modules/NanoRevolution/Scenes/NanoSetting.gd"
+		"res://Modules/NanoRevolution/Scenes/NanoSetting.gd",
+		"res://Modules/NanoRevolution/Scenes/HumoiTalkScene.gd",
 		]
 	characters = [
 		"res://Modules/NanoRevolution/Characters/NanoAssemble.gd",

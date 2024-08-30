@@ -62,6 +62,22 @@ func setSizeDict(size):
 	print([pickedPartToChange[1]])
 	sizeDict[pickedPartToChange[0]][pickedPartToChange[1]] = size
 	setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
+
+
+func toggleFlag(flag):
+	var current = getModuleFlag("NanoRevolutionModule", flag, true)
+	if current:
+		setModuleFlag("NanoRevolutionModule", flag, false)
+	else:
+		setModuleFlag("NanoRevolutionModule", flag, true)
+
+func showEventState(desc,flag):
+	var enable = getModuleFlag("NanoRevolutionModule", flag, true)
+	if enable:
+		saynn("[color=green]Enable[/color]:\n" + desc)
+	else:
+		saynn("[color=red]Disable[/color]:\n" + desc)
+
 func _init():
 	sceneID = "NanoSetting"
 	
@@ -139,8 +155,22 @@ func _run():
 
 		addButton("Certainly","Do the survey","Start_survey")
 		addButton("Sex?","You just come here for sex","skip_and_sex")
+		addButton("Talk","You want to understand more about her.","talkandendscene")
 		addButton("Leave","Sorry, wrong cell","endthescene")
-		
+		# addButton("Debug","comment this","test_effects")
+	if(state == "test_effects"):
+		saynn("Hypno text: [tornado radius=3.0 freq=2.0 connected=1][pulse color=#FF33FF height=0.0 freq=3.0]Hypnoword[/pulse][/tornado]")
+		saynn("Wave: [wave amp=50.0 freq=5.0 connected=1]The quick brown fox jumps over the lazy dog.[/wave]")
+		saynn("Tornado: [tornado radius=10.0 freq=1.0 connected=1]The quick brown fox jumps over the lazy dog.[/tornado]")
+		saynn("Shake: [shake rate=20.0 level=5 connected=1]The quick brown fox jumps over the lazy dog.[/shake]")
+		saynn("Fade: [fade start=4 length=14]The quick brown fox jumps over the lazy dog.[/fade]")
+		saynn("Rainbow: [rainbow freq=1.0 sat=0.8 val=0.8]The quick brown fox jumps over the lazy dog.[/rainbow]")
+		saynn("Pulse: [pulse color=#00FFAA height=0.0 freq=2.0]The quick brown fox jumps over the lazy dog.[/pulse]")
+		saynn("Matrix: [matrix clean=2.0 dirty=1.0 span=50]The quick brown fox jumps over the lazy dog.[/matrix]")
+		saynn("Ghost: [ghost freq=5.0 span=10.0]The quick brown fox jumps over the lazy dog.[/ghost]")
+		saynn("Corrupt: [corrupt]The quick brown fox jumps over the lazy dog.[/corrupt]")
+		saynn("Console: [console freq=5.0 span=10.0]The quick brown fox jumps over the lazy dog.[/console]")
+		addButton("Goodbye", "Good for now", "endthescene")
 	if(state == "Start_survey"):
 		saynn("She smiles, passing the datapad to you.")
 
@@ -159,8 +189,8 @@ func _run():
 
 		saynn("- [Decline] Exit the survey.")
 
-		addButton("agree","start survey","menu")
-
+		addButton("Agree","Start survey","menu")
+		addButton("Decline","Exit survey","no_change")
 	if(state == "menu"):
 		add_panel()
 
@@ -174,15 +204,19 @@ func _run():
 
 		saynn("- [Q4] Nano Android Check Frequency")
 
+		saynn("- [Q5] Nano Android Event Option")
+
 		saynn("- [ISSUE] Send an issue to the engineering team")
 
-		saynn("- [decline] Exit the survey.")
+		saynn("- [End] Exit the survey.")
 
 		addButton("Q1_gender","go to question 1","Q1")
 		addButton("Q2_species","go to question 2","Q2")
 		addButton("Q3_size","go to question 3","Q3")
 		addButton("Q4_frequency","go to question 4","Q4")
+		addButton("Q5_event","go to question 5","Q5")
 		addButton("ISSUE","make a suggestion","Q_end")
+		addButtonAt(14,"End","End the survey","finish_answer")
 
 	if(state == "Q1"):
 		add_panel()
@@ -324,14 +358,14 @@ func _run():
 			var attributes = bodypart.getPickableAttributes()
 			var currentAttribute = attributes["cocksize"]
 			
-			saynn(currentAttribute["text"] +Util.cmToString(sizeDict[BodypartSlot.Penis][pickedPartToChange[1]]) + minMax + "size")
+			saynn("Pick the "+ minMax + " cock length:"+ Util.cmToString(sizeDict[BodypartSlot.Penis][pickedPartToChange[1]]))
 			for option in currentAttribute["options"]:
 				addButton(option[1], option[2], "setAttribute", [option[0]])
 		elif(pickedPartToChange[0] == BodypartSlot.Breasts):
 			var attributes = getNanoPickableAttributes()
 			var currentAttribute = attributes["breastsize"]
 			
-			saynn(currentAttribute["text"] + BreastsSize.breastSizeToCupString(sizeDict[BodypartSlot.Breasts][pickedPartToChange[1]]) + minMax + "size")
+			saynn("Pick the "+ minMax + " breasts cup:"+  BreastsSize.breastSizeToCupString(sizeDict[BodypartSlot.Breasts][pickedPartToChange[1]]))
 			for option in currentAttribute["options"]:
 				addButton(option[1], option[2], "setAttribute", [option[0]])
 		
@@ -362,7 +396,7 @@ func _run():
 		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes. Otherwise, click \"Next\" to proceed to the next question")
 		
 		
-		addButton("Next","go to the last question","Q_end")
+		addButton("Next","go to the last question","Q_5")
 		addButton("Edit","I want to edit","Q4_menu")
 		addButton("Last","I want to review the last question","Q3")
 		addButtonAt(10,"Menu","Back to main menu","menu")
@@ -404,7 +438,17 @@ func _run():
 		addButton("+5%", "Change the probability", "Q4_edit", [prob+0.05])
 		addButton("+15%", "Change the probability", "Q4_edit", [prob+0.15])
 		addButtonAt(14,"Done","Save changes","Q4")
-
+	if(state == "Q5"):
+		add_panel()
+		saynn("Now, imagine you’re the manager of this program. Here are some actions the androids might take with inmates. You have the authority to enable or disable these events. Toggle your choices, and click \"Next\" when you’re satisfied.")
+		
+		var flag = "NanoToughEnable"
+		showEventState("The android guard will enforce tough anus punishment if an inmate’s refusal times exceeds 10.",flag)
+		addButton("Tough Punishment","toggle_this","Q5_change",[flag])
+		addButtonAt(10,"Next","go to the last question","Q_end")
+		addButtonAt(11,"Last","I want to review the last question","Q4")
+		addButtonAt(12,"Menu","Back to main menu","menu")
+		addButtonAt(13,"End","End the survey","finish_answer")
 
 
 	if(state == "Q_end"):
@@ -448,10 +492,11 @@ func _run():
 		saynn("[say=pc]Sorry,I am quite busy now.[/say]")
 
 		saynn("Humoi chuckles and grabs the datapad back.")
-		
-		saynn("[say=humoi]It's fine. Just remember, you are free to find me and change your options. I'm lilac, so you know you can find me. See you around~[/say]")
-
-		addButton("Leave","Boring survey","endthescene")
+		if !(getModuleFlag("NanoRevolutionModule","NanoMeetHumoi",false)):
+			saynn("[say=humoi]It's fine. Just remember, you are free to find me and change your options. I'm lilac, so you know you can find me. See you around~[/say]")
+		else:
+			saynn("[say=humoi]It's fine. See you then~[/say]")
+		addButton("Leave","Maybe next time","endthescene")
 
 	if(state == "skip_and_sex"):
 		saynn("Humoi giggles and put the datapad beside.")
@@ -470,7 +515,7 @@ func _run():
 			elif(timesCame < 10):
 				saynn("[say=humoi]Hey... hey... I'm nearly exhausted. I kinda like you now~ come to my cell later, so you can edit your answer, and... you know, rewards heh heh..[/say]")
 			else:
-				saynn("[say=humoi]...sex...so..much..cumming.....come...my..room....change.....rewards~[/say]")
+				saynn("[say=humoi][shake rate=20.0 level=5 connected=1]...sex...so..much..cumming.....come...my..room....change.....rewards~[/shake][/say]")
 				saynn("Humoi colapse on the floor. Maybe she is noticing you to change your answer in her lilac cell if you want")
 		else:
 			if(timesCame < 1):
@@ -480,7 +525,7 @@ func _run():
 			elif(timesCame < 10):
 				saynn("[say=humoi]Hey... hey... I'm nearly exhausted. You are really a good partner, we should do that again~[/say]")
 			else:
-				saynn("[say=humoi]...sex...so..much..cumming....Ahhh.....I...am....yours.....[/say]")
+				saynn("[say=humoi][shake rate=20.0 level=5 connected=1]...sex...so..much..cumming....Ahhh.....I...am....yours.....[/shake][/say]")
 				saynn("Humoi colapse on the floor.")
 		addButton("Leave","Should go now","endthescene")
 		
@@ -511,6 +556,10 @@ func _react(_action: String, _args):
 
 	if(_action == "endthescene"):
 		setModuleFlag("NanoRevolutionModule","NanoMeetHumoi",true)
+		endScene()
+		return
+	if(_action == "talkandendscene"):
+		runScene("HumoiTalkScene")
 		endScene()
 		return
 
@@ -551,6 +600,10 @@ func _react(_action: String, _args):
 	if(_action == "setAttribute"):
 		setSizeDict(_args[0])
 		setState("Q3_menu")
+		return
+	if(_action == "Q5_change"):
+		toggleFlag(_args[0])
+		setState("Q5")
 		return
 	setState(_action)
 

@@ -190,7 +190,8 @@ func _run():
 
 	if(state == "machine_try_run"):
 		playAnimation(StageScene.TentaclesSex, "tease", {bodyState={naked=true, hard=true}})
-		for item in GM.pc.getInventory().getAllEquippedItems():
+		for itemSlot in GM.pc.getInventory().getAllEquippedItems():
+			var item = GM.pc.getInventory().getAllEquippedItems()[itemSlot]
 			if(item.isImportant()):
 				continue
 			GM.pc.getInventory().unequipItem(item)
@@ -225,6 +226,13 @@ func _run():
 
 		saynn("[say=NanoSystem]Loading existing body configuration. Converting to Standard "+ Gender.genderToString(pcGender)+" Guard Body Module.[/say]")
 		var description = "You feel those black goo flow to your crotch. Suddenly, great pleasure shocks your head, making you hard to think anything."
+		if(pcGender == Gender.Female):	
+			var cage = GM.pc.getInventory().getEquippedItem(BodypartSlot.Penis)
+			if cage != null:
+				if cage.isImportant():
+					saynn("[say=NanoSystem][color=red]WARNING[/color]: The template has an unauthorized component protecting its penis. Retain the penis. Adjust the target gender to androgynous[/say]")
+					GM.pc.setGender(Gender.Androgynous)
+					pcGender = Gender.Androgynous
 
 		var cockLength = GlobalRegistry.getModule("NanoRevolutionModule").getNanoCockSize()
 		var breastSize = GlobalRegistry.getModule("NanoRevolutionModule").getNanoBreastSize()
@@ -232,10 +240,10 @@ func _run():
 		if(pcGender == Gender.Androgynous):
 			if(!GM.pc.hasVagina()):
 				createPart(BodypartSlot.Vagina)
-				description += "You grow a pussy right below your crotch. "
+				description += "A pussy grow right below your crotch. "
 			if(!GM.pc.hasPenis()):
 				createPart(BodypartSlot.Penis)
-				description += "A "+ Util.cmToString(cockLength)+" cock form on your crotch."
+				description += "A "+ Util.cmToString(cockLength)+" cock form on your crotch. "
 			else:
 				description += "Your cock now shape into "+ Util.cmToString(cockLength) +" long. "
 			var _penis = GM.pc.getBodypart(BodypartSlot.Penis)
@@ -243,23 +251,23 @@ func _run():
 			var _breasts = GM.pc.getBodypart(BodypartSlot.Breasts)
 			if(_breasts.size > BreastsSize.FOREVER_FLAT):
 
-				description += "Now you have "+ BreastsSize.breastSizeToCupString(breastSize) + " breasts"
+				description += "Now you have "+ BreastsSize.breastSizeToCupString(breastSize) + " breasts. "
 				_breasts.size = breastSize
 			else:
 				var NewBreasts = GlobalRegistry.createBodypart("humanbreasts")
 				NewBreasts.size = breastSize
 				GM.pc.giveBodypartUnlessSame(NewBreasts)
-				description += "Now you have "+ BreastsSize.breastSizeToCupString(breastSize) + " breasts"
+				description += "Now you have "+ BreastsSize.breastSizeToCupString(breastSize) + " breasts. "
 
 
 
 		if(pcGender == Gender.Male):
 			if(GM.pc.hasVagina()):
 				GM.pc.removeBodypart(BodypartSlot.Vagina)
-				description += "You feel your slit gradually closed."
+				description += "You feel your slit gradually closed. "
 			if(!GM.pc.hasPenis()):
 				createPart(BodypartSlot.Penis)
-				description += "A "+ Util.cmToString(cockLength)+" cock form on your crotch."
+				description += "A "+ Util.cmToString(cockLength)+" cock form on your crotch. "
 			else:
 				description += "Your cock now shape into "+ Util.cmToString(cockLength) +" long. "
 			var _penis = GM.pc.getBodypart(BodypartSlot.Penis)
@@ -274,10 +282,10 @@ func _run():
 			
 			if(GM.pc.hasPenis()):
 				GM.pc.removeBodypart(BodypartSlot.Penis)
-				description += "You notice your cock is shrinking and disappear eventually."
+				description += "You notice your member is shrinking and disappear eventually. "
 			if(!GM.pc.hasVagina()):
 				createPart(BodypartSlot.Vagina)
-				description += "You grow a pussy right below your crotch. "
+				description += "A pussy grow right below your crotch. "
 			var _breasts = GM.pc.getBodypart(BodypartSlot.Breasts)
 			if(_breasts.size > BreastsSize.FOREVER_FLAT):
 
@@ -293,10 +301,11 @@ func _run():
 			
 		playAnimation(StageScene.TentaclesSex, "sex", {pcCum=true, bodyState={naked=true, hard=true}})
 		saynn(description)
-		
-		saynn("You fight to hold on to your thoughts, your memories, but they’re shooting away with your cum, drowned out by the relentless pleasure. You feel the goo flow in your body progressly replace every fragment of your body. Strangely, you feel that becoming an android isn't that bad....")
-		
-		saynn("[say=pc]Obey.....[/say]")
+		if(pcGender != Gender.Female):
+			saynn("You fight to hold on to your thoughts, your memories, but they’re shooting away with your cum, drowned out by the relentless pleasure. You feel the goo flow in your body progressly replace every fragment of your body. Strangely, you feel that becoming an android isn't that bad....")
+		else:
+			saynn("You fight to hold on to your thoughts, your memories, but they’re fading away as you keep cumming, drowned out by the relentless pleasure. You feel the goo flow in your body progressly replace every fragment of your body. Strangely, you feel that becoming an android isn't that bad....")
+
 		
 		var pcSkinData={
 		"hair": {"r": Color("ff21253e"),"g": Color("ff4143a8"),"b": Color("ff000000"),},
@@ -330,13 +339,13 @@ func _run():
 
 	if(state == "machine_complete"):
 		playAnimation(StageScene.TentaclesSex, "fast", {pcCum=true,bodyState={naked=true, hard=true}})
-		saynn("The transformation continue, you hard think anything except the system command.")
+		saynn("The transformation continues, and you can hardly think of anything except the system commands.")
 
-		saynn("[say=alexrynard]Gosh, the damn door, what happened[/say]")
+		saynn("[say=alexrynard]Gosh, the damn door—what happened?![/say]")
 
-		saynn("A familiar voice with smashing sound from outside. Is it someone in your database?")
+		saynn("A familiar voice accompanied by a smashing sound comes from outside. Is it someone in your database?")
 
-		saynn("[say=alexrynard]OK. System interrupt, and force open[/say]")
+		saynn("[say=alexrynard]OK. System interrupt—force it open.[/say]")
 
 		addButton("Continue", "Alex rush in", "alexrynard_break")
 
@@ -347,11 +356,11 @@ func _run():
 			bodyState={naked = true, hard = true},
 			npcBodyState={},
 		})
-		saynn("[say=alexrynard]{pc.name}! Are you OK? Response me if you can still listening[/say]")
+		saynn("[say=alexrynard]{pc.name}! Are you OK? Respond if you can still hear me![/say]")
 
-		saynn("[say=pc]Serial number confirmed: System Manager. Initiating greeting protocol. Greeting Sir, what can I do for you?[/say]")
+		saynn("[say=pc]Serial number identity confirmed: System Manager. Initiating greeting protocol. Greeting Sir, what can I do for you?[/say]")
 
-		saynn("You knee down, awaiting your master's command...")
+		saynn("You kneel down, awaiting your commander's orders...")
 
 		saynn("[say=alexrynard]No.. NO! Not again.... Backup memory set! That should work![/say]")
 

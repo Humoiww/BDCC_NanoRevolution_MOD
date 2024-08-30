@@ -64,7 +64,8 @@ func canCombine():
 # 	return .tryCombine(_otherItem)
 
 func getTags():
-	return []
+	return [ItemTag.Illegal]
+
 
 func getItemCategory():
 	return ItemCategory.Generic

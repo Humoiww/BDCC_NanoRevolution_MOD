@@ -165,7 +165,7 @@ func _run():
 		severity = "tough"
 		if(refuseTime < 5):
 			severity = "slight"
-		elif((refuseTime < 10)||(getModuleFlag("NanoRevolutionModule", "NanoToughEnable", true))):
+		elif((refuseTime < 10) || !(getModuleFlag("NanoRevolutionModule", "NanoToughEnable", true))):
 			severity = "moderate"
 		if(refuseTime < 2):
 			saynn("[say=npc]I see, {pc.name}. Since this is the first time, we will let you leave. But let me explain our rule, after this time, we will force punishment on you. The severity of punishment is depending on your total refusing times. You can leave now.[/say]")
@@ -209,7 +209,8 @@ func _run():
 			addButton("Continue", "Ouch", "loseandendthescene")
 		else:
 			playAnimation(StageScene.StocksSex, "tease", {pc="pc", npc=npcID, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
-			saynn("[say=npc]Inmate Secured. Initiating anal punishment[/say]")
+
+			saynn("[say=npc]Inmate Secured. Initiating anal punishment. Modifying body to punishment mode.[/say]")
 
 			saynn("The android guard cock erect out. You estimate it about 40 cm long.")
 
