@@ -190,15 +190,15 @@ func _run():
 
 	if(state == "machine_try_run"):
 		playAnimation(StageScene.TentaclesSex, "tease", {bodyState={naked=true, hard=true}})
-		GM.pc.removeAllRestraints()
-		for slot in InventorySlot.getAll():
-			if slot == InventorySlot.Neck:
+		for item in GM.pc.getInventory().getAllEquippedItems():
+			if(item.isImportant()):
 				continue
-			GM.pc.getInventory().clearSlot(slot)
+			GM.pc.getInventory().unequipItem(item)
+
 		saynn("You try your best to get to the door you entered. Unfortunately, it seems locked by this system. Before you notice, several latex tentacles grip your arm and leg, hold you in to the air.")
 		addButton("Struggle", "Try to stop it", "machine_try_stop")
 	if(state == "machine_try_stop"):
-		playAnimation(StageScene.TentaclesSex, "sex", {pcCum=true, bodyState={naked=true, hard=true}})
+		
 		saynn("You try to pull the goo tentacles away, but it doesn't work. The black goo starts climbing your legs, arm, and than covering your whole body.")
 
 		saynn("[say=pc]Help! Can anyone hear me?[/say]")
@@ -226,8 +226,8 @@ func _run():
 		saynn("[say=NanoSystem]Loading existing body configuration. Converting to Standard "+ Gender.genderToString(pcGender)+" Guard Body Module.[/say]")
 		var description = "You feel those black goo flow to your crotch. Suddenly, great pleasure shocks your head, making you hard to think anything."
 
-		var cockLength = GM.main.getModule("NanoRevolutionModule").getNanoCockSize()
-		var breastSize = GM.main.getModule("NanoRevolutionModule").getNanoBreastSize()
+		var cockLength = GlobalRegistry.getModule("NanoRevolutionModule").getNanoCockSize()
+		var breastSize = GlobalRegistry.getModule("NanoRevolutionModule").getNanoBreastSize()
 
 		if(pcGender == Gender.Androgynous):
 			if(!GM.pc.hasVagina()):
@@ -270,8 +270,28 @@ func _run():
 				_breasts.size = BreastsSize.FOREVER_FLAT
 
 
+		if(pcGender == Gender.Female):
 			
-		
+			if(GM.pc.hasPenis()):
+				GM.pc.removeBodypart(BodypartSlot.Penis)
+				description += "You notice your cock is shrinking and disappear eventually."
+			if(!GM.pc.hasVagina()):
+				createPart(BodypartSlot.Vagina)
+				description += "You grow a pussy right below your crotch. "
+			var _breasts = GM.pc.getBodypart(BodypartSlot.Breasts)
+			if(_breasts.size > BreastsSize.FOREVER_FLAT):
+
+				description += "Now you have "+ BreastsSize.breastSizeToCupString(breastSize) + " breasts"
+				_breasts.size = breastSize
+			else:
+				var NewBreasts = GlobalRegistry.createBodypart("humanbreasts")
+				NewBreasts.size = breastSize
+				GM.pc.giveBodypartUnlessSame(NewBreasts)
+				description += "Now you have "+ BreastsSize.breastSizeToCupString(breastSize) + " breasts"
+
+
+			
+		playAnimation(StageScene.TentaclesSex, "sex", {pcCum=true, bodyState={naked=true, hard=true}})
 		saynn(description)
 		
 		saynn("You fight to hold on to your thoughts, your memories, but they’re shooting away with your cum, drowned out by the relentless pleasure. You feel the goo flow in your body progressly replace every fragment of your body. Strangely, you feel that becoming an android isn't that bad....")

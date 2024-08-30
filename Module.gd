@@ -27,7 +27,7 @@ func getDefaultSize():
 	return defaultSizePara
 
 func getSizeDict():
-	var defaultSizeDict = GM.main.getModule("NanoRevolutionModule").getDefaultSize()
+	var defaultSizeDict = GlobalRegistry.getModule("NanoRevolutionModule").getDefaultSize()
 	var sizeDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
 	return sizeDict
 

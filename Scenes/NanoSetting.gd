@@ -12,6 +12,27 @@ var pickedSpeciesToChange = ""
 var pickedGenderToChange = ""
 var pickedPartToChange = []
 
+func getNanoPickableAttributes():
+	var result = {}
+	var breastVariants = [
+		[BreastsSize.FOREVER_FLAT, "Forever Flat", "Your breasts will never produce milk or increase in size"],
+		[BreastsSize.FLAT, "Flat", "Flat breasts"],
+	]
+	for breastSize in BreastsSize.getAll():
+		if(breastSize <= BreastsSize.FLAT || breastSize > BreastsSize.O):
+			continue
+		breastVariants.append([breastSize, BreastsSize.breastSizeToString(breastSize), BreastsSize.breastSizeToCupString(breastSize)])
+	
+	result["breastsize"]= {
+		"text": "Change the breast size",
+		"textButton": "Breast size",
+		"buttonDesc": "Pick the breast size",
+		"options": breastVariants,
+		"default": 4,
+	}
+	return result
+
+
 func are_keys_equal(dict1: Dictionary, dict2: Dictionary) -> bool:
 	var keys1 = dict1.keys()
 	var keys2 = dict2.keys()
@@ -38,6 +59,7 @@ func setGenderWeight(gender,chance):
 	setModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",nanoGenderDict)
 
 func setSizeDict(size):
+	print([pickedPartToChange[1]])
 	sizeDict[pickedPartToChange[0]][pickedPartToChange[1]] = size
 	setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
 func _init():
@@ -293,24 +315,23 @@ func _run():
 		addButton("Max Cock", "Change the maximum of this", "sizemenu", [BodypartSlot.Penis,2])
 		addButton("Min Breast", "Change the minimum of this", "sizemenu", [BodypartSlot.Breasts,1])
 		addButton("Max Breast", "Change the maximum of this", "sizemenu", [BodypartSlot.Breasts,2])
-
+		addButtonAt(14,"Done","Save changes","Q3")
 	if(state == "sizemenu"):
 		add_panel()
-		var minMax = "min" if pickedGenderToChange[1] == 1 else "max"
-		if(pickedGenderToChange[0] == BodypartSlot.Penis):
+		var minMax = "min" if pickedPartToChange[1] == 1 else "max"
+		if(pickedPartToChange[0] == BodypartSlot.Penis):
 			var bodypart = BodypartPenis.new()
 			var attributes = bodypart.getPickableAttributes()
 			var currentAttribute = attributes["cocksize"]
 			
-			saynn(currentAttribute["text"] +":" + minMax)
+			saynn(currentAttribute["text"] +Util.cmToString(sizeDict[BodypartSlot.Penis][pickedPartToChange[1]]) + minMax + "size")
 			for option in currentAttribute["options"]:
 				addButton(option[1], option[2], "setAttribute", [option[0]])
-		elif(pickedGenderToChange[0] == BodypartSlot.Breasts):
-			var bodypart = BodypartBreasts.new()
-			var attributes = bodypart.getPickableAttributes()
+		elif(pickedPartToChange[0] == BodypartSlot.Breasts):
+			var attributes = getNanoPickableAttributes()
 			var currentAttribute = attributes["breastsize"]
 			
-			saynn(currentAttribute["text"] +":" + minMax)
+			saynn(currentAttribute["text"] + BreastsSize.breastSizeToCupString(sizeDict[BodypartSlot.Breasts][pickedPartToChange[1]]) + minMax + "size")
 			for option in currentAttribute["options"]:
 				addButton(option[1], option[2], "setAttribute", [option[0]])
 		
@@ -515,7 +536,7 @@ func _react(_action: String, _args):
 	if(_action == "genderchancemenu"):
 		pickedGenderToChange = _args[0]	
 	if(_action == "sizemenu"):
-		pickedGenderToChange = [_args[0],_args[1]]
+		pickedPartToChange = [_args[0],_args[1]]
 	if(_action == "setgenderchance"):
 		setGenderWeight(_args[0], _args[1])
 		
