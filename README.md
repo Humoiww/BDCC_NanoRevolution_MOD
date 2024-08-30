@@ -27,7 +27,9 @@ Then, use godot 3.x to open this project. Start debug, and you can try the mod n
 
 ## TODO List
 
-- [ ] Add option at start of encounter
+- [x] Add option at start of encounter
+- [x] Add a new character to handle the option part
+- [x] make sure the options are working without bug
 - [ ] Fully developed nano engineering skill tree. You can make something really powerful with this skill.
 - [ ] More nano android type. nano engineers, nurses, and even android sextoys, enrich the BDCC life. 
 - [ ] Mature nano species side path. A new skill tree that is closely related to how to use your new body.
