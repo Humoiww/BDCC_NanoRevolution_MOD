@@ -349,7 +349,7 @@ func addWonButton():
 		addDisabledButton("Submit to", "The system has shutted down.")
 	addButton("Inventory", "Look at your inventory", "openinventory")
 	if(GM.pc.hasPerk("NanoExtration")):
-		addButtonWithChecks("Extract Core","get this android core through its hole","extract_core", [], [ButtonChecks.NotHandsBlocked])
+		addButtonWithChecks("Extract Core","get this android core through its hole","extract_core", [], [ButtonChecks.CanStartSex])
 	if(GM.pc.getInventory().hasRemovableRestraints()):
 		addButton("Struggle", "Struggle out of your restraints", "strugglemenu")
 

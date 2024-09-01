@@ -76,7 +76,7 @@ func updateInfo():
 		itemNameLabel.text = item.getInventoryName()
 	
 	if(isBuy):
-		var price = ceil(item.getPrice()/5.0)
+		var price = ceil(item.getPrice()/5.0) if (item.getPrice()>0) else 1.0
 		var priceStr = (str(price)+" core") if price == 1 else (str(price)+" cores")
 		itemNameLabel.text = item.getVisibleName()+" ("+priceStr+")"
 		if(item.getBuyAmount() > 1):
@@ -115,7 +115,8 @@ func updateInfo():
 				if(item.isImportant()):
 					showUseButton(false)
 			if(isBuy):
-				if(GM.pc.getInventory().getAmountOf("NanoCore") < ceil(item.getPrice()/5.0)):
+				var price = ceil(item.getPrice()/5.0) if (item.getPrice()>0) else 1.0
+				if(GM.pc.getInventory().getAmountOf("NanoCore") < price):
 					$HBoxContainer/HBoxContainer/InteractButton.disabled = true
 				else:
 					$HBoxContainer/HBoxContainer/InteractButton.disabled = false

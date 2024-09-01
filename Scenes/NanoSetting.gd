@@ -396,7 +396,7 @@ func _run():
 		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes. Otherwise, click \"Next\" to proceed to the next question")
 		
 		
-		addButton("Next","go to the last question","Q_5")
+		addButton("Next","go to the last question","Q5")
 		addButton("Edit","I want to edit","Q4_menu")
 		addButton("Last","I want to review the last question","Q3")
 		addButtonAt(10,"Menu","Back to main menu","menu")
@@ -444,7 +444,7 @@ func _run():
 		
 		var flag = "NanoToughEnable"
 		showEventState("The android guard will enforce tough anus punishment if an inmate’s refusal times exceeds 10.",flag)
-		addButton("Tough Punishment","toggle_this","Q5_change",[flag])
+		addButton("Tough Punish","toggle this","Q5_change",[flag])
 		addButtonAt(10,"Next","go to the last question","Q_end")
 		addButtonAt(11,"Last","I want to review the last question","Q4")
 		addButtonAt(12,"Menu","Back to main menu","menu")

@@ -41,7 +41,7 @@ func updateSellingItems():
 			continue
 		
 		var itemObject = GlobalRegistry.getItemRef(itemID)
-		var cost = ceil(itemObject.getPrice()/5.0)
+		var cost = ceil(itemObject.getPrice()/5.0) if (itemObject.getPrice()>0) else 1.0
 		var desc = itemObject.getVisisbleDescription()
 		if(cost <= 1):
 			cost = 1

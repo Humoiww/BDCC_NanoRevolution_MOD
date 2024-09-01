@@ -36,6 +36,14 @@ func _run():
 		else:
 			addDisabledButton("Trade","You don't have any core, better go and get some for me?")
 		addButton("Leave","Seems like there's not much to talk about right now, is there? But trust me, there'll be something in the future. X3","endthescene")
+	if(state == "trade"):
+		var coreAmount = GM.pc.getInventory().getAmountOf("NanoCore")
+		displayCoreCount(coreAmount)
+		if(coreAmount >= 1):
+			addButton("Trade","Trade one core","trade")
+		else:
+			addDisabledButton("Trade","You don't have any core, better go and get some for me?")
+		addButton("Leave","Seems like there's not much to talk about right now, is there? But trust me, there'll be something in the future. X3","endthescene")
 
 func _react(_action: String, _args):
 	if(_action == "endthescene"):
@@ -45,7 +53,7 @@ func _react(_action: String, _args):
 	if(_action == "trade"):
 		GM.pc.getInventory().removeXOfOrDestroy("NanoCore",1)
 		GM.pc.addCredits(3)
-		setState("")
+		setState("trade")
 		return
 
 	if(_action == "aftercare"):

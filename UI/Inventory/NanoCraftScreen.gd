@@ -140,7 +140,7 @@ func updateSelectedInfo():
 	itemNameLabel.text = selectedItem.getStackName()
 	itemDescLabel.bbcode_text = selectedItem.getVisibleDescription()
 	if(isBuy):
-		var price = ceil(selectedItem.getPrice()/5.0)
+		var price = ceil(selectedItem.getPrice()/5.0) if (selectedItem.getPrice()>0) else 1.0
 		var priceStr = (str(price)+" core") if price == 1 else (str(price)+" cores")
 		itemDescLabel.bbcode_text += "\ncost: " +priceStr
 		if(selectedItem.getBuyAmount() > 1):
