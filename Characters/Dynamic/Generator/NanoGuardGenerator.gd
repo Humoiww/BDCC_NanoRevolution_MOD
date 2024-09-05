@@ -39,10 +39,6 @@ func createBodyparts(character:DynamicCharacter, _args = {}):
 	# Size should be something in species part
 	var allSpecies = GlobalRegistry.getAllSpecies()
 	
-	
-
-
-	
 	var basicSpeciesDict = {}
 	for speciesID in allSpecies:
 		var specie = allSpecies[speciesID]

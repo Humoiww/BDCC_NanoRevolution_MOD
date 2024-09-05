@@ -18,6 +18,19 @@ func getFlags():
 		"NanoAndroidGuardAppearWeight": flag(FlagType.Number),
 		"NanoAndroidGenderDistr": flag(FlagType.Dict),
 		"NanoToughEnable": flag(FlagType.Bool),
+
+
+		# SexDollSkill
+		"NanoSexSub": flag(FlagType.Bool),
+		"NanoSexMasturbate": flag(FlagType.Bool),
+		"NanoSexToilet": flag(FlagType.Bool),
+		"NanoSexDollMaitain": flag(FlagType.Bool),
+		# ControllerFlag
+		"NanoControllerRemainCharge": flag(FlagType.Number),
+		"NanoControllerFullCharge": flag(FlagType.Number),
+		"NanoTriggerKeyQuest": flag(FlagType.Bool),
+	
+		
 	}
 
 func getDefaultSize():
@@ -39,16 +52,51 @@ func getNanoBreastSize():
 	var sizeDict = getSizeDict()
 	return RNG.randi_range(sizeDict[BodypartSlot.Breasts][1],sizeDict[BodypartSlot.Breasts][2])
 
+func doConvertCharacter(npcID):
+	# var theChar:DynamicCharacter = GlobalRegistry.getCharacter(npcID)
+	
+	# if(theChar == null || !theChar.isDynamicCharacter()):
+	# 	return false
+	# if(theChar.isSlaveToPlayer()):
+	# 	return false
+	
+	# var theEnslaveQuest:NpcEnslavementQuest = theChar.getEnslaveQuest()
+	# theChar.setEnslaveQuest(null)
+	
+	# var slaveType = defaultSlaveType
+	# if(theEnslaveQuest != null):
+	# 	slaveType = theEnslaveQuest.slaveType
+	
+	# var newNpcSlavery = NpcSlave.new()
+	# newNpcSlavery.setChar(theChar)
+	# newNpcSlavery.setMainSlaveType(slaveType)
+	# newNpcSlavery.slaveSpecializations = {
+	# 	slaveType: 0,
+	# }
+	# #newNpcSlavery.generateTasks()
+	# theChar.setNpcSlavery(newNpcSlavery)
+	# newNpcSlavery.onEnslave()
+	
+	GM.main.removeDynamicCharacterFromAllPools(npcID)
+	GM.main.addDynamicCharacterToPool(npcID, "SexDoll")
+	return true
+
+
+
 func _init():
 	id = "NanoRevolutionModule"
 	author = "Humoi"
-	
+	attacks = [
+		
+	]
 	scenes = [
 		"res://Modules/NanoRevolution/Scenes/NanoAttackScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoCraftScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoExposureForceCheckScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoSetting.gd",
 		"res://Modules/NanoRevolution/Scenes/HumoiTalkScene.gd",
+		"res://Modules/NanoRevolution/Scenes/NanoMeetSexDollScene.gd",
+		"res://Modules/NanoRevolution/Scenes/NanoCallingScene.gd",
 		]
 	characters = [
 		"res://Modules/NanoRevolution/Characters/NanoAssemble.gd",
@@ -56,6 +104,7 @@ func _init():
 	]
 	items = [
 		"res://Modules/NanoRevolution/Inventory/Items/NanoCore.gd",
+		"res://Modules/NanoRevolution/Inventory/Items/NanoController.gd",
 		
 	]
 	events = [
@@ -82,6 +131,6 @@ func _init():
 #	stageScenes = [
 #
 #	]
-# func resetFlagsOnNewDay():
-# 	if(GM.main.getModuleFlag("NovaModule", "Nova_NotThereToday")):
-# 		GM.main.setModuleFlag("NovaModule", "Nova_NotThereToday", false)
+func resetFlagsOnNewDay():
+	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 1)
+	GM.main.setModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", charge)

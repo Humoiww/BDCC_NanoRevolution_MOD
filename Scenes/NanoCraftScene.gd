@@ -18,6 +18,8 @@ func _initScene(_args = []):
 	if(_args.size() > 0):
 		lockedInto = true
 		setState(_args[0])
+		if(_args.size() > 1):
+			sellingItemsTags = _args[1]
 
 func _init():
 	sceneID = "NanoCraftScene"

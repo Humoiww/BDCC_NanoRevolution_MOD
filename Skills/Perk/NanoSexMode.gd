@@ -5,11 +5,11 @@ func _init():
 	skillGroup = "NanoENGR"
 
 func getVisibleName():
-	return "Sex Mode"
+	return "Introduction to Android Hacking."
 
 func getVisibleDescription():
-	return "Hum, I wonder what how this trigger works...\n" \
-	+ "Effect: Now you can trigger nano android's sex module after defeating them."
+	return "So, you just notice that your controller can remotely communivate with the android terminal.\n" \
+	+ "Effect: Unlock the \"Hack\" move during and after winning an android fight. (However, hacking is not that easy...)"
 
 func getSkillTier():
 	return 0
@@ -17,3 +17,5 @@ func getSkillTier():
 func getPicture():
 	return "res://Images/Perks/nested-hearts2.png"
 
+func addsAttacks():
+	return ["NanoHackPCAttack"]

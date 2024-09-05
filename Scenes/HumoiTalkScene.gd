@@ -16,6 +16,10 @@ func _run():
 	if(state == ""):
 		addCharacter("humoi")
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
+		saynn("Want to learn something?")
+	if(state == "debug_message_state"):
+		addCharacter("humoi")
+		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
 		saynn("[say=humoi]So, you want to know more about me? You’re so sweet! But for now, sorry for breaking the fourth wall—I have to tell you that this scene hasn’t been implemented yet. This is the only part you’ll see for now.[/say]")
 		
 		saynn("Humoi playfully made a pouty face, tilting her head slightly.")

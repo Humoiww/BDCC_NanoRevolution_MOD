@@ -11,6 +11,8 @@ var totalWeight = 0
 var pickedSpeciesToChange = ""
 var pickedGenderToChange = ""
 var pickedPartToChange = []
+var accessThroughControl = false
+
 
 func getNanoPickableAttributes():
 	var result = {}
@@ -106,10 +108,17 @@ func _initScene(_args = []):
 
 	defaultSizeDict = getModule("NanoRevolutionModule").getDefaultSize()
 	
-
+	accessThroughControl = false
 	timesCame = 0
 	if(_args.size() > 0):
-		setState(_args[0])
+		print(_args[0])
+		if(_args[0].substr(0, 4) == "item"):
+			setState("Enter_survey")
+			accessThroughControl = true
+		else:
+			setState(_args[0])
+
+		
 
 func _run():
 	if(state == ""):
@@ -483,8 +492,12 @@ func _run():
 	if(state == "return_datapad"):
 		saynn("You complete all these questions. Humoi grab her datapad back and giggles.")
 
-		saynn("[say=humoi]Looks like someone is waiting for {pc.hisHer} rewards~[/say]")
+		if(!getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false)):
+			saynn("[say=humoi]Looks like someone is waiting for {pc.hisHer} rewards... Oh, I almost forgot. Here, take this controller. Next time, if you want to adjust your response, you can use this instead of tracking me down.[/say]")
 
+			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
+		else:
+			saynn("[say=humoi]Looks like someone is waiting for {pc.hisHer} rewards~[/say]")
 		addButtonWithChecks("Sex!", "Time to fuck them!", "startsexasdom", [], [ButtonChecks.CanStartSex])
 		addButton("Leave","No interest for now","endthescene")
 
@@ -493,7 +506,9 @@ func _run():
 
 		saynn("Humoi chuckles and grabs the datapad back.")
 		if !(getModuleFlag("NanoRevolutionModule","NanoMeetHumoi",false)):
-			saynn("[say=humoi]It's fine. Just remember, you are free to find me and change your options. I'm lilac, so you know you can find me. See you around~[/say]")
+			saynn("[say=humoi]It’s fine. Just remember, you’re always free to find me and change your options. I’m lilac, so you’ll know where to find me. Also, here, take this controller. You can use it to change your response instead of hunting me down. See you around~[/say]")
+
+			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
 		else:
 			saynn("[say=humoi]It's fine. See you then~[/say]")
 		addButton("Leave","Maybe next time","endthescene")
@@ -501,17 +516,22 @@ func _run():
 	if(state == "skip_and_sex"):
 		saynn("Humoi giggles and put the datapad beside.")
 
-		saynn("[say=humoi]Looks like someone is pretty horny today. Yes, use me as an useless sextory~[/say]")
+		if !(getModuleFlag("NanoRevolutionModule","NanoMeetHumoi",false)):
+			saynn("[say=humoi]You don’t want to take the survey? That’s totally fine. Just take this controller, so you can respond whenever you’re ready.[/say]")
+			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
+			saynn("[say=humoi]Now, make me~[/say]")
+		else:
+			saynn("[say=humoi]Looks like someone is pretty horny today. Yes, use me as an useless sextory~[/say]")
 
-		addButtonWithChecks("Sex!", "Time to fuck them!", "startsexasdom", [], [ButtonChecks.CanStartSex])
+		addButtonWithChecks("Sex!", "Time to fuck!", "startsexasdom", [], [ButtonChecks.CanStartSex])
 		addButton("Leave","You changed your idea","after_sex")
 
 	if(state == "after_sex"):
 		if(!getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false)):
 			if(timesCame < 1):
-				saynn("[say=humoi]Stop now? Ok, if you really in hurry. Just remember, you are free to find me and change your options. I'm lilac, so you know where you can find me. See you around~[/say]")
+				saynn("[say=humoi]Stop now? Ok, if you really in hurry. Just remember, you are free to find me and change responses. I'm lilac, so you know where you can find me. See you around~[/say]")
 			elif(timesCame < 5):
-				saynn("[say=humoi]Wow, thanks for such good sex. Just remember, you are free to find me and change your options. I'm lilac, so you know where you can find me. See you around~[/say]")
+				saynn("[say=humoi]Wow, thanks for such good sex. Just remember, you are free to find me and change your responses. I'm lilac, so you know where you can find me. See you around~[/say]")
 			elif(timesCame < 10):
 				saynn("[say=humoi]Hey... hey... I'm nearly exhausted. I kinda like you now~ come to my cell later, so you can edit your answer, and... you know, rewards heh heh..[/say]")
 			else:
@@ -525,7 +545,7 @@ func _run():
 			elif(timesCame < 10):
 				saynn("[say=humoi]Hey... hey... I'm nearly exhausted. You are really a good partner, we should do that again~[/say]")
 			else:
-				saynn("[say=humoi][shake rate=20.0 level=5 connected=1]...sex...so..much..cumming....Ahhh.....I...am....yours.....[/shake][/say]")
+				saynn("[say=humoi][shake rate=20.0 level=5 connected=1]...sex...so..much..cumming....Ahhh.....I...m...all....yours.....[/shake][/say]")
 				saynn("Humoi colapse on the floor.")
 		addButton("Leave","Should go now","endthescene")
 		
@@ -605,6 +625,18 @@ func _react(_action: String, _args):
 		toggleFlag(_args[0])
 		setState("Q5")
 		return
+
+	# if you make setting through controller
+	if(_action == "no_change" || _action == "return_datapad" || _action == "skip_and_sex"):
+		print(_action)
+		print("should_not_trigger_here")
+		if (!GM.pc.getInventory().hasItemID("NanoController")):
+			GM.pc.getInventory().addItemID("NanoController")
+		if accessThroughControl:
+			endScene()
+			return
+
+
 	setState(_action)
 
 

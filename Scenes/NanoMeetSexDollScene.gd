@@ -34,24 +34,24 @@ func showAndroidStatus(possibility):
 		saynn("That's... ridiculous! I mean, it's nearly impossible to succeed so many times just to see this message!")
 
 func _init():
-	sceneID = "NanoExposureForceCheckScene"
+	sceneID = "NanoMeetSexDollScene"
 
 func _initScene(_args = []):
 	npcID = _args[0]
-	var npc = GlobalRegistry.getCharacter(npcID)
+	# var npc = GlobalRegistry.getCharacter(npcID)
 	
-	if(npc.getFlag(CharacterFlag.Introduced)):
-		sawBefore = true
-	else:
-		npc.setFlag(CharacterFlag.Introduced, true)
+	# if(npc.getFlag(CharacterFlag.Introduced)):
+	# 	sawBefore = true
+	# else:
+	# 	npc.setFlag(CharacterFlag.Introduced, true)
 		
-	var personality:Personality = npc.getPersonality()
-	if(personality.getStat(PersonalityStat.Mean) > 0.3 || personality.getStat(PersonalityStat.Subby) < -0.6):
-		npcVariation = "mean"
-	if(personality.getStat(PersonalityStat.Mean) < -0.3):
-		npcVariation = "kind"
-	if(personality.getStat(PersonalityStat.Subby) > 0.6 || personality.getStat(PersonalityStat.Coward) > 0.8):
-		npcVariation = "subby"
+	# var personality:Personality = npc.getPersonality()
+	# if(personality.getStat(PersonalityStat.Mean) > 0.3 || personality.getStat(PersonalityStat.Subby) < -0.6):
+	# 	npcVariation = "mean"
+	# if(personality.getStat(PersonalityStat.Mean) < -0.3):
+	# 	npcVariation = "kind"
+	# if(personality.getStat(PersonalityStat.Subby) > 0.6 || personality.getStat(PersonalityStat.Coward) > 0.8):
+	# 	npcVariation = "subby"
 	
 func resolveCustomCharacterName(_charID):
 	if(_charID == "npc"):
@@ -65,58 +65,30 @@ func _run():
 	if(state == ""):
 		addCharacter(npcID)
 		playAnimation(StageScene.Duo, "stand", {npc=npcID})
-	if(state == "" && !getModuleFlag("NanoRevolutionModule", "NanoCheckHappened", false)):
-		setModuleFlag("NanoRevolutionModule", "NanoCheckHappened", true)
-		setModuleFlag("NanoRevolutionModule", "NanoCheckSRefuseTimes", 0)
-		saynn("When you walk around, you just notice an android with dark blue skin color approach you")
+	if(state == ""):
 
-		saynn("{npc.himHer} gives you a stop sign.")
-
-		saynn("[say=npc]Greating, Inmate number {pc.inmateNumber}, how's your day going?[/say]")
-
-		saynn("[say=pc]Good I suppose?[/say]")
-
-		saynn("[say=npc]That's excellent, may I have your name please? Just for reference.[/say]")
-
-		saynn("[say=pc]It's {pc.name}, can I go now?[/say]")
-
-		saynn("[say=npc]Sorry {pc.name}, we have to frisk you. Please stand against a wall.[/say]")
+		saynn("[say=npc]Hello, sir. What can I serve you today.[/say]")
 
 		# (if not naked)
-		if(!GM.pc.isFullyNaked()):
-			saynn("[say=pc]Why?[/say]")
-
-			saynn("[say=npc]According to the prison law 1437, inmates should not have any stuff labeled illegal. And we will check periodically to ensure safety.[/say]")
-
-			saynn("[say=pc]And what is illegal?[/say]")
-
-			saynn("[say=npc]Illegal item include but not limited to weapons, contraband, and stollen stuff. Your personal inventory UI should show the stuff label for reference.[/say]")
-		# (if naked)
-		else:
-			saynn("[say=pc]Can’t you see that I don’t have anything, I’m naked[/say]")
-
-			saynn("[say=npc]I'm afraid that we still need to complete frisking process. According to our frisking record, 20% Inmates hide item in their private area.[/say]")
-
-		saynn("The nano guard will check you every time when they meet you. What do you wanna do?")
-	elif(state == ""):
-		saynn("The nano guard stops you.")
-
-		saynn("[say=npc]{pc.name}, we have to frisk you. Please stand against a wall.[/say]")
 		
-		saynn("What do you wanna do?")
-	if(state == ""):
-		addButton("Get frisked", "Let "+ GlobalRegistry.getCharacter(npcID).himHer() +" frisk you", "get_frisked")
+
+		addButton("Sex!", "Start sex at dominative position.", "startsexasdom")
+		addButton("Submit!", "Enable Dominativate Mode","startsexassub")
+		addButton("Masturbate","You want your doll to solve your heat.", "masturbate_selection")
+		addButton("Toilet","You want to use them as toilet.","toilet")
+		addButton("Massage","You want them to relax you, recover some stamina","Massage")
 		# addButtonWithChecks("Offer handjob", "Maybe he will let you through if you let his cock out", "offer_handjob", [], [
 		# 	ButtonChecks.NotHandsBlocked,
 		# 	ButtonChecks.NotLate,
 		# 	[ButtonChecks.SkillCheck, Skill.SexSlave, 1],
 		# 	])
-		addButton("Refuse", "You don’t wanna get frisked!", "intimidate")
-		# addButton("Leave", "You don’t wanna get frisked", "leave")
-		if(GM.pc.hasPerk("NanoDistraction")):
-			addButton("Distract!", "Making the android think you are not here.", "leave")
-		else:
-			addDisabledButton("Leave", "The guard keep all their attention on you")
+		addButton("leave", "You don't want to do anything for now.", "leaveandendthescene")
+		# addButton("Refuse", "You don’t wanna get frisked!", "intimidate")
+		# # addButton("Leave", "You don’t wanna get frisked", "leave")
+		# if(GM.pc.hasPerk("NanoDistraction")):
+		# 	addButton("Distract!", "Making the android think you are not here.", "leave")
+		# else:
+		# 	addDisabledButton("Leave", "The guard keep all their attention on you")
 
 	if(state == "leave"):
 		saynn("[say=npc]Warning: cannot track inmate {pc.inmateNumber}.[/say]")
@@ -387,13 +359,6 @@ func _react(_action: String, _args):
 
 	if(_action == "convert_to_sex_mode"):
 		var _npc = getCharacter(npcID)
-		getModule("NanoRevolutionModule").doConvertCharacter(npcID)
-
-	if(_action == "convertsexend"):
-		runScene("NanoMeetSexDollScene",[npcID])
-		endScene()
-		return
-		
 	if(_action == "outside"):
 		GM.pc.addSkillExperience(Skill.SexSlave, 20, "cpguard_suckcock")
 
