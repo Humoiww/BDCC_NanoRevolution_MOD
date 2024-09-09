@@ -336,9 +336,8 @@ func _run():
 		addButton("Done", "Excellent", "allowFullAndendthescene")
 
 	if(state == "convert_to_sex_mode"):
-		saynn("You use your terminal and hack in the android guard module. Quiet complex, but you notice that there's an unused sex doll part.")
+		saynn("You successfully convert it to sex mode.")
 
-		saynn("You adjust a bit, and switch success. (TODO: change this text)")
 		addButton("Continue","See what happened next","convertsexend")
 
 func addWonButton():
@@ -348,11 +347,10 @@ func addWonButton():
 	# addButtonWithChecks("Catch oral", "Use the guy’s dick for your pleasure", "catch_oral", [], [ButtonChecks.NotHandsBlocked])
 
 	if(GM.pc.hasPerk("NanoSexMode")):
-		addButtonWithChecks("Sex!", "Transform to android running mode to sex doll.", "convert_to_sex_mode", [], [ButtonChecks.CanStartSex])
+		addButtonWithChecks("Hack!", "Try to hack in the android system", "convert_to_sex_mode", [], [ButtonChecks.CanStartSex])
 		# addButton("Submit to", "Switch the android to dominative mode", "startsexsubby")
-	else:
-		addDisabledButton("Sex!", "The system has shutted down.")
-		addDisabledButton("Submit to", "The system has shutted down.")
+	addDisabledButton("Sex!", "The system has shutted down.")
+	addDisabledButton("Submit to", "The system has shutted down.")
 	addButton("Inventory", "Look at your inventory", "openinventory")
 	if(GM.pc.hasPerk("NanoExtration")):
 		addButtonWithChecks("Extract Core","get this android core through its hole","extract_core", [], [ButtonChecks.CanStartSex])
@@ -386,8 +384,9 @@ func _react(_action: String, _args):
 
 
 	if(_action == "convert_to_sex_mode"):
-		var _npc = getCharacter(npcID)
-		getModule("NanoRevolutionModule").doConvertCharacter(npcID)
+		runScene("ComputerSimScene", ["DatapadHackComputer"], "computerhack")
+		# var _npc = getCharacter(npcID)
+		# getModule("NanoRevolutionModule").doConvertCharacter(npcID)
 
 	if(_action == "convertsexend"):
 		runScene("NanoMeetSexDollScene",[npcID])
@@ -524,6 +523,12 @@ func _react_scene_end(_tag, _result):
 
 			for item in GM.pc.getInventory().forceRestraintsWithTag(ItemTag.CanBeForcedByGuards, RNG.randi_range(baseNum, int(ceil(refuseTime/2)))):
 				addMessage(item.getForcedOnMessage())
+
+	if(_tag == "computerhack"):
+		if(_result[0] == true):
+			setState("hack_succeed")
+		else:
+			setState("hack_fail")
 
 
 func getDevCommentary():

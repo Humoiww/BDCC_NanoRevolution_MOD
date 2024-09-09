@@ -14,14 +14,18 @@ func getVisibleDesc(_context = {}):
 func _doAttack(_attacker, _receiver, _context = {}):
 
 	var texts = [
-		"{attacker.name} manages to land a few strong punches on {receiver.name}",
+		"{attacker.name} hack in {receiver.name}'s system successfully.",
 	]
 	var text = RNG.pick(texts)
-	
-
+	var pain = _receiver.painThreshold()
+	if(!GM.main.getModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", false)):
+		GM.main.setModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", true)
+		pain = 0
+		text = "{attacker.name} tried to hack into the android guard system, but it’s locked behind a key! Looks like {attacker.name}’ll need to find the key first."
 	return {
 		text = text,
-		pain = RNG.randi_range(10,20)
+		pain = pain
+
 	}
 # func doAttack(_attacker, _receiver, _context = {}):
 # 	doRequirements(_attacker, _receiver)

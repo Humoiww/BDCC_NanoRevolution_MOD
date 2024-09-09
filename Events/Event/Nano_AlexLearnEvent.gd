@@ -7,12 +7,18 @@ func registerTriggers(es):
 	es.addTrigger(self, Trigger.TalkingToNPC, "alexrynard")
 	
 func run(_triggerID, _args):
-	if(getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false)):
+	if(getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false)):
 		if(not getFlag("AlexRynardModule.ch1HypnovisorHappened")):
 			addDisabledButton("Nano Android", "Better wait till Alex is more friendly with you")
 		else:
-			addButtonUnlessLate("Nano Android", "Inquiry something about these nano androids", "talk_android")
-		return
+			if(!getModuleFlag("NanoRevolutionModule", "NanoAskAlexKey", false) || getModuleFlag("NanoRevolutionModule", "NanoKnowAndroidKey", false)):
+				addButtonUnlessLate("Nano Android", "Inquiry something about these nano androids", "talk_android")
+			else:
+				addDisabledButton("Nano Android", "Better go and check that blue dragon first.")
+	
+	
+	
+	return
 	
 
 		

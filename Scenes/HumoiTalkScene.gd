@@ -12,11 +12,79 @@ func displayCoreCount(coreAmount):
 		saynn("You have only one core.")
 	else:
 		saynn("You don't have any core.")
+
+func sayCharater(ch,text):
+	saynn("[say=" +ch+ "]" +text + "[/say]")
+
+
 func _run():
 	if(state == ""):
+		
 		addCharacter("humoi")
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
-		saynn("Want to learn something?")
+		saynn("[say=humoi]So, you want to know more about me? You’re so sweet! Then what do you want to talk.[/say]")
+
+		addButton("Herself","Back story?","humoi_self")
+		if GM.main.getModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", false):
+			if !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
+				addButton("Key?","Does she know anything about android key?","ask_key")
+			elif !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskAlexKey", false):
+				addButton("Key","Review some key information","ask_key")
+			else:
+				addButton("Key!","Interrogate her about key","ask_key_second")
+		
+		addButton("Leave","I think that's it","endthescene")
+
+
+
+
+
+	if(state == "ask_key"):
+		if GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
+			sayCharater("humoi","Need more information? Sure, just ask anything you want!")
+		else:
+			sayCharater("humoi","So, you’ve found the backdoor software I created for these androids? Nice work! Unfortunately, I still don’t have any clues on how to access those keys. Maybe you should check with Alex. He’s a smart fox working in the engineering bay near the mining area, and he might have more information once he gets to know you better.")
+		
+		
+		addButton("Strange","She designed the software but doesn’t have the key to access it? Why?","why_key")
+		addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
+		addButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?","why_me")
+		addButton("Leave","OK then","endthescene")
+
+	if(state == "why_key"):
+		sayCharater("humoi","Well, that’s a common issue in engineering. Sometimes, we design a project but don’t anticipate every possible case. When we encounter an unexpected situation, we often have to pause the project until we find a solution.")
+		saynn("She blinks and continues.")
+		sayCharater("humoi","Once you have any clues about the key, I can probably make something to help with your hacking.")
+
+
+		addDisabledButton("Strange","She designed the software but doesn’t have the key to access it? Why?")
+		addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
+		addButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?","why_me")
+		addButton("Leave","OK then","endthescene")
+	if(state == "why_alex"):
+		sayCharater("humoi","So, Alex is a very ambitious fox working in engineering. He’s put a lot of effort into this project for some reason, so if you want more information about the nano androids, you should check with him.")
+		saynn("She sighs a little.")
+		sayCharater("humoi","Though I strongly suggest you avoid asking too much about why he put so much effort into this project until he brings it up himself. It’s not a story with a happy ending. Just keep an eye on this fox, alright? He’s been through a lot, and it’d mean a lot to me if you looked out for him. Think of it as a favor.")
+		
+		
+		addButton("Strange","She designed the software but doesn’t have the key to access it? Why?","why_key")
+		addDisabledButton("Alex?","Why does she think Alex might have a clue about the key?")
+		addButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?","why_me")
+		addButton("Leave","OK then","endthescene")	
+
+
+	if(state == "why_me"):
+		sayCharater("pc","Why don’t you go ask him about the key? You’re more familiar with him and the androids, so you might get better clues than I can provide.")
+		sayCharater("humoi","There are two reasons. First, he knows me too well, so he probably won’t spill any clues about the key since he knows I could use it to mess things up. Second, getting chummy with Alex could really help you if you want to dig deeper into the nano androids.")
+
+
+		addButton("Strange","She designed the software but doesn’t have the key to access it? Why?","why_key")
+		addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
+		addDisabledButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?")
+		addButton("Leave","OK then","endthescene")
+
+
+
 	if(state == "debug_message_state"):
 		addCharacter("humoi")
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
@@ -59,6 +127,9 @@ func _react(_action: String, _args):
 		GM.pc.addCredits(3)
 		setState("trade")
 		return
+
+	if(_action == "ask_key"):
+		GM.main.setModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", true)
 
 	if(_action == "aftercare"):
 		processTime(30*60)

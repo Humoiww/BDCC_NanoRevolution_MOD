@@ -28,8 +28,11 @@ func getFlags():
 		# ControllerFlag
 		"NanoControllerRemainCharge": flag(FlagType.Number),
 		"NanoControllerFullCharge": flag(FlagType.Number),
+		# KeyQuestFlag
 		"NanoTriggerKeyQuest": flag(FlagType.Bool),
-	
+		"NanoKnowAndroidKey": flag(FlagType.Bool),
+		"NanoAskHumoiKey": flag(FlagType.Bool),
+		"NanoAskAlexKey": flag(FlagType.Bool),
 		
 	}
 
@@ -87,7 +90,7 @@ func _init():
 	id = "NanoRevolutionModule"
 	author = "Humoi"
 	attacks = [
-		
+		"res://Modules/NanoRevolution/Attacks/NanoHackPCAttack.gd",
 	]
 	scenes = [
 		"res://Modules/NanoRevolution/Scenes/NanoAttackScene.gd",
@@ -97,6 +100,7 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/HumoiTalkScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoMeetSexDollScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoCallingScene.gd",
+		"res://Modules/NanoRevolution/Scenes/Alex_TalkAboutAndroid.gd",
 		]
 	characters = [
 		"res://Modules/NanoRevolution/Characters/NanoAssemble.gd",
@@ -113,6 +117,7 @@ func _init():
 		"res://Modules/NanoRevolution/Events/Event/NanoAndroidMeetAssembleEvent.gd", 
 		"res://Modules/NanoRevolution/Events/Event/NanoAndroidCheck.gd",
 		"res://Modules/NanoRevolution/Events/Event/NanoVisitHumoiEvent.gd",
+		"res://Modules/NanoRevolution/Events/Event/Nano_AlexLearnEvent.gd",
 	]
 	perks = [
 		"res://Modules/NanoRevolution/Skills/Perk/NanoBetterExtration.gd",
@@ -131,6 +136,11 @@ func _init():
 #	stageScenes = [
 #
 #	]
+	quests = [
+		"res://Modules/NanoRevolution/Quests/Nano_FigureOutKey.gd"
+	]
+
+
 func resetFlagsOnNewDay():
 	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 1)
 	GM.main.setModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", charge)
