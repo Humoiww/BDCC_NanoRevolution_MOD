@@ -22,6 +22,8 @@ func _doAttack(_attacker, _receiver, _context = {}):
 		GM.main.setModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", true)
 		pain = 0
 		text = "{attacker.name} tried to hack into the android guard system, but it’s locked behind a key! Looks like {attacker.name}’ll need to find the key first."
+	else:
+		GM.main.increaseModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", -5)
 	return {
 		text = text,
 		pain = pain
@@ -70,7 +72,7 @@ func checkRequirement(_attacker, _receiver, req):
 		if (GM.main.getModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", false)  &&  !GM.main.getModuleFlag("NanoRevolutionModule", "NanoKnowAndroidKey", false)):
 			return false
 	if(reqtype == "hasRemainCharge"):
-		if(GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1) < 0.8):
+		if(GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1) < 5):
 			return false
 	return true
 
@@ -83,7 +85,7 @@ func getRequirements():
 	return ["isNanoAndroid","knownKey","hasRemainCharge"]
 
 func getAttackSoloAnimation():
-	return "punch"
+	return "stand"
 
 func getExperience():
 	return [[Skill.Combat, 10]]

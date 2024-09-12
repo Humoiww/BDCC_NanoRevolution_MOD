@@ -9,7 +9,7 @@ var extractAmount = 0
 var refuseTime = 0
 var severity = ""
 var initialSize = -1
-
+var newMode = ""
 func showAndroidStatus(possibility):
 	if(possibility > 90):
 		saynn("The android seems very stable.")
@@ -252,6 +252,11 @@ func _run():
 		saynn("You check the android, their body just become too stiff to use for your pleasure.")
 		
 		addWonButton()
+		
+	if(state == "hack_fail"):
+		saynn("You try to hack in, but nothing changed.")
+		
+		addWonButton()
 
 	if(state == "extract_core"):
 		playAnimation(StageScene.SexFisting, "sex", {
@@ -340,6 +345,11 @@ func _run():
 
 		addButton("Continue","See what happened next","convertsexend")
 
+	if(state == "convert_to_guard_mode"):
+		saynn("You switch the android to guard mode, nothing changed.")
+		
+		addWonButton()
+
 func addWonButton():
 	addButton("Walk away", "You got your pass, you can just go", "allowFullAndendthescene")
 	# addButtonWithChecks("Catch anal", "Use the guy’s dick for your pleasure", "catch_anal", [], [ButtonChecks.NotHandsBlocked])
@@ -384,7 +394,7 @@ func _react(_action: String, _args):
 
 
 	if(_action == "convert_to_sex_mode"):
-		runScene("ComputerSimScene", ["DatapadHackComputer"], "computerhack")
+		runScene("ComputerSimScene", ["HackAndroid"], "computerhack")
 		# var _npc = getCharacter(npcID)
 		# getModule("NanoRevolutionModule").doConvertCharacter(npcID)
 
@@ -525,8 +535,14 @@ func _react_scene_end(_tag, _result):
 				addMessage(item.getForcedOnMessage())
 
 	if(_tag == "computerhack"):
+		print(_result)
 		if(_result[0] == true):
-			setState("hack_succeed")
+			var parameter = _result[1]
+			newMode = parameter[0]
+			if(newMode == "guard"):
+				setState("convert_to_guard_mode")
+			if(newMode == "sex"):
+				setState("convert_to_sex_mode")
 		else:
 			setState("hack_fail")
 

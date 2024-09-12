@@ -2,11 +2,9 @@ extends "res://Scenes/SceneBase.gd"
 
 var inventoryScreenScene = preload("res://Modules/NanoRevolution/UI/Inventory/NanoCraftScreen.tscn")
 
-var sellingItemsTags = [
-	ItemTag.SoldByTheAnnouncer,
-	ItemTag.CanBeForcedByGuards,
-]
+var sellingItemsTags = []
 var sellingItems = [
+	"NanoBrick"
 	]
 var sellItemsData = {}
 var sortedItemsIds = []
@@ -20,10 +18,21 @@ func _initScene(_args = []):
 		setState(_args[0])
 		if(_args.size() > 1):
 			sellingItemsTags = _args[1]
+	var craftableItem = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableItem", {})
+	for itemID in craftableItem:
+		if craftableItem[itemID] == true:
+			sellingItems.append(itemID)
+	var craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
+	for tag in craftableTag:
+		if craftableItem[tag] == true:
+			sellingItemsTags.append(tag)
 
 func _init():
 	sceneID = "NanoCraftScene"
+
+
 	
+
 func _reactInit():
 	updateSellingItems()
 	
@@ -43,7 +52,9 @@ func updateSellingItems():
 			continue
 		
 		var itemObject = GlobalRegistry.getItemRef(itemID)
-		var cost = ceil(itemObject.getPrice()/5.0) if (itemObject.getPrice()>0) else 1.0
+
+		
+		var cost = GlobalRegistry.getModule("NanoRevolutionModule").getCraftCost(itemObject)
 		var desc = itemObject.getVisisbleDescription()
 		if(cost <= 1):
 			cost = 1

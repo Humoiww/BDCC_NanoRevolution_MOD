@@ -7,27 +7,27 @@ var keyAccepted = false
 var key = ""
 
 func int_to_hex(value: int) -> String:
-    var hex_string = ""
-    var hex_chars = "0123456789abcdef"
-    while value > 0:
-        hex_string = hex_chars[value % 16] + hex_string
-        value = int(floor(value / 16.0))
-    
-    if hex_string == "":
-        hex_string = "0"
-    
-    return hex_string
+	var hex_string = ""
+	var hex_chars = "0123456789abcdef"
+	while value > 0:
+		hex_string = hex_chars[value % 16] + hex_string
+		value = int(floor(value / 16.0))
+	
+	if hex_string == "":
+		hex_string = "0"
+	
+	return hex_string
 func _init():
 	id = "HackAndroid"
 	introText = "Nano Android Access Terminal."
 	keyAccepted = false
-	var password = int_to_hex(1664525 * GM.main.getTime() + 1013904223 % (2^32))
-	key = password.substr(2, password.length())
-	if GM.main.getModuleFlag("NanoRevolutionModule", "NanoKnowAndroidKey", true):
-		learnCommand("Key_Generate")
+
 
 func reactToCommand(_command:String, _args:Array, _commandStringRaw:String):
-
+	var password = int_to_hex(1664525 * GM.main.getTime() + 1013904223 % (2^32))
+	key = password.substr(2, password.length())
+	if GM.main.getModuleFlag("NanoRevolutionModule", "NanoKnowAndroidKey", false):
+		learnCommand("Key_Generate")
 	if keyAccepted:
 		return reactToCommandAndroid(_command, _args, _commandStringRaw)
 	else:
@@ -78,8 +78,8 @@ func keyAccessCommand(_command: String, _args:Array, _commandStringRaw:String):
 	if(_command == "exit"):
 		markFinishedFail()
 		return "Disconnect Success!"
-
-	return "Key invalid, please try again"
+	learnCommand("help")
+	return "Invalid command, type 'help' to see known command"
 
 	
 func reactToCommandAndroid(_command: String, _args:Array, _commandStringRaw:String):
@@ -90,15 +90,19 @@ func reactToCommandAndroid(_command: String, _args:Array, _commandStringRaw:Stri
 				if(_args.size() >= 2):
 					var mode = _args[1]
 					if(mode in ["guard", "1"]):
+						markFinished(["guard"])
 						return "Switch to guard mode"
 					if(mode in ["sex", "2"]):
+						markFinished(["sex"])
 						return "Switch to sex mode"
 					else:
 						return "Swtich to "+mode+" mode...\nMode not found."
 				else:
 					return "mode variable need 1 argument"
 			elif(parse in ['-l',"--list"]):
-				return "Available mode: \nguard\nsex\n type 'switch --mode <mod>' to apply the mode"
+				learnCommand("guard")
+				learnCommand("sex")
+				return "Available mode: \n1.guard\n2.sex\n type 'switch --mode <mod>' to apply the mode"
 		else:
 			return "This command expects 1 argument"
 	
@@ -117,7 +121,10 @@ func reactToCommandAndroid(_command: String, _args:Array, _commandStringRaw:Stri
 			if(tolearn == "help"):
 				return "This command outputs all other commands and can also provide help for certain command by typing 'help <COMMAND>'."
 			elif(tolearn == "switch"):
+				learnCommand("--mode")
+				learnCommand("--list")
 				return "This command switch your android to target mode. Syntax 'switch --mode <target_mode>', type 'switch --list' to show all available mode."
+
 			elif(tolearn == "exit"):
 				return "This command exits the program."
 			else:
@@ -127,7 +134,7 @@ func reactToCommandAndroid(_command: String, _args:Array, _commandStringRaw:Stri
 			learnCommand("help")
 			learnCommand("switch")
 			learnCommand("exit")
-			return "Available commands are: \nconnect\nprobe\nexit\nhelp\nTo learn more about a command type 'help <COMMAND>'"
+			return "Available commands are: \nhelp\nswitch\nxit\nTo learn more about a command type 'help <COMMAND>'"
 		else:
 			learnCommand("help")
 			return "'help' expects 0 or 1 arguments"

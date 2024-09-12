@@ -21,14 +21,14 @@ func _run():
 	if(state == ""):
 		addCharacter("alexrynard")
 		playAnimation(StageScene.Duo, "stand", {npc="alexrynard"})
-		if(getModuleFlag("NanoRevolutionModule", "NanoAskAlexKey", false)):
+		if(!getModuleFlag("NanoRevolutionModule", "NanoAskAlexKey", false)):
 			sayCharater("pc","Hey, Alex, can I ask you something?")
 			sayCharater("alexrynard","What’s up?")
 			sayCharater("pc","I’ve been curious about how those nano androids work. It’s pretty fascinating. You seem to know a lot about them—think you could give me a rundown?")
 			saynn("A suspicious expression flickers across Alex’s face. ")
 			sayCharater("alexrynard","Why the sudden interest?")
 			sayCharater("pc","Oh, just trying to understand the tech better. You know, see how it all fits together. Plus, I’ve heard some things about how the key system works. Any chance you could fill me in?")
-			sayCharater("alexrynard","Hold on a second—where did you hear the word \"key\"? It’s not something a normal inmate would know about.")
+			sayCharater("alexrynard","Hold on a second...where did you hear the word \"key\"? It’s not something a normal inmate would know about.")
 			addButton("Lie","Try to think a excuse for this","a_excuse")
 			addButton("Honest","Humoi didn’t specifically say not to expose her to Alex, did she?","humoi_truth")
 		else:

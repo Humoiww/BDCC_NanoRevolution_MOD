@@ -4,7 +4,7 @@ func _init():
 	id = "nanoAndroid"
 	
 func getVisibleName():
-	return "Nano Andoird"
+	return "Nano Android"
 
 func getDefaultLegs(_gender):
 	return "plantilegs"

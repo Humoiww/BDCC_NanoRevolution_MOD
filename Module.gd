@@ -19,7 +19,9 @@ func getFlags():
 		"NanoAndroidGenderDistr": flag(FlagType.Dict),
 		"NanoToughEnable": flag(FlagType.Bool),
 
-
+		# Craftable List
+		"NanoCraftableTag": flag(FlagType.Dict),
+		"NanoCraftableItem": flag(FlagType.Dict),
 		# SexDollSkill
 		"NanoSexSub": flag(FlagType.Bool),
 		"NanoSexMasturbate": flag(FlagType.Bool),
@@ -56,7 +58,8 @@ func getNanoBreastSize():
 	return RNG.randi_range(sizeDict[BodypartSlot.Breasts][1],sizeDict[BodypartSlot.Breasts][2])
 
 func doConvertCharacter(npcID):
-	# var theChar:DynamicCharacter = GlobalRegistry.getCharacter(npcID)
+	var theChar:DynamicCharacter = GlobalRegistry.getCharacter(npcID)
+	theChar.addEffect("NanoSexMark")
 	
 	# if(theChar == null || !theChar.isDynamicCharacter()):
 	# 	return false
@@ -91,6 +94,7 @@ func _init():
 	author = "Humoi"
 	attacks = [
 		"res://Modules/NanoRevolution/Attacks/NanoHackPCAttack.gd",
+		"res://Modules/NanoRevolution/Attacks/NanoBrickPCAttack.gd",
 	]
 	scenes = [
 		"res://Modules/NanoRevolution/Scenes/NanoAttackScene.gd",
@@ -101,6 +105,7 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/NanoMeetSexDollScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoCallingScene.gd",
 		"res://Modules/NanoRevolution/Scenes/Alex_TalkAboutAndroid.gd",
+		"res://Modules/NanoRevolution/Scenes/HumoiSecondKeyScene.gd",
 		]
 	characters = [
 		"res://Modules/NanoRevolution/Characters/NanoAssemble.gd",
@@ -109,6 +114,7 @@ func _init():
 	items = [
 		"res://Modules/NanoRevolution/Inventory/Items/NanoCore.gd",
 		"res://Modules/NanoRevolution/Inventory/Items/NanoController.gd",
+		"res://Modules/NanoRevolution/Inventory/Items/Weapons/NanoBrick.gd",
 		
 	]
 	events = [
@@ -139,8 +145,20 @@ func _init():
 	quests = [
 		"res://Modules/NanoRevolution/Quests/Nano_FigureOutKey.gd"
 	]
+	computers = [
+		"res://Modules/NanoRevolution/Scenes/NanoAndroidFunction/Nano_HackAndroid.gd"
+	]
+	statusEffects = [
+		"res://Modules/NanoRevolution/StatusEffect/NanoSexMark.gd"
+	]
 
 
 func resetFlagsOnNewDay():
-	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 1)
+	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
 	GM.main.setModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", charge)
+
+
+func getCraftCost(itemObject:ItemBase):
+
+	itemObject.getVisibleName()
+	return ceil(itemObject.getPrice()/5.0) if (itemObject.getPrice()>0) else 1.0

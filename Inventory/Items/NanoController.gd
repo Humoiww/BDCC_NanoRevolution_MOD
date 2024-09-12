@@ -9,17 +9,25 @@ func getVisibleName():
 	return "Nano Controller - Lite version"
 
 func getDescription():
-	var desc = "Current feature:\n"
+	var desc = "\n\nCurrent feature:\n"
 	desc += "Edit Nano generation response.\n"
 	desc += "Calling the android with your own backend.\n"
-
-	desc += "\nCharge remain: "+ str(GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1))
+	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1)
+	var fullcharge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
+	desc += "\n\nCharge remain: "+ str(charge) + "/" + str(fullcharge) + "\n"
+	desc += "["
+	for i in range(fullcharge):
+		if i < charge:
+			desc += "█"
+		else:
+			desc += " "
+	desc += "]"
 	return "A portable version Nano Controller with limited function." + desc
 
 
 
 func useInCombat(_attacker, _receiver):
-	if(GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1) > 0):
+	if(GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1) >= 4):
 		var sexDollPool = GM.main.getDynamicCharacterIDsFromPool("SexDoll")
 		if(sexDollPool.size() > 0):
 			var idToUse = NpcFinder.grabNpcIDFromPool("SexDoll")
@@ -37,7 +45,7 @@ func useInCombat(_attacker, _receiver):
 					return "You try to call " + summon.getName() + " to attack " + _receiver.getName() + ". Unfortunately, it's not strong enough to defeat " + _receiver.getName() + " and collapses into a pool of goo. Before it's gone, it deals " + str(damage) + " damage to " + _receiver.getName() + "."
 			else:
 				GM.main.runScene("NanoMeetSexDollScene",[idToUse])
-			GM.main.increaseModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", -1)
+			GM.main.increaseModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", -4)
 			return "You let your sex doll leave away, waiting for your next command."
 		else:
 			return "You don't have any Sex Doll, better go and get some?"

@@ -166,6 +166,8 @@ func _run():
 		addButton("Sex?","You just come here for sex","skip_and_sex")
 		addButton("Talk","You want to understand more about her.","talkandendscene")
 		addButton("Leave","Sorry, wrong cell","endthescene")
+		if (GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskAlexKey", false)) && (!GM.main.getModuleFlag("NanoRevolutionModule", "NanoKnowAndroidKey", false)):
+			addButton("Key!","Interrogate her about key","ask_key_second")
 		# addButton("Debug","comment this","test_effects")
 	if(state == "test_effects"):
 		saynn("Hypno text: [tornado radius=3.0 freq=2.0 connected=1][pulse color=#FF33FF height=0.0 freq=3.0]Hypnoword[/pulse][/tornado]")
@@ -580,6 +582,11 @@ func _react(_action: String, _args):
 		return
 	if(_action == "talkandendscene"):
 		runScene("HumoiTalkScene")
+		endScene()
+		return
+		
+	if(_action == "ask_key_second"):
+		runScene("HumoiSecondKeyScene")
 		endScene()
 		return
 

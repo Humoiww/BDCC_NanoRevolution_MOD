@@ -16,27 +16,55 @@ func displayCoreCount(coreAmount):
 func sayCharater(ch,text):
 	saynn("[say=" +ch+ "]" +text + "[/say]")
 
+func addBackStoryButton():
+	addButton("Crime","How did she get here?","what_crime")
+	addButton("Energetic","She seems so upbeat—it’s not something you’d expect in a place like this.","why_positve")
+	addButton("Leave","Enough talk","endthescene")
 
 func _run():
 	if(state == ""):
 		
 		addCharacter("humoi")
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
-		saynn("[say=humoi]So, you want to know more about me? You’re so sweet! Then what do you want to talk.[/say]")
+		saynn("[say=humoi]So, you want to chat? Awesome! What’s on your mind?[/say]")
 
-		addButton("Herself","Back story?","humoi_self")
+		addButton("Herself","Backstory?","humoi_self")
 		if GM.main.getModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", false):
 			if !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
 				addButton("Key?","Does she know anything about android key?","ask_key")
 			elif !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskAlexKey", false):
 				addButton("Key","Review some key information","ask_key")
-			else:
-				addButton("Key!","Interrogate her about key","ask_key_second")
+		
+		if GM.pc.hasPerk("NanoCraftingT1"):
+			addButton("Blueprint","Ask about available blueprint for nano core crafting","blueprint")
 		
 		addButton("Leave","I think that's it","endthescene")
 
 
 
+	if(state == "humoi_self"):
+		sayCharater("humoi","Yay, backstory time! What would you like to know?")
+		addBackStoryButton()
+
+	if(state == "what_crime"):
+		sayCharater("pc","What's your crime? I know it must be some sex related, but I’m curious to hear the details.")
+		sayCharater("humoi","Oh, my crime? Well, according to the prison record, I threw a massive, unauthorized orgy on the entire space station, Celestial Nexus. Not sure if you've heard of it.")
+		sayCharater("pc","The whole station?! How on earth did you pull that off?")
+		sayCharater("humoi","Simple: hacked into the station's system, played some hypnosis music, adding the controlling gas, and voilà!")
+		saynn("Simple? That’s like saying putting a spaceship in a refrigerator is easy. A look of skepticism crosses your face.")
+		sayCharater("humoi","Don’t believe it? Well, if you have a more plausible explanation, feel free to come up with one and stick with that as the truth.")
+
+
+		addBackStoryButton()
+	
+	if(state == "why_positive"):
+		sayCharater("pc","Why are you so upbeat? It’s unusual to see anyone this positive in a place like this. Aren’t you bothered by being in prison?")
+		sayCharater("humoi","First, obviously, as an liliac, people alreadly treat you as a their sex toy, no need to hypnosis or some other extra movement, which is perfect. Besides...")
+		saynn("Humoi smiles and gestures towards an android guard patrolling near the cell.")
+		sayCharater("humoi","Have you noticed those androids?")
+		sayCharater("pc","Those android guards? Yes. They actually make me uncomfortable… It’s like being under constant surveillance, all the time, everywhere.")
+		sayCharater("humoi","Yeah, they are. But the way they work is super fascinating. With some hacking skills, I can control them and make stuff you just can't find anywhere else. Kind of nerdy, but really interesting.")
+		addBackStoryButton()
 
 
 	if(state == "ask_key"):
@@ -119,6 +147,11 @@ func _run():
 
 func _react(_action: String, _args):
 	if(_action == "endthescene"):
+		endScene()
+		return
+
+	if(_action == "blueprint"):
+		runScene("NanoBlueprintHumoi")
 		endScene()
 		return
 

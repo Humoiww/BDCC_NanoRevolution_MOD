@@ -82,6 +82,8 @@ func _run():
 		# 	ButtonChecks.NotLate,
 		# 	[ButtonChecks.SkillCheck, Skill.SexSlave, 1],
 		# 	])
+		if(GM.pc.hasPerk("NanoExtration")):
+			addButton("Extract","You don't want this sex doll any more, time to extract" + GlobalRegistry.getCharacter(npcID).hisHer() +" core.","extract_core")
 		addButton("leave", "You don't want to do anything for now.", "leaveandendthescene")
 		# addButton("Refuse", "You don’t wanna get frisked!", "intimidate")
 		# # addButton("Leave", "You don’t wanna get frisked", "leave")
@@ -90,140 +92,6 @@ func _run():
 		# else:
 		# 	addDisabledButton("Leave", "The guard keep all their attention on you")
 
-	if(state == "leave"):
-		saynn("[say=npc]Warning: cannot track inmate {pc.inmateNumber}.[/say]")
-
-		saynn("It is still weird that this seemly advance android will lose its attention. Whatever, now you can leave now")
-
-		addButton("leave", "", "leaveandendthescene")
-
-	if(state == "get_frisked"):
-		playAnimation(StageScene.SexStanding, "tease", {
-			pc=npcID,npc="pc",
-			bodyState={},
-			npcBodyState={},
-		})
-		
-		saynn("You stand against a wall and wait for the guy. He stands behind you and makes you spread your feet more.")
-
-		saynn("He then crouches and starts going from bottom to the top, his hands slide along the curves of your {pc.thick} body, searching for anything unusual. He checks any pockets too.")
-
-		saynn("Then he pulls out some kind of scanner and uses it on you. He probably could have just done that from the start.")
-
-		# (if has something)
-		if(GM.pc.hasIllegalItems()):
-			saynn("[say=npc]That’s contraband. Where did you find that, inmate?[/say]")
-
-			saynn("[say=pc]On the floor?[/say]")
-
-			saynn("[say=npc]I will be taking that away[/say]")
-
-			saynn("Well, what can you do. You roll your eyes and walk away.")
-		else:
-		# (if clear)
-			saynn("[say=npc]Alright, you’re clear.[/say]")
-
-			saynn("You continue on your way.")
-		
-		addButton("Continue", "Time to go", "friskAndEndthescene")
-
-		
-	if(state == "intimidate"):
-		saynn("[say=pc]How about you let me leave peacefully.[/say]")
-
-		saynn("The guard straightens eye start to flash")
-		increaseModuleFlag("NanoRevolutionModule", "NanoCheckSRefuseTimes", 1)
-		refuseTime = getModuleFlag("NanoRevolutionModule", "NanoCheckSRefuseTimes", 0)
-		severity = "tough"
-		if(refuseTime < 5):
-			severity = "slight"
-		elif((refuseTime < 10) || !(getModuleFlag("NanoRevolutionModule", "NanoToughEnable", true))):
-			severity = "moderate"
-		if(refuseTime < 2):
-			saynn("[say=npc]I see, {pc.name}. Since this is the first time, we will let you leave. But let me explain our rule, after this time, we will force punishment on you. The severity of punishment is depending on your total refusing times. You can leave now.[/say]")
-
-			addButton("leave", "Well, prepare for the next time then", "leaveandendthescene")
-		else:
-			saynn("[say=npc]{pc.name}, you have refuse our frisking request " + str(refuseTime) +" times. We will force " + severity + " punishment on you. Initiating attack protocol.[/say]")
-
-			saynn("Seems like it’s a fight.")
-			
-			addButton("Fight", "Start the fight", "fight")
-
-	if(state == "lost_fight"):
-		if(severity == "slight"):
-			playAnimation(StageScene.Duo, "Standing", {pc = npcID, npc="pc"})
-			saynn("Defeated, you fall to your knees.")
-		else:
-			playAnimation(StageScene.Choking, "idle", {pc = npcID, npc="pc", bodyState={exposedCrotch=true,hard=true}})
-			saynn("Defeated, you fall to your knees. But then the sticky android chock your neck!")
-
-		saynn("[say=npc]Confrontation ended successfully. Inmate's status: completely submissive. Securing. Excuting "+ severity +" punishment mode.[/say]")
-
-		saynn("Before your realize, some BDSM devices magically bonds on you.")
-
-		if(severity == "slight"):
-			saynn("[say=npc]Attach slight BDSM device success. All possible illegal items collected. You can leave now inmate.[/say]")
-			saynn("Well, at least you've learnt some nano stuff from this fight.")
-			# (scene ends)
-			addButton("Continue","Ouch","friskAndEndthescene")
-		else:
-			saynn("[say=npc]Bondage secure. Bringing inmate to punishment stock.[/say]")
-			saynn("The android chocking your neck, force you follow its step.")
-			addButton("Struggle", "", "bring_to_stock")
-	if(state == "bring_to_stock"):
-		GM.pc.setLocation("main_punishment_spot")
-		aimCamera("main_punishment_spot")
-		if(severity == "moderate"):
-			playAnimation(StageScene.Stocks, "idle")
-			saynn("[say=npc]Inmate Secured. {pc.name}, hope you will follow our instruction next time.[/say]")
-			saynn("Now you need to figure out how to escape here")
-			addButton("Continue", "Ouch", "loseandendthescene")
-		else:
-			playAnimation(StageScene.StocksSex, "tease", {pc="pc", npc=npcID, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
-
-			saynn("[say=npc]Inmate Secured. Initiating anal punishment. Modifying body to punishment mode.[/say]")
-
-			saynn("The android guard cock erect out. You estimate it about 40 cm long.")
-
-			saynn("[say=pc]Wait! That won't fit..[/say]")
-
-			addButton("Resist", "That just... too big", "force_anal")			
-	if(state == "force_anal"):
-		playAnimation(StageScene.StocksSex, "sex", {pc="pc", npc=npcID, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
-		saynn("The android thick cock force penetrate inside your anus.")
-
-		saynn("[say=pc]Please... Stop....[/say]")
-
-		saynn("The android ignore your request, mechanically insert back and forth again and again")
-
-		addButton("Submit", "Ahh", "force_end")
-
-	if(state == "force_end"):
-		playAnimation(StageScene.StocksSex, "fast", {pc="pc", npc=npcID, pcCum=true, npcCum=true, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
-
-		saynn("[say=npc]Inmate state: close. Injecting simulated cum.[/say]")
-
-		saynn("All of sudden, you feel massive amount of hot liquid flux into your stomach. But the cum don't stop, you feel your stomach become bigger and bigger, something coming down your throat! Does this cum just pass through your whole body?!")
-
-		saynn("[say=pc]Ahh.....h....h...[/say]")
-		saynn("[say=npc]Punishment completed. Enjoy rest of your day, {pc.name}.[/say]")
-
-		saynn("Now you need to figure out how to escape here")
-		
-		addButton("Continue", "Ouch", "loseandendthescene")
-
-	if(state == "won_fight"):
-		
-		saynn("The defeated guard sits on the floor, unable to continue fighting.")
-
-		saynn("[say=npc]FATAL ERROR: Damage exceed system threshold. Entering energy saving mode[/say]")
-
-		saynn("Winning this fight makes you understand more about nano engineering")
-
-		saynn("You check the android, their body just become too stiff to use for your pleasure.")
-		
-		addWonButton()
 
 	if(state == "extract_core"):
 		playAnimation(StageScene.SexFisting, "sex", {
