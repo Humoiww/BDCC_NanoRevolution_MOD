@@ -21,38 +21,38 @@ func run(_triggerID, _args):
 	# so, a brute force way to keep the save
 	updateEverything()
 
-	var thePC = GM.pc
-	var pcColor = thePC.getBaseSkinColors()
-	print(thePC.getSpecies().has("nanoAndroid"))
-	if((thePC.getSpecies().has("nanoAndroid")) &&
-	((thePC.getBaseSkinID() != "HumanSkin") || (pcColor != [Color("ff080808"),Color("ff363636"),Color("ff678def")]))):
+	# var thePC = GM.pc
+	# var pcColor = thePC.getBaseSkinColors()
+	# print(thePC.getSpecies().has("nanoAndroid"))
+	# if((thePC.getSpecies().has("nanoAndroid")) &&
+	# ((thePC.getBaseSkinID() != "HumanSkin") || (pcColor != [Color("ff080808"),Color("ff363636"),Color("ff678def")]))):
 				
-		var pcSkinData={
-		"hair": {"r": Color("ff21253e"),"g": Color("ff4143a8"),"b": Color("ff000000"),},
-		"penis": {"r": Color("ff242424"),"g": Color("ff070707"),"b": Color("ff01b2f9"),},
-		}
-		thePC.pickedSkin="HumanSkin"
-		thePC.pickedSkinRColor=Color("ff080808")
-		thePC.pickedSkinGColor=Color("ff363636")
-		thePC.pickedSkinBColor=Color("ff678def")
+	# 	var pcSkinData={
+	# 	"hair": {"r": Color("ff21253e"),"g": Color("ff4143a8"),"b": Color("ff000000"),},
+	# 	"penis": {"r": Color("ff242424"),"g": Color("ff070707"),"b": Color("ff01b2f9"),},
+	# 	}
+	# 	thePC.pickedSkin="HumanSkin"
+	# 	thePC.pickedSkinRColor=Color("ff080808")
+	# 	thePC.pickedSkinGColor=Color("ff363636")
+	# 	thePC.pickedSkinBColor=Color("ff678def")
 		
-		thePC.setSpecies(["nanoAndroid"]) # yeah this magical function change PC's species 
-		thePC.updateAppearance()
+	# 	thePC.setSpecies(["nanoAndroid"]) # yeah this magical function change PC's species 
+	# 	thePC.updateAppearance()
 
-		for bodypartSlot in pcSkinData:
-			if(!thePC.hasBodypart(bodypartSlot)):
-				#Log.error(getID()+" doesn't have "+str(bodypartSlot)+" slot but we're trying to paint it anyway inside paintBodyparts()")
-				continue
-			var bodypart = thePC.getBodypart(bodypartSlot)
-			var bodypartSkinData = pcSkinData[bodypartSlot]
-			if(bodypartSkinData.has("skin")):
-				bodypart.pickedSkin = bodypartSkinData["skin"]
-			if(bodypartSkinData.has("r")):
-				bodypart.pickedRColor = bodypartSkinData["r"]
-			if(bodypartSkinData.has("g")):
-				bodypart.pickedGColor = bodypartSkinData["g"]
-			if(bodypartSkinData.has("b")):
-				bodypart.pickedBColor = bodypartSkinData["b"]
+	# 	for bodypartSlot in pcSkinData:
+	# 		if(!thePC.hasBodypart(bodypartSlot)):
+	# 			#Log.error(getID()+" doesn't have "+str(bodypartSlot)+" slot but we're trying to paint it anyway inside paintBodyparts()")
+	# 			continue
+	# 		var bodypart = thePC.getBodypart(bodypartSlot)
+	# 		var bodypartSkinData = pcSkinData[bodypartSlot]
+	# 		if(bodypartSkinData.has("skin")):
+	# 			bodypart.pickedSkin = bodypartSkinData["skin"]
+	# 		if(bodypartSkinData.has("r")):
+	# 			bodypart.pickedRColor = bodypartSkinData["r"]
+	# 		if(bodypartSkinData.has("g")):
+	# 			bodypart.pickedGColor = bodypartSkinData["g"]
+	# 		if(bodypartSkinData.has("b")):
+	# 			bodypart.pickedBColor = bodypartSkinData["b"]
 		# pcSkinData={
 		# "hair": {"r": Color("ff21253e"),"g": Color("ff4143a8"),"b": Color("ff000000"),},
 		# "penis": {"r": Color("ff242424"),"g": Color("ff070707"),"b": Color("ff01b2f9"),},

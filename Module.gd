@@ -19,6 +19,8 @@ func getFlags():
 		"NanoAndroidGenderDistr": flag(FlagType.Dict),
 		"NanoToughEnable": flag(FlagType.Bool),
 
+		# CraftFlag
+		"NanoAfterFirstBlueprintHumoi": flag(FlagType.Bool),
 		# Craftable List
 		"NanoCraftableTag": flag(FlagType.Dict),
 		"NanoCraftableItem": flag(FlagType.Dict),
@@ -45,10 +47,10 @@ func getDefaultSize():
 	return defaultSizePara
 
 func getSizeDict():
-	var defaultSizeDict = GlobalRegistry.getModule("NanoRevolutionModule").getDefaultSize()
+	var defaultSizeDict = getDefaultSize()
 	var sizeDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
 	# check if sizeDict is valid, if not, reset the size dictionary
-	if (sizeDict[BodypartSlot.Penis][0] != "Cock Length") or (sizeDict[BodypartSlot.Breasts][0] != "Cup Size"):
+	if (sizeDict[BodypartSlot.Penis] == null) or (sizeDict[BodypartSlot.Breasts] == null):
 		sizeDict = defaultSizeDict
 		GM.main.setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
 	return sizeDict

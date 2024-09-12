@@ -62,6 +62,8 @@ func setGenderWeight(gender,chance):
 
 func setSizeDict(size):
 	# print([pickedPartToChange[1]])
+	if (sizeDict[BodypartSlot.Penis][0] != "Cock Length") or (sizeDict[BodypartSlot.Breasts][0] != "Cup Size"):
+		sizeDict = defaultSizeDict
 	sizeDict[pickedPartToChange[0]][pickedPartToChange[1]] = size
 	setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
 
@@ -333,7 +335,9 @@ func _run():
 
 		saynn("Currently our android visible component size range is:")
 		sizeDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
-
+		if (sizeDict[BodypartSlot.Penis] == null) or (sizeDict[BodypartSlot.Breasts] == null):
+			sizeDict = defaultSizeDict
+			setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
 		sayn("Minimum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][1]))
 		sayn("Maximum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][2]))
 		sayn("Minimum Breast Size : " + BreastsSize.breastSizeToCupString(sizeDict[BodypartSlot.Breasts][1]))

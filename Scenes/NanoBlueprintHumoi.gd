@@ -44,7 +44,15 @@ func _run():
 		
 		addCharacter("humoi")
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
-		saynn("[say=humoi]So, you want to chat? Awesome! What’s on your mind?[/say]")
+		if (!getModuleFlag("NanoRevolutionModule","NanoAfterFirstBlueprintHumoi",false)):
+			sayCharater("humoi","Great, you’re interested in blueprints for using those nano cores! I’ve got you covered. I offer two types of blueprints:")
+
+			sayCharater("humoi","First, these are general Blueprint Sets and can be used to craft a variety of common items.")
+
+			sayCharater("humoi","Second, these are for special Blueprints, unique items. Think of them as powerful tools or weapons that can give you an edge in combat.")
+
+			
+		saynn("[say=humoi]?[/say]")
 
 
 		
