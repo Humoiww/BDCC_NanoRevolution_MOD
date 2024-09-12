@@ -11,7 +11,7 @@ func updateEverything():
 	# update occurance
 	var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]	
 	for i in range(weighEvents.events.size()):
-		print("brute force load flag")
+		# print("brute force load flag")
 		if(weighEvents.events[i].id == "NanoExposureForceCheckEvent"):
 			weighEvents.weights[i] = getModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", 10)
 

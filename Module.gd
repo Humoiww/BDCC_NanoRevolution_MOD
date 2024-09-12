@@ -47,6 +47,10 @@ func getDefaultSize():
 func getSizeDict():
 	var defaultSizeDict = GlobalRegistry.getModule("NanoRevolutionModule").getDefaultSize()
 	var sizeDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
+	# check if sizeDict is valid, if not, reset the size dictionary
+	if (sizeDict[BodypartSlot.Penis][0] != "Cock Length") or (sizeDict[BodypartSlot.Breasts][0] != "Cup Size"):
+		sizeDict = defaultSizeDict
+		GM.main.setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
 	return sizeDict
 
 func getNanoCockSize():

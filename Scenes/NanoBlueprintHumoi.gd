@@ -1,6 +1,14 @@
 extends SceneBase
 
 var bratCounter = 0
+var craftingItemsTags = []
+var craftingItems = [
+	"NanoBrick"
+	]
+var sortedItemsIds = []
+var finalcraftingItemsObjects = []
+
+var lockedInto = false
 
 func _init():
 	sceneID = "NanoBlueprintHumoi"
@@ -15,15 +23,6 @@ func displayCoreCount(coreAmount):
 
 func sayCharater(ch,text):
 	saynn("[say=" +ch+ "]" +text + "[/say]")
-
-var craftingItemsTags = []
-var craftingItems = [
-	"NanoBrick"
-	]
-var sortedItemsIds = []
-var finalcraftingItemsObjects = []
-
-var lockedInto = false
 
 func _initScene(_args = []):
 	if(_args.size() > 0):

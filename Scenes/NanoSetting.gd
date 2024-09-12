@@ -61,7 +61,7 @@ func setGenderWeight(gender,chance):
 	setModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",nanoGenderDict)
 
 func setSizeDict(size):
-	print([pickedPartToChange[1]])
+	# print([pickedPartToChange[1]])
 	sizeDict[pickedPartToChange[0]][pickedPartToChange[1]] = size
 	setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
 
