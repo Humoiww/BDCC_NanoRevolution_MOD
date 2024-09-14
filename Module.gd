@@ -30,6 +30,7 @@ func getFlags():
 		"NanoSexToilet": flag(FlagType.Bool),
 		"NanoSexDollMaitain": flag(FlagType.Bool),
 		# ControllerFlag
+		"NanoHasController": flag(FlagType.Bool),
 		"NanoControllerRemainCharge": flag(FlagType.Number),
 		"NanoControllerFullCharge": flag(FlagType.Number),
 		# KeyQuestFlag
@@ -101,6 +102,7 @@ func _init():
 	attacks = [
 		"res://Modules/NanoRevolution/Attacks/NanoHackPCAttack.gd",
 		"res://Modules/NanoRevolution/Attacks/NanoBrickPCAttack.gd",
+		"res://Modules/NanoRevolution/Attacks/NanoAutoBondPCAttack.gd",
 	]
 	scenes = [
 		"res://Modules/NanoRevolution/Scenes/NanoAttackScene.gd",
@@ -112,6 +114,7 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/NanoCallingScene.gd",
 		"res://Modules/NanoRevolution/Scenes/Alex_TalkAboutAndroid.gd",
 		"res://Modules/NanoRevolution/Scenes/HumoiSecondKeyScene.gd",
+		"res://Modules/NanoRevolution/Scenes/NanoBlueprintHumoi.gd",
 		]
 	characters = [
 		"res://Modules/NanoRevolution/Characters/NanoAssemble.gd",
@@ -121,6 +124,8 @@ func _init():
 		"res://Modules/NanoRevolution/Inventory/Items/NanoCore.gd",
 		"res://Modules/NanoRevolution/Inventory/Items/NanoController.gd",
 		"res://Modules/NanoRevolution/Inventory/Items/Weapons/NanoBrick.gd",
+		"res://Modules/NanoRevolution/Inventory/Items/Nano_InstantCharger.gd",
+		"res://Modules/NanoRevolution/Inventory/Items/Nano_AutoBonder.gd",
 		
 	]
 	events = [
@@ -137,6 +142,8 @@ func _init():
 		"res://Modules/NanoRevolution/Skills/Perk/NanoExtration.gd", 
 		"res://Modules/NanoRevolution/Skills/Perk/NanoSexMode.gd",
 		"res://Modules/NanoRevolution/Skills/Perk/NanoDistraction.gd",
+		"res://Modules/NanoRevolution/Skills/Perk/NanoCallBackUp.gd",
+		"res://Modules/NanoRevolution/Skills/Perk/NanoCraftingT2.gd",
 	]
 	skills = [
 		"res://Modules/NanoRevolution/Skills/Skill/NanoENGR.gd",
@@ -156,6 +163,9 @@ func _init():
 	]
 	statusEffects = [
 		"res://Modules/NanoRevolution/StatusEffect/NanoSexMark.gd"
+	]
+	sexActivities = [
+		"res://Modules/NanoRevolution/SexActivities/UseNanoStuff.gd",
 	]
 
 

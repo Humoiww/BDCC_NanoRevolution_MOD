@@ -255,6 +255,11 @@ func _run():
 		
 	if(state == "hack_fail"):
 		saynn("You try to hack in, but nothing changed.")
+		if(!GM.main.getModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", false)):
+			GM.main.setModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", true)
+			saynn("Looks like you need to find the key first.")
+
+			addMessage("Add Quest: 'Figure out the key'")
 		
 		addWonButton()
 
@@ -357,7 +362,7 @@ func addWonButton():
 	# addButtonWithChecks("Catch oral", "Use the guy’s dick for your pleasure", "catch_oral", [], [ButtonChecks.NotHandsBlocked])
 
 	if(GM.pc.hasPerk("NanoSexMode")):
-		addButtonWithChecks("Hack!", "Try to hack in the android system", "convert_to_sex_mode", [], [ButtonChecks.CanStartSex])
+		addButtonWithChecks("Hack!", "Try to hack in the android system", "enter_hack_scene", [], [ButtonChecks.CanStartSex])
 		# addButton("Submit to", "Switch the android to dominative mode", "startsexsubby")
 	addDisabledButton("Sex!", "The system has shutted down.")
 	addDisabledButton("Submit to", "The system has shutted down.")
@@ -393,10 +398,12 @@ func _react(_action: String, _args):
 		GM.pc.addSkillExperience(Skill.SexSlave, 20)
 
 
-	if(_action == "convert_to_sex_mode"):
+	if(_action == "enter_hack_scene"):
 		runScene("ComputerSimScene", ["HackAndroid"], "computerhack")
-		# var _npc = getCharacter(npcID)
-		# getModule("NanoRevolutionModule").doConvertCharacter(npcID)
+
+	# if(_action == "convert_to_sex_mode"):
+
+		
 
 	if(_action == "convertsexend"):
 		runScene("NanoMeetSexDollScene",[npcID])
@@ -543,6 +550,8 @@ func _react_scene_end(_tag, _result):
 				setState("convert_to_guard_mode")
 			if(newMode == "sex"):
 				setState("convert_to_sex_mode")
+				var _npc = getCharacter(npcID)
+				getModule("NanoRevolutionModule").doConvertCharacter(npcID)
 		else:
 			setState("hack_fail")
 

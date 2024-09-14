@@ -9,10 +9,13 @@ func getVisibleName():
 
 func getVisibleDescription():
 	return "So, you've heard that nano-androids can be used in the medical field, which inspire you to craft some medicine through nano cores.\n" \
-	+ "Effect: Now you can upgrade the crafting station in your cell, letting you make some medical stuff. (Still, you need a blueprint set for this)"
+	+ "Effect: Now you can make some medical stuff. (Still, you need a blueprint set for this)"
+
+func getRequiredPerks():
+	return ["NanoCraftingT1"]
 
 func getSkillTier():
-	return 0
+	return 1
 
 func getPicture():
 	return "res://Modules/NanoRevolution/Images/Perks/NanoCraftT2Perk.png"

@@ -9,7 +9,7 @@ func getVisibleName(_context = {}):
 	return "Hack"
 	
 func getVisibleDesc(_context = {}):
-	return "Hack in target system. Need target"
+	return "Hack in target system. (Charge: 5)"
 	
 func _doAttack(_attacker, _receiver, _context = {}):
 
@@ -22,6 +22,7 @@ func _doAttack(_attacker, _receiver, _context = {}):
 		GM.main.setModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", true)
 		pain = 0
 		text = "{attacker.name} tried to hack into the android guard system, but it’s locked behind a key! Looks like {attacker.name}’ll need to find the key first."
+		GM.main.addMessage("Add Quest: 'Figure out the key'")
 	else:
 		GM.main.increaseModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", -5)
 	return {
@@ -94,4 +95,4 @@ func getAnticipationText(_attacker, _receiver):
 	return "{attacker.name} is about to punch {receiver.name}!"
 
 func getAttackerDamageMultiplierEfficiency(_attacker, _receiver, _damageType) -> float:
-	return 2.0
+	return 0.0

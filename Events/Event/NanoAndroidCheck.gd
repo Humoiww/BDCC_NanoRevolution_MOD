@@ -14,6 +14,11 @@ func updateEverything():
 		# print("brute force load flag")
 		if(weighEvents.events[i].id == "NanoExposureForceCheckEvent"):
 			weighEvents.weights[i] = getModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", 10)
+	if getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false):
+		if (!getModuleFlag("NanoRevolutionModule", "NanoHasController",false)):
+			addMessage("Hey! I just notice that you haven't got the nano controller yet, take this and have fun~")
+			setModuleFlag("NanoRevolutionModule", "NanoHasController",true)
+			GM.pc.getInventory().addItemID("NanoController")
 
 func run(_triggerID, _args):
 	# saynn("Hello owo")

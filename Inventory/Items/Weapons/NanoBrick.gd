@@ -43,7 +43,7 @@ func getTags():
 	return [ItemTag.Illegal]
 
 func getItemCategory():
-	return ItemCategory.Weapons
+	return "Nano"
 
 func getInventoryImage():
 	return "res://Images/Perks/mansory.png"

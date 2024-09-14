@@ -62,7 +62,7 @@ func setGenderWeight(gender,chance):
 
 func setSizeDict(size):
 	# print([pickedPartToChange[1]])
-	if (sizeDict[BodypartSlot.Penis][0] != "Cock Length") or (sizeDict[BodypartSlot.Breasts][0] != "Cup Size"):
+	if (sizeDict[BodypartSlot.Penis] == null) or (sizeDict[BodypartSlot.Breasts] == null):
 		sizeDict = defaultSizeDict
 	sizeDict[pickedPartToChange[0]][pickedPartToChange[1]] = size
 	setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
@@ -639,10 +639,9 @@ func _react(_action: String, _args):
 
 	# if you make setting through controller
 	if(_action == "no_change" || _action == "return_datapad" || _action == "skip_and_sex"):
-		print(_action)
-		print("should_not_trigger_here")
-		if (!GM.pc.getInventory().hasItemID("NanoController")):
+		if (!getModuleFlag("NanoRevolutionModule", "NanoHasController",false)):
 			GM.pc.getInventory().addItemID("NanoController")
+			setModuleFlag("NanoRevolutionModule", "NanoHasController",true)
 		if accessThroughControl:
 			endScene()
 			return

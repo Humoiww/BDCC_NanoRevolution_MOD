@@ -73,15 +73,13 @@ func _run():
 		
 
 		addButton("Sex!", "Start sex at dominative position.", "startsexasdom")
-		addButton("Submit!", "Enable Dominativate Mode","startsexassub")
-		addButton("Masturbate","You want your doll to solve your heat.", "masturbate_selection")
-		addButton("Toilet","You want to use them as toilet.","toilet")
-		addButton("Massage","You want them to relax you, recover some stamina","Massage")
-		# addButtonWithChecks("Offer handjob", "Maybe he will let you through if you let his cock out", "offer_handjob", [], [
-		# 	ButtonChecks.NotHandsBlocked,
-		# 	ButtonChecks.NotLate,
-		# 	[ButtonChecks.SkillCheck, Skill.SexSlave, 1],
-		# 	])
+		addButton("Submit!", "Enable Dominativate Mode","startsexsubby")
+		# addButton("Masturbate","You want your doll to solve your heat.", "masturbate_selection")
+		# addButton("Toilet","You want to use them as toilet.","toilet")
+		addDisabledButton("Masturbate","You want your doll to solve your heat. Not implemented yet :(")
+		addDisabledButton("Toilet","You want to use them as toilet. Not implemented yet :(")
+		addButton("Massage","You want them to give you a relax massage. (Semi-implemented ?v?, mostly copy from slave massage scene.)","massage_action")
+
 		if(GM.pc.hasPerk("NanoExtration")):
 			addButton("Extract","You don't want this sex doll any more, time to extract" + GlobalRegistry.getCharacter(npcID).hisHer() +" core.","extract_core")
 		addButton("leave", "You don't want to do anything for now.", "leaveandendthescene")
@@ -127,6 +125,23 @@ func _run():
 			saynn("You have a feeling that you will never meet {npc.name} again")
 			GM.main.removeDynamicCharacterFromAllPools(npcID)
 			addButton("Done", "Weird", "allowFullAndendthescene")
+
+	if(state == "massage_action"):
+		playAnimation(StageScene.Massage, "back", {pc=npcID, npc="pc"})
+		
+		saynn("You instruct your sex doll to give you a back massage before laying down.")
+		
+		saynn("[say=npc]Yes, sir.[/say]")
+		
+		saynn("Without hesitation, {npc.he} obediently complies, sitting nearby. As {npc.heShe} starts to knead your shoulders with a tender touch, you feel a wave of warmth spreading through them.")
+		
+		saynn("After removing any tension from your shoulders, your sub’s hands glide over your {pc.masc} back, following and caressing the curves at a slow, relaxing pace.")
+		
+		saynn("You can’t help but to moan softly, the gentle touch coupled with {npc.his} words feel quite good.")
+		
+		saynn("This massage has warmed up your back the same way a yoga session would! Also, recevie some stamina and your pain has been relieved.")
+		
+		addButton("Continue", "See what happens next", "endthescene")
 
 
 	if(state == "extract_continue"):
@@ -296,38 +311,13 @@ func _react(_action: String, _args):
 	if(_action == "strugglemenu"):
 		runScene("StrugglingScene")
 		return
-	
-	if(_action == "bring_to_stock"):
-		if(severity == "tough"):
-			var _npc = getCharacter(npcID)
-			if(_npc.hasPenis()):
-				var _penis = _npc.getBodypart(BodypartSlot.Penis)
-				initialSize = _penis.lengthCM
-				_penis.lengthCM = 40
-			else:
-				var penis = GlobalRegistry.createBodypart("equinepenis")
-				_npc.giveBodypartUnlessSame(penis)
-				var _penis = _npc.getBodypart(BodypartSlot.Penis)
-				initialSize = -1
-				_penis.lengthCM = 40
-				var npcSkinData={
-				"penis": {"r": Color("ff242424"),"g": Color("ff070707"),"b": Color("ff01b2f9"),},
-				}
-				for bodypartSlot in npcSkinData:
-					if(!_npc.hasBodypart(bodypartSlot)):
-						#Log.error(getID()+" doesn't have "+str(bodypartSlot)+" slot but we're trying to paint it anyway inside paintBodyparts()")
-						continue
-					var bodypart = _npc.getBodypart(bodypartSlot)
-					var bodypartSkinData = npcSkinData[bodypartSlot]
-					if(bodypartSkinData.has("skin")):
-						bodypart.pickedSkin = bodypartSkinData["skin"]
-					if(bodypartSkinData.has("r")):
-						bodypart.pickedRColor = bodypartSkinData["r"]
-					if(bodypartSkinData.has("g")):
-						bodypart.pickedGColor = bodypartSkinData["g"]
-					if(bodypartSkinData.has("b")):
-						bodypart.pickedBColor = bodypartSkinData["b"]
-			_npc.updateAppearance()
+
+	if(_action == "massage_action"):
+		if(!GM.pc.hasEffect(StatusEffect.Yoga)):
+			GM.pc.addEffect(StatusEffect.Yoga)
+		GM.pc.addStamina(100)
+		GM.pc.addPain(-100)
+
 				
 	
 	setState(_action)
@@ -360,7 +350,7 @@ func _react_scene_end(_tag, _result):
 
 
 func getDevCommentary():
-	return "This part actually based one the check point guard scene. Now I adjust with a new minigame"
+	return "This part should add some function, but for now, not so many."
 
 func hasDevCommentary():
 	return true

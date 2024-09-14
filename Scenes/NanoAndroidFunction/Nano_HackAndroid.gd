@@ -105,12 +105,6 @@ func reactToCommandAndroid(_command: String, _args:Array, _commandStringRaw:Stri
 				return "Available mode: \n1.guard\n2.sex\n type 'switch --mode <mod>' to apply the mode"
 		else:
 			return "This command expects 1 argument"
-	
-	if(_command == "probe"):
-		if(_args.size() == 0):
-			return "Scanning...\nDone. Found 4 devices.\n1 - grd_radio_3511\n2 - grd_radio_1447\n3 - deloxekarat_default\n4 - viplug_m_default"
-		else:
-			return "This command expects 0 arguments"
 			
 	if(_command == "exit"):
 		return "Disconnect Successs."
@@ -134,7 +128,7 @@ func reactToCommandAndroid(_command: String, _args:Array, _commandStringRaw:Stri
 			learnCommand("help")
 			learnCommand("switch")
 			learnCommand("exit")
-			return "Available commands are: \nhelp\nswitch\nxit\nTo learn more about a command type 'help <COMMAND>'"
+			return "Available commands are: \nhelp\nswitch\nexit\nTo learn more about a command type 'help <COMMAND>'"
 		else:
 			learnCommand("help")
 			return "'help' expects 0 or 1 arguments"

@@ -38,6 +38,10 @@ func _run():
 		if GM.pc.hasPerk("NanoCraftingT1"):
 			addButton("Blueprint","Ask about available blueprint for nano core crafting","blueprint")
 		
+		if (!GM.pc.getInventory().hasItemID("NanoController")):
+			addButton("Controller!","You accidentally lose your controller. (Probably you stack it somewhere, no worries, you can get a new one)","new_controller")
+		else:
+			addDisabledButton("Controller!","If you don’t have the controller in your inventory, just press this button, and I’ll give you a new one. \n(Note: You can store the controller in your cell and get as many as you want, but remember that the extra controllers are useless, so you’ll only be wasting your time X3)")
 		addButton("Leave","I think that's it","endthescene")
 
 
@@ -167,6 +171,11 @@ func _react(_action: String, _args):
 	if(_action == "aftercare"):
 		processTime(30*60)
 
+	if(_action == "new_controller"):
+		GM.pc.getInventory().addItemID("NanoController")
+		addMessage("Got it! A new one has just been added to your inventory.(￣▽￣)／")
+		setState("")
+		return
 	setState(_action)
 
 func saveData():

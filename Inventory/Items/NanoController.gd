@@ -18,10 +18,11 @@ func getDescription():
 	desc += "["
 	for i in range(fullcharge):
 		if i < charge:
-			desc += "█"
+			desc += "■"
 		else:
-			desc += " "
+			desc += "   "
 	desc += "]"
+	desc += "\n Recharge to full every morning."
 	return "A portable version Nano Controller with limited function." + desc
 
 
@@ -50,7 +51,7 @@ func useInCombat(_attacker, _receiver):
 		else:
 			return "You don't have any Sex Doll, better go and get some?"
 	else:
-		return "You try to calling someone, unfortunately, you just notice that your device is completely losing its charge."
+		return "You try to calling someone. Unfortunately, you just notice that your device does not have enough charge."
 	
 	
 
@@ -62,11 +63,12 @@ func getPossibleActions():
 			"description": "Entering the setting part",
 			"onlyWhenCalm": true,
 	})
-	action.append({
-			"name": "Calling",
-			"scene": "UseItemLikeInCombatScene",
-			"description": "Call one of your sex doll. Useless if you don't have any sex doll.",
-	})
+	if(GM.pc.hasPerk("NanoCallBackUp")):
+		action.append({
+				"name": "Calling",
+				"scene": "UseItemLikeInCombatScene",
+				"description": "(Charge: 4) Call one of your sex doll. Useless if you don't have any sex doll.",
+		})
 	return action
 
 func getPrice():
@@ -90,7 +92,7 @@ func getTags():
 
 
 func getItemCategory():
-	return ItemCategory.Generic
+	return "Nano"
 
 # func getAttacks():
 # 	return ["NanoCallingBackup"]

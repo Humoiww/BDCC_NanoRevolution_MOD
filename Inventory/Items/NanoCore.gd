@@ -68,7 +68,7 @@ func getTags():
 
 
 func getItemCategory():
-	return ItemCategory.Generic
+	return "Nano"
 
 # func saveData():
 # 	var data = .saveData()

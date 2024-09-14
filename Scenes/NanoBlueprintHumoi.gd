@@ -9,14 +9,14 @@ var sortedItemsIds = []
 var finalcraftingItemsObjects = []
 
 var lockedInto = false
-
+var justPurchased = false
 func _init():
 	sceneID = "NanoBlueprintHumoi"
 
-func displayCoreCount(coreAmount):
-	if coreAmount > 1:
-		saynn("You have "+ str(coreAmount) +" cores.")
-	elif coreAmount > 0:
+func displayCoreCount(amount):
+	if amount > 1:
+		saynn("You have "+ str(amount) +" cores.")
+	elif amount > 0:
 		saynn("You have only one core.")
 	else:
 		saynn("You don't have any core.")
@@ -36,8 +36,36 @@ func _initScene(_args = []):
 			craftingItems.append(itemID)
 	var craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
 	for tag in craftableTag:
-		if craftableItem[tag] == true:
+		if craftableTag[tag] == true:
 			craftingItemsTags.append(tag)
+
+func addTagItem(tag,name,description,nameshort,cost,amount):
+	if tag in craftingItemsTags:
+		sayn("(Purchased)- " + name + "\n-- Cost: " + str(cost) + " cores")
+		addDisabledButton(nameshort,"You've learnt this blueprint")
+	else:
+		sayn("- " + name + "\n-- Cost: " + str(cost) + " cores")
+		if(amount >= cost):
+			addButton(nameshort,"Buy this (" + str(cost)+ " cores)","trade_tag",[tag,cost])
+		else:
+			addDisabledButton(nameshort,"You can't afford this :<")
+	saynn(description)
+
+
+func addItem(item,name,description,nameshort,cost,amount):
+	if item in craftingItems:
+		sayn("(Purchased)- " + name + "\n-- Cost: " + str(cost) + " cores")
+		addDisabledButton(nameshort,"You've learnt this blueprint")
+	else:
+		sayn("- " + name + "\n-- Cost: " + str(cost) + " cores")
+		if(amount >= cost):
+			addButton(nameshort,"Buy this (" + str(cost)+ " cores)","trade_item",[item,cost])
+		else:
+			addDisabledButton(nameshort,"You can't afford this :<")
+	saynn(description)
+	
+		
+	
 
 func _run():
 	if(state == ""):
@@ -49,52 +77,75 @@ func _run():
 
 			sayCharater("humoi","First, these are general Blueprint Sets and can be used to craft a variety of common items.")
 
-			sayCharater("humoi","Second, these are for special Blueprints, unique items. Think of them as powerful tools or weapons that can give you an edge in combat.")
+			sayCharater("humoi","Second, these are for crafting special, one-of-a-kind items. You can only obtain these items by using the blueprints, as they’re specifically designed by me.")
+			setModuleFlag("NanoRevolutionModule","NanoAfterFirstBlueprintHumoi",true)
+		saynn("[say=humoi]Did anything catch your eye?[/say]")
 
-			
-		saynn("[say=humoi]?[/say]")
-
+		addButton("General","You want to check more general blueprint sets","tag_select")
+		addButton("Special","You want to check something special","item_select")
 
 		
 		addButton("Leave","I think that's it","endthescene")
-
-
-
-
-
-
-
-	if(state == "debug_message_state"):
-		addCharacter("humoi")
-		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
-		saynn("[say=humoi]So, you want to know more about me? You’re so sweet! But for now, sorry for breaking the fourth wall—I have to tell you that this scene hasn’t been implemented yet. This is the only part you’ll see for now.[/say]")
-		
-		saynn("Humoi playfully made a pouty face, tilting her head slightly.")
-
-		saynn("[say=humoi]But I can give you a hint about what to expect in the future. It doesn’t make much sense for you to learn how to craft something with nano cores by kicking those androids' asses, right? You can get familiar with them, sure, but you’ll need to learn some techniques from others. That’s why I’m here—to offer advice and blueprints related to those nano things.[/say]")
-
-		saynn("Humoi paused for a moment, thinking, then continued speaking.")
-
-		saynn("[say=humoi]In this mod, I initially thought about having Alex teach you these things. But then I realized it would be out of character for him to teach something dangerous, like nano weapons or anything like that. So, there needs to be a “bad guy” to offer some forbidden knowledge for a bit of fun. That’s where I come in. In the next update, you’ll be able to get some really cool stuff from me. And if you have any great ideas, just remember there’s an issue option in the survey part.[/say]")
-		
-		saynn("Humoi flashed a mischievous grin.")
-		
-		saynn("[say=humoi]Well, since this scene is set up, let’s do a little test. See that Trade button? You can click it to give me one core, and I’ll give you 3 credits. Great deal, isn’t it?~[/say]")
+	if(state == "tag_select"):
+		if justPurchased:
+			sayCharater("humoi","Thank you! I've upload the blueprint set to your device.")
+			justPurchased = false
+		else:
+			saynn("[say=humoi]OK, here's some general blueprints[/say]")
 		var coreAmount = GM.pc.getInventory().getAmountOf("NanoCore")
 		displayCoreCount(coreAmount)
-		if(coreAmount >= 1):
-			addButton("Trade","Trade one core","trade")
+
+		if(GM.main != null && (GM.main.getFlag("PortalPantiesModule.Panties_PcDenied") || GM.main.getFlag("PortalPantiesModule.Panties_FleshlightsReturnedToAlex"))):
+			addTagItem(ItemTag.SoldByAlexRynard,
+			"Alex Rynard's Collection",
+			"I got some prototypes from Alex and whipped up an alternative version using nano cores.",
+			"Alex",
+			4,coreAmount)
+
+		addTagItem(ItemTag.SoldByTheAnnouncer,
+		"Fight Club Collection",
+		"A set of blueprints containing all stuff from fight club announcer",
+		"Fight Club",
+		2,coreAmount)
+
+		addTagItem(ItemTag.CanBeForcedByGuards,
+		"Guard Restrict Collection",
+		"A collection containing all BDSM device that the guard may force on you.",
+		"Guard BDSM",
+		3,coreAmount)
+
+		if(GM.pc.hasPerk("NanoCraftingT2")):
+			addTagItem(ItemTag.SoldByMedicalVendomat,
+			"Medical Collection",
+			"A collection for crafting medical items. You’ll need some solid skills to make sure everything turns out right and avoids any health issues.",
+			"Medical",
+			4,coreAmount)
+
+
+
+		addButtonAt(10,"Special","You want to check something special","item_select")
+		addButtonAt(14,"Leave","I think that's it","endthescene")
+
+	if(state == "item_select"):
+		if justPurchased:
+			sayCharater("humoi","Thank you! I've upload the blueprint to your device.")
+			justPurchased = false
 		else:
-			addDisabledButton("Trade","You don't have any core, better go and get some for me?")
-		addButton("Leave","Seems like there's not much to talk about right now, is there? But trust me, there'll be something in the future. X3","endthescene")
-	if(state == "trade"):
+			saynn("[say=humoi]Awesome, these are my special blueprints.[/say]")
 		var coreAmount = GM.pc.getInventory().getAmountOf("NanoCore")
 		displayCoreCount(coreAmount)
-		if(coreAmount >= 1):
-			addButton("Trade","Trade one core","trade")
-		else:
-			addDisabledButton("Trade","You don't have any core, better go and get some for me?")
-		addButton("Leave","Seems like there's not much to talk about right now, is there? But trust me, there'll be something in the future. X3","endthescene")
+
+		addItem("InstantCharger",
+		"Instant Charger",
+		"A small charger that charge your controller instantly.",
+		"Charger",
+		3,coreAmount)
+
+
+		addButtonAt(10,"General","You want to check more general blueprint sets","tag_select")
+		addButtonAt(14,"Leave","I think that's it","endthescene")
+
+
 
 func _react(_action: String, _args):
 	if(_action == "endthescene"):
@@ -112,6 +163,31 @@ func _react(_action: String, _args):
 
 	if(_action == "aftercare"):
 		processTime(30*60)
+
+	if(_action == "trade_tag"):
+		var tagToTrade = _args[0]
+		var cost = _args[1]
+		craftingItemsTags.append(tagToTrade)
+		GM.pc.getInventory().removeXOfOrDestroy("NanoCore",cost)
+		justPurchased = true
+		var craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
+		craftableTag[tagToTrade] = true
+		GM.main.setModuleFlag("NanoRevolutionModule", "NanoCraftableTag", craftableTag)
+		setState("tag_select")
+		return
+
+	if(_action == "trade_item"):
+		var itemToTrade = _args[0]
+		var cost = _args[1]
+		craftingItemsTags.append(itemToTrade)
+		GM.pc.getInventory().removeXOfOrDestroy("NanoCore",cost)
+		justPurchased = true
+		var craftableItem = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableItem", {})
+		craftableItem[itemToTrade] = true
+		GM.main.setModuleFlag("NanoRevolutionModule", "NanoCraftableItem", craftableItem)
+		setState("tag_select")
+		return
+	
 
 	setState(_action)
 
