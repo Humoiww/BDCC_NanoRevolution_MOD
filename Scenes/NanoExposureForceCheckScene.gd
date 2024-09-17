@@ -360,15 +360,18 @@ func addWonButton():
 	# addButtonWithChecks("Catch anal", "Use the guy’s dick for your pleasure", "catch_anal", [], [ButtonChecks.NotHandsBlocked])
 	# addButtonWithChecks("Catch virginal", "Use the guy’s dick for your pleasure", "catch_virginal", [], [ButtonChecks.NotHandsBlocked])
 	# addButtonWithChecks("Catch oral", "Use the guy’s dick for your pleasure", "catch_oral", [], [ButtonChecks.NotHandsBlocked])
-
+	var check = [	ButtonChecks.NotHandsBlocked,
+					ButtonChecks.NotArmsRestrained,
+					ButtonChecks.NotLegsRestrained,
+					ButtonChecks.NotBlindfolded,]
 	if(GM.pc.hasPerk("NanoSexMode")):
-		addButtonWithChecks("Hack!", "Try to hack in the android system", "enter_hack_scene", [], [ButtonChecks.CanStartSex])
+		addButtonWithChecks("Hack!", "Try to hack in the android system", "enter_hack_scene", [], check)
 		# addButton("Submit to", "Switch the android to dominative mode", "startsexsubby")
 	addDisabledButton("Sex!", "The system has shutted down.")
 	addDisabledButton("Submit to", "The system has shutted down.")
 	addButton("Inventory", "Look at your inventory", "openinventory")
 	if(GM.pc.hasPerk("NanoExtration")):
-		addButtonWithChecks("Extract Core","get this android core through its hole","extract_core", [], [ButtonChecks.CanStartSex])
+		addButtonWithChecks("Extract Core","get this android core through its hole","extract_core", [], check)
 	if(GM.pc.getInventory().hasRemovableRestraints()):
 		addButton("Struggle", "Struggle out of your restraints", "strugglemenu")
 
@@ -549,6 +552,8 @@ func _react_scene_end(_tag, _result):
 			if(newMode == "guard"):
 				setState("convert_to_guard_mode")
 			if(newMode == "sex"):
+				GM.pc.addSkillExperience("NanoENGR", 50)
+				addMessage("You get more familiar with nano androids.")
 				setState("convert_to_sex_mode")
 				var _npc = getCharacter(npcID)
 				getModule("NanoRevolutionModule").doConvertCharacter(npcID)

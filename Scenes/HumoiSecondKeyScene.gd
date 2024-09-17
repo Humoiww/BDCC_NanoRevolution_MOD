@@ -24,7 +24,8 @@ func _run():
 		sayCharater("humoi","Okay, let me set things straight. I’m not lying to you—I really don’t know how to access the key directly. The androids use a dynamic password system with no key memory. But just because I don’t have the key doesn’t mean I can’t help you generate one. Your controller actually has a feature for creating the current key. I can tweak it a bit so it’ll generate the right key and get you through the check.")
 		saynn("Humoi’s expression softens, her eyes narrowing into a playful smile. She takes a deep breath and continues.")
 		sayCharater("humoi","Sorry if I’ve been juggling with words and playing a bit of a trick on you. But hey, at least now you’ve got a new friend who’s an official engineering member, right? To make up for it, I’ll upgrade your control panel for free. How’s that for a deal?")
-
+		addMessage("Completed: Figure out key quest")
+		addMessage("Now you can hack in android system.")
 		addButton("OK","Fair enough","endthescenewithkey")
 		addDisabledButton("Punish","Sorry, not implemented yet. For now you can only accept this unfair deal. But I'm sure this self-rightous dragon will be get punished in the future.(maybe not next big update)")
 
@@ -47,8 +48,7 @@ func _react(_action: String, _args):
 		setState("trade")
 		return
 
-	if(_action == "ask_key"):
-		GM.main.setModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", true)
+
 
 	if(_action == "aftercare"):
 		processTime(30*60)

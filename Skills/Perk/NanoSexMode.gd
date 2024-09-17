@@ -15,7 +15,7 @@ func getSkillTier():
 	return 0
 
 func getPicture():
-	return "res://Images/Perks/nested-hearts2.png"
+	return "res://Images/Items/generic/chip.png"
 
 func addsAttacks():
 	return ["NanoHackPCAttack"]

@@ -81,7 +81,7 @@ func _run():
 		addButton("Massage","You want them to give you a relax massage. (Semi-implemented ?v?, mostly copy from slave massage scene.)","massage_action")
 
 		if(GM.pc.hasPerk("NanoExtration")):
-			addButton("Extract","You don't want this sex doll any more, time to extract" + GlobalRegistry.getCharacter(npcID).hisHer() +" core.","extract_core")
+			addButton("Extract","You don't want this sex doll any more, time to extract " + GlobalRegistry.getCharacter(npcID).hisHer() +" core.","extract_core")
 		addButton("leave", "You don't want to do anything for now.", "leaveandendthescene")
 		# addButton("Refuse", "You don’t wanna get frisked!", "intimidate")
 		# # addButton("Leave", "You don’t wanna get frisked", "leave")

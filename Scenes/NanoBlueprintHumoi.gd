@@ -86,6 +86,8 @@ func _run():
 
 		
 		addButton("Leave","I think that's it","endthescene")
+
+
 	if(state == "tag_select"):
 		if justPurchased:
 			sayCharater("humoi","Thank you! I've upload the blueprint set to your device.")
@@ -98,26 +100,26 @@ func _run():
 		if(GM.main != null && (GM.main.getFlag("PortalPantiesModule.Panties_PcDenied") || GM.main.getFlag("PortalPantiesModule.Panties_FleshlightsReturnedToAlex"))):
 			addTagItem(ItemTag.SoldByAlexRynard,
 			"Alex Rynard's Collection",
-			"I got some prototypes from Alex and whipped up an alternative version using nano cores.",
+			"I got some prototypes from Alex and whipped up an alternative version using nano cores. Yep, definitely unauthorized. I'm pretty sure Alex won’t mind... probably?(･ω<)☆",
 			"Alex",
 			4,coreAmount)
 
 		addTagItem(ItemTag.SoldByTheAnnouncer,
 		"Fight Club Collection",
-		"A set of blueprints containing all stuff from fight club announcer",
+		"A set of blueprints containing all stuff from fight club announcer. Mostly BDSM devices, but also some great toys.ヾ(ﾟ∀ﾟゞ)",
 		"Fight Club",
 		2,coreAmount)
 
 		addTagItem(ItemTag.CanBeForcedByGuards,
 		"Guard Restrict Collection",
-		"A collection containing all BDSM device that the guard may force on you.",
+		"A collection containing all BDSM device that the guard may force on you. \nFun fact: If the guard device stocks are updated, my blueprint set will instantly reflect these new stocks. Don’t ask me how - SCIENCE!(-v<)✧",
 		"Guard BDSM",
 		3,coreAmount)
 
 		if(GM.pc.hasPerk("NanoCraftingT2")):
 			addTagItem(ItemTag.SoldByMedicalVendomat,
 			"Medical Collection",
-			"A collection for crafting medical items. You’ll need some solid skills to make sure everything turns out right and avoids any health issues.",
+			"A collection for crafting medical items!(≧ω≦)/ \nYeah, I won’t show you this until you’ve gained more experience—it's too risky for novices to access this blueprint set.(￣^￣)",
 			"Medical",
 			4,coreAmount)
 
@@ -135,9 +137,16 @@ func _run():
 		var coreAmount = GM.pc.getInventory().getAmountOf("NanoCore")
 		displayCoreCount(coreAmount)
 
+		addItem("AutoBonder",
+		"Automatic Bonder",
+		"Ever find it annoying when those nano androids applied dozens of BDSM devices instantly during tougher punishments?(╬￣皿￣) Now you can do the same stuff! This device replicates their bonding process and compresses it into a small, handy tool. Just activate it, and you can instantly bond your target!ヾ(ﾟ∀ﾟゞ)",
+		"AutoBonder",
+		4,coreAmount)
+
+
 		addItem("InstantCharger",
 		"Instant Charger",
-		"A small charger that charge your controller instantly.",
+		"A small charger that charge your controller instantly. Good for the longer term useヽ(￣▽￣)ﾉ",
 		"Charger",
 		3,coreAmount)
 
@@ -158,8 +167,6 @@ func _react(_action: String, _args):
 		setState("trade")
 		return
 
-	if(_action == "ask_key"):
-		GM.main.setModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", true)
 
 	if(_action == "aftercare"):
 		processTime(30*60)
@@ -179,13 +186,13 @@ func _react(_action: String, _args):
 	if(_action == "trade_item"):
 		var itemToTrade = _args[0]
 		var cost = _args[1]
-		craftingItemsTags.append(itemToTrade)
+		craftingItems.append(itemToTrade)
 		GM.pc.getInventory().removeXOfOrDestroy("NanoCore",cost)
 		justPurchased = true
 		var craftableItem = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableItem", {})
 		craftableItem[itemToTrade] = true
 		GM.main.setModuleFlag("NanoRevolutionModule", "NanoCraftableItem", craftableItem)
-		setState("tag_select")
+		setState("item_select")
 		return
 	
 

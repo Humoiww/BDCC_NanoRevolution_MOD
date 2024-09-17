@@ -50,6 +50,7 @@ func _run():
 		sayCharater("alexrynard","Still not ready to spill the truth? That’s fine. Just be careful, Humoi is a tricky one. She might try to deceive you with her words. I bet she knows something about the key.")
 		saynn("Wait, did she lie to you? Why would she do that?")
 		sayCharater("alexrynard","Now that you’ve got what you need, head back and give my regards to Humoi. I'm kind of busy now.")
+		addMessage("Updated: Figure out key quest")
 		addButton("Leave","Nothing so much here.","endscenewithclue")
 
 
@@ -58,6 +59,7 @@ func _run():
 		sayCharater("alexrynard","I figured as much. The only advice I can give you is to be cautious around her. Humoi is known for being tricky and may try to mislead you with her words. I’m pretty sure she knows something about the key.")
 		saynn("Wait, did she lie to you? Why would she do that?")
 		sayCharater("alexrynard","Now that you’ve got what you need, head back and give my regards to Humoi. I'm kind of busy now.")
+		addMessage("Updated: Figure out key quest")
 		addButton("Leave","Nothing so much here.","endscenewithclue")
 		
 

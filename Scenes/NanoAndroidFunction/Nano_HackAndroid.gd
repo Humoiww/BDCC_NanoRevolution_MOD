@@ -46,7 +46,7 @@ func keyAccessCommand(_command: String, _args:Array, _commandStringRaw:String):
 			var received_key = _args[0]
 			if(received_key == key):
 				keyAccepted = true
-				return "Key:" + key + " accepted."
+				return "Key:" + key + " accepted. Please type 'help' for new commands."
 			else:
 				return "Invalid key, please try again."
 		else:

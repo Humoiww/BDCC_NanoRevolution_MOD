@@ -9,8 +9,7 @@ func getVisibleName():
 
 func getVisibleDescription():
 	return "So, these nano android should be drived by something right? Let's see if we can get something from their body.\n" \
-	+ "Effect: Now you can extract nano android's cores after defeating them." \
-	+ "(Note: I strongly suggest you to pick this perk as the starting perk for this mod:>)"
+	+ "Effect: Now you can extract nano android's cores after defeating them." 
 
 
 

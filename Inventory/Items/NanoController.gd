@@ -11,7 +11,10 @@ func getVisibleName():
 func getDescription():
 	var desc = "\n\nCurrent feature:\n"
 	desc += "Edit Nano generation response.\n"
-	desc += "Calling the android with your own backend.\n"
+	if(GM.pc.hasPerk("NanoSexMode")):
+		desc += "Hack android during the fight (charge:5) or after the fight (No charge use)\n"
+	if(GM.pc.hasPerk("NanoCallBackUp")):
+		desc += "Call the android with your own backend.(Charge:4)\n"
 	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1)
 	var fullcharge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
 	desc += "\n\nCharge remain: "+ str(charge) + "/" + str(fullcharge) + "\n"
