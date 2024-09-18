@@ -37,7 +37,7 @@ func _initScene(_args = []):
 	var craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
 	for tag in craftableTag:
 		if craftableTag[tag] == true:
-			craftingItemsTags.append(tag)
+			craftingItemsTags.append(int(tag))
 
 func addTagItem(tag,name,description,nameshort,cost,amount):
 	if tag in craftingItemsTags:
@@ -200,9 +200,17 @@ func _react(_action: String, _args):
 
 func saveData():
 	var data = .saveData()
+	
 
+	data["craftingItems"] = craftingItems
+	data["craftingItemsTags"] = craftingItemsTags
+	
 	return data
-
+	
 func loadData(data):
 	.loadData(data)
+	
+
+	craftingItems = SAVE.loadVar(data, "craftingItems", [])
+	craftingItemsTags = SAVE.loadVar(data, "craftingItemsTags", [])
 

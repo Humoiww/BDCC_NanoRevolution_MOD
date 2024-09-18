@@ -25,7 +25,7 @@ func _initScene(_args = []):
 	var craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
 	for tag in craftableTag:
 		if craftableTag[tag] == true:
-			sellingItemsTags.append(tag)
+			sellingItemsTags.append(int(tag))
 
 func _init():
 	sceneID = "NanoCraftScene"
