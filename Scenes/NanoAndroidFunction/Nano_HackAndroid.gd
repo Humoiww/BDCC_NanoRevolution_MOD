@@ -107,7 +107,8 @@ func reactToCommandAndroid(_command: String, _args:Array, _commandStringRaw:Stri
 			return "This command expects 1 argument"
 			
 	if(_command == "exit"):
-		return "Disconnect Successs."
+		markFinishedFail()
+		return "Disconnect Success!"
 		
 	if(_command == "help"):
 		if(_args.size() == 1):

@@ -5,6 +5,7 @@ func _init():
 	id = "NanoExposureForceCheckEvent"
 func registerTriggers(es):
 	es.addTrigger(self, Trigger.HighExposureInmateEvent)
+	es.addTrigger(self, Trigger.PCLookingForTrouble)
 
 func react(_triggerID, _args):
 	if(!getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false)):

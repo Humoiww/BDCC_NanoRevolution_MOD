@@ -1,5 +1,8 @@
 extends Module
 class_name NanoModule
+var NIS = preload("res://Modules/NanoRevolution/InteractionSystem/NanoInteractionSystem.gd").new()
+
+
 
 func getFlags():
 	return {
@@ -38,6 +41,12 @@ func getFlags():
 		"NanoKnowAndroidKey": flag(FlagType.Bool),
 		"NanoAskHumoiKey": flag(FlagType.Bool),
 		"NanoAskAlexKey": flag(FlagType.Bool),
+
+		# Interaction Flag 
+		"NanoIsGenerateThisMorning": flag(FlagType.Bool),# I know might stupid but try this lol
+		"NanoIsGenerateThisAfternoon": flag(FlagType.Bool),
+		"NanoIsGenerateThisEvening": flag(FlagType.Bool),
+
 		
 	}
 
@@ -135,6 +144,7 @@ func _init():
 		"res://Modules/NanoRevolution/Events/Event/NanoAndroidCheck.gd",
 		"res://Modules/NanoRevolution/Events/Event/NanoVisitHumoiEvent.gd",
 		"res://Modules/NanoRevolution/Events/Event/Nano_AlexLearnEvent.gd",
+		"res://Modules/NanoRevolution/Events/Event/Nano_NewInteraction.gd",
 	]
 	perks = [
 		"res://Modules/NanoRevolution/Skills/Perk/NanoBetterExtration.gd",
@@ -172,6 +182,7 @@ func _init():
 func resetFlagsOnNewDay():
 	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
 	GM.main.setModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", charge)
+	GM.main.setModuleFlag("NanoRevolutionModule", "NanoIsGenerateThisMorning",false)
 
 
 func getCraftCost(itemObject:ItemBase):

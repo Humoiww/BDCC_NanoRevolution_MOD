@@ -1,4 +1,5 @@
 extends EventBase
+var NanoGuardGenerator = preload("res://Modules/NanoRevolution/Characters/Dynamic/Generator/NanoGuardGenerator.gd")
 
 
 func _init():
@@ -20,12 +21,34 @@ func updateEverything():
 			setModuleFlag("NanoRevolutionModule", "NanoHasController",true)
 			GM.pc.getInventory().addItemID("NanoController")
 
+
+func generateAndroidBaseCount(count):
+	for _i in range(count):
+		var idToUse = grabNpcIDFromPoolOrGenerate("NanoGuard", [], NanoGuardGenerator.new(), {NpcGen.Level: 1})
+		# GlobalRegistry.getModule("NanoRevolutionModule").NIS.spawnPawn(idToUse)
+		GM.main.IS.spawnPawn(idToUse)
+			
+func clockBasedAndroidSpawn():
+	var count = 5
+	var currentTime = GM.main.getTime()
+	print(currentTime)
+	if((currentTime >= 21600) and (!getModuleFlag("NanoRevolutionModule", "NanoIsGenerateThisMorning",false))):
+		# Every morning, the system will generate 5 new/not new android based on account
+		generateAndroidBaseCount(count)
+		setModuleFlag("NanoRevolutionModule", "NanoIsGenerateThisMorning",true)
+	
+
+
+	
+
 func run(_triggerID, _args):
 	# saynn("Hello owo")
 	# test even
 	# so, a brute force way to keep the save
 	updateEverything()
+	# clockBasedAndroidSpawn()
 
+	# addButton("DEBUG GEN","generate_android pawn????","generate_android")
 	# var thePC = GM.pc
 	# var pcColor = thePC.getBaseSkinColors()
 	# print(thePC.getSpecies().has("nanoAndroid"))
@@ -83,3 +106,9 @@ func run(_triggerID, _args):
 
 func getPriority():
 	return 1
+
+func onButton(_method, _args):
+	if(_method == "generate_android"):
+		generateAndroidBaseCount(1)
+
+
