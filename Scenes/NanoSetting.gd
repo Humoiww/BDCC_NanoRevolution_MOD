@@ -13,6 +13,14 @@ var pickedGenderToChange = ""
 var pickedPartToChange = []
 var accessThroughControl = false
 
+func generate_random_times():
+	var mean_time: float = getModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", 21600.0)  # 6 hours
+	var std_dev: float = 3600
+	var time = randf() * std_dev + mean_time  # 6 ~ 9 hours cool down time
+	print("next generate time:")
+	print(time)
+	return time
+
 
 func getNanoPickableAttributes():
 	var result = {}
@@ -144,9 +152,15 @@ func _run():
 
 		saynn("[say=humoi]Yeah, a few months ago, BDCC launched the android assistant program, where androids help with tough tasks, like inspecting inmates. It seemed to work at first, but over time, multiple cases showed that these androids—especially their punishment mechanisms—might be causing some mental health issues.[/say]")
 
+		
+
+		saynn("[say=pc]Android? What do you mean? I haven't seen them anywhere.[/say]")
+
+		saynn("[say=humoi]Well, due to some technical issues, the engineering department can’t allow those androids wandering around. Since they’re nano androids, they use a special drainage system designed for the jail to move around and check on inmates periodically—specifically every 6 to 7 hours.[/say]")
+
 		saynn("She sighs a little, and continues.")
 
-		saynn("[say=humoi]Though I really like their size and punishment, I didn’t want others to feel uncomfortable with it, so I asked Eliza, the doctor in charge of the medical team here, to address the issue through questionnaires. We collect the inmates' responses periodically, report their needs to the engineering department, and implement any necessary changes.[/say]")
+		saynn("[say=humoi]I didn’t want others to feel uncomfortable with it, so I asked Eliza, the doctor in charge of the medical team here, to address the issue through questionnaires. We collect the inmates' responses periodically, report their needs to the engineering department, and implement any necessary changes.[/say]")
 
 		saynn("She's moving closer.")
 
@@ -387,27 +401,27 @@ func _run():
 		addButton("Back", "Go back a menu", "Q3_menu")
 
 	if(state == "Q4"):
-		var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]
-		totalWeight = 0
+		# var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]
+		# totalWeight = 0
 		
-		var targetWeight = 0
-		for i in range(weighEvents.events.size()):
-			if(weighEvents.events[i].id == "NanoExposureForceCheckEvent"):
-				weighEvents.weights[i] = getModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", 10)
-				targetWeight = weighEvents.weights[i]
-			else:
-				totalWeight += weighEvents.weights[i]
-		var prob = float(targetWeight)/(float(targetWeight) + totalWeight)
-		print(prob)
-		var probability = ("%.2f" % (prob*100)) + "%"
-
-
+		# var targetWeight = 0
+		# for i in range(weighEvents.events.size()):
+		# 	if(weighEvents.events[i].id == "NanoExposureForceCheckEvent"):
+		# 		weighEvents.weights[i] = getModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", 10)
+		# 		targetWeight = weighEvents.weights[i]
+		# 	else:
+		# 		totalWeight += weighEvents.weights[i]
+		# var prob = float(targetWeight)/(float(targetWeight) + totalWeight)
+		# print(prob)
+		# var probability = ("%.2f" % (prob*100)) + "%"
+		var currentCheckTime = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", 21600.0)
+		var currentCheckHours = ("%.1f" % (currentCheckTime/3600)) + "~" +("%.1f" % (currentCheckTime/3600 + 1))
 		add_panel()
 
 		saynn("Question 4:")
-
-		saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
-
+		# saynn("[color=red]This question is no longer valid since the last cell update, but we’ve decided to keep this part for future development. \n --Humoi (∠・ω<)[/color]")
+		# saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
+		saynn("Currently, the Nano Guards check on inmates approximately every [color=red]" + currentCheckHours + "[/color] hours. This timing starts counting from every morning and resets with each check.")
 		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes. Otherwise, click \"Next\" to proceed to the next question")
 		
 		
@@ -419,39 +433,47 @@ func _run():
 
 	if(state == "Q4_menu"):
 		add_panel()
-		var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]
-		totalWeight = 0
+		var currentCheckTime = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", 21600.0)
+		var currentCheckHours = ("%.1f" % (currentCheckTime/3600)) + "~" +("%.1f" % (currentCheckTime/3600 + 1))
+		# saynn("[color=red]This question is no longer valid since the last cell update, but we’ve decided to keep this part for future development. \n --Humoi (∠・ω<)[/color]")
+		# saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
+		saynn("Currently, the Nano Guards check on inmates approximately every [color=red]" + currentCheckHours + "[/color] hours. This timing starts counting from every morning and resets with each check.")
+		saynn("Change the prefered hours through following selection. Click the \"Done button\" if you are satisfied with current selection. ")
+		# var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]
+		# totalWeight = 0
 		
-		var targetWeight = 0
-		for i in range(weighEvents.events.size()):
+		# var targetWeight = 0
+		# for i in range(weighEvents.events.size()):
 			
-			if(weighEvents.events[i].id == "NanoExposureForceCheckEvent"):
-				weighEvents.weights[i] = getModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", 10)
-				targetWeight = weighEvents.weights[i]
-			else:
-				totalWeight += weighEvents.weights[i]
-			print(weighEvents.events[i].id)
-			print(weighEvents.weights[i])
-		var prob = float(targetWeight)/(float(targetWeight) + totalWeight)
-		print(prob)
-		var probability = ("%.2f" % (prob*100)) + "%"
-		saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
+		# 	if(weighEvents.events[i].id == "NanoExposureForceCheckEvent"):
+		# 		weighEvents.weights[i] = getModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", 10)
+		# 		targetWeight = weighEvents.weights[i]
+		# 	else:
+		# 		totalWeight += weighEvents.weights[i]
+		# 	print(weighEvents.events[i].id)
+		# 	print(weighEvents.weights[i])
+		# var prob = float(targetWeight)/(float(targetWeight) + totalWeight)
+		# print(prob)
+		# var probability = ("%.2f" % (prob*100)) + "%"
+		# saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
 
-		saynn("Change the probability through following selection. Click the Done button if you are satisfied with current selection. ")
+		# saynn("Change the probability through following selection. Click the Done button if you are satisfied with current selection. ")
 
-		saynn("Please note that it's not possible to completely avoid inmate encounters, so you can only increase this setting up to 99%")
+		# saynn("Please note that it's not possible to completely avoid inmate encounters, so you can only increase this setting up to 99%")
 
-		addButton("0%", "Change the probability", "Q4_edit", [0])
-		addButton("25%", "Change the probability", "Q4_edit", [0.25])
-		addButton("50%", "Change the probability", "Q4_edit", [0.5])
-		addButton("75%", "Change the probability", "Q4_edit", [0.75])
-		addButton("99%", "Change the probability", "Q4_edit", [0.99])
-		addButton("-15%", "Change the probability", "Q4_edit", [prob-0.15])
-		addButton("-5%", "Change the probability", "Q4_edit", [prob-0.05])
-		addButton("-1%", "Change the probability", "Q4_edit", [prob-0.01])
-		addButton("+1%", "Change the probability", "Q4_edit", [prob+0.01])
-		addButton("+5%", "Change the probability", "Q4_edit", [prob+0.05])
-		addButton("+15%", "Change the probability", "Q4_edit", [prob+0.15])
+		for selectTime in range(19):
+			addButton(str(selectTime) + "~" + str(selectTime+1),"Change the hour","Q4_edit",[selectTime*3600])
+		# addButton("0%", "Change the probability", "Q4_edit", [0])
+		# addButton("25%", "Change the probability", "Q4_edit", [0.25])
+		# addButton("50%", "Change the probability", "Q4_edit", [0.5])
+		# addButton("75%", "Change the probability", "Q4_edit", [0.75])
+		# addButton("99%", "Change the probability", "Q4_edit", [0.99])
+		# addButton("-15%", "Change the probability", "Q4_edit", [prob-0.15])
+		# addButton("-5%", "Change the probability", "Q4_edit", [prob-0.05])
+		# addButton("-1%", "Change the probability", "Q4_edit", [prob-0.01])
+		# addButton("+1%", "Change the probability", "Q4_edit", [prob+0.01])
+		# addButton("+5%", "Change the probability", "Q4_edit", [prob+0.05])
+		# addButton("+15%", "Change the probability", "Q4_edit", [prob+0.15])
 		addButtonAt(14,"Done","Save changes","Q4")
 	if(state == "Q5"):
 		add_panel()
@@ -596,16 +618,19 @@ func _react(_action: String, _args):
 
 	if(_action == "Q4_edit"):
 		if(_args.size() > 0):
-			var target_prob = _args[0]
-			if(target_prob < 0):
-				target_prob = 0
-			if(target_prob > 0.99):
-				target_prob = 0.99
-			var new_weight = float(totalWeight)*target_prob/(1-target_prob)
-			print("debug:")
-			print(totalWeight)
-			print(new_weight)
-			setModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", new_weight)
+			var target_Hour = _args[0]
+			GM.main.setModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", target_Hour)
+			GM.main.setModuleFlag("NanoRevolutionModule", "NanoNextCheckTime", generate_random_times())
+			# var target_prob = _args[0]
+			# if(target_prob < 0):
+			# 	target_prob = 0
+			# if(target_prob > 0.99):
+			# 	target_prob = 0.99
+			# var new_weight = float(totalWeight)*target_prob/(1-target_prob)
+			# print("debug:")
+			# print(totalWeight)
+			# print(new_weight)
+			# setModuleFlag("NanoRevolutionModule", "NanoAndroidGuardAppearWeight", new_weight)
 			# var loadedevents = GlobalRegistry.getEvents()
 			# var event = loadedevents["NanoExposureForceCheckEvent"]
 			# event.updatePrior()

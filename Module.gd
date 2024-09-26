@@ -42,13 +42,18 @@ func getFlags():
 		"NanoAskHumoiKey": flag(FlagType.Bool),
 		"NanoAskAlexKey": flag(FlagType.Bool),
 
-		# Interaction Flag 
+		#Nano New Interaction Flag 
 		"NanoIsGenerateThisMorning": flag(FlagType.Bool),# I know might stupid but try this lol
 		"NanoIsGenerateThisAfternoon": flag(FlagType.Bool),
 		"NanoIsGenerateThisEvening": flag(FlagType.Bool),
-
+		"NanoCheckedToday": flag(FlagType.Bool),
+		"NanoLastCheckTime": flag(FlagType.Number),
+		"NanoNextCheckTime": flag(FlagType.Number),
+		"NanoCheckTimePeriod": flag(FlagType.Number),
 		
 	}
+
+
 
 func getDefaultSize():
 	var defaultSizePara = {}
@@ -183,6 +188,8 @@ func resetFlagsOnNewDay():
 	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
 	GM.main.setModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", charge)
 	GM.main.setModuleFlag("NanoRevolutionModule", "NanoIsGenerateThisMorning",false)
+	GM.main.setModuleFlag("NanoRevolutionModule", "NanoCheckedToday",false)
+	GM.main.setModuleFlag("NanoRevolutionModule", "NanoLastCheckTime", 21600)
 
 
 func getCraftCost(itemObject:ItemBase):

@@ -7,6 +7,7 @@ func registerTriggers(es):
 	es.addTrigger(self, Trigger.TalkingToNPC, "alexrynard")
 	
 func run(_triggerID, _args):
+	print("I'm activate ---------------------------------Alexlearn")
 	if(getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false)):
 		if(not getFlag("AlexRynardModule.ch1HypnovisorHappened")):
 			addDisabledButton("Nano Android", "Better wait till Alex is more friendly with you")
@@ -18,7 +19,7 @@ func run(_triggerID, _args):
 	
 	
 	
-	return
+
 	
 
 		

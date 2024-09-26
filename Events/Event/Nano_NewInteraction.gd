@@ -1,7 +1,7 @@
 extends EventBase
 
 func _init():
-	id = "AlexLearnEvent"
+	id = "NanoInteraction"
 
 func registerTriggers(es):
 	es.addTrigger(self, Trigger.TalkingToDynamicNPC)

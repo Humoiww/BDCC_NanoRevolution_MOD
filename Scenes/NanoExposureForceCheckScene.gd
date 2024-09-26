@@ -68,7 +68,7 @@ func _run():
 	if(state == "" && !getModuleFlag("NanoRevolutionModule", "NanoCheckHappened", false)):
 		setModuleFlag("NanoRevolutionModule", "NanoCheckHappened", true)
 		setModuleFlag("NanoRevolutionModule", "NanoCheckSRefuseTimes", 0)
-		saynn("When you walk around, you just notice an android with dark blue skin color approach you")
+		saynn("As you walk around, a pool of black goo suddenly emerges from the ground, shaping itself into an android-like creature.")
 
 		saynn("{npc.himHer} gives you a stop sign.")
 
@@ -99,7 +99,7 @@ func _run():
 
 		saynn("The nano guard will check you every time when they meet you. What do you wanna do?")
 	elif(state == ""):
-		saynn("The nano guard stops you.")
+		saynn("As you walk around, a pool of black goo suddenly emerges from the ground, shaping itself into an android-like creature.")
 
 		saynn("[say=npc]{pc.name}, we have to frisk you. Please stand against a wall.[/say]")
 		
@@ -216,7 +216,14 @@ func _run():
 
 			saynn("[say=pc]Wait! That won't fit..[/say]")
 
-			addButton("Resist", "That just... too big", "force_anal")			
+			saynn("[say=npc]Now, {pc.name}, regarding the prison policy, you have the chance to decide on your type of punishment.[/say]")
+
+			saynn("Oh, how 'charitable' of them!")
+
+			addButton("Anal", "They will punish through your anal", "force_anal")
+			addButton("Vagina", "They will punish through your pussy", "force_vagina")
+			addButton("Oral","They will punish through your mouth", "force_oral")
+
 	if(state == "force_anal"):
 		playAnimation(StageScene.StocksSex, "sex", {pc="pc", npc=npcID, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
 		saynn("The android thick cock force penetrate inside your anus.")
@@ -225,9 +232,9 @@ func _run():
 
 		saynn("The android ignore your request, mechanically insert back and forth again and again")
 
-		addButton("Submit", "Ahh", "force_end")
+		addButton("Submit", "Ahh", "force_anal_end")
 
-	if(state == "force_end"):
+	if(state == "force_anal_end"):
 		playAnimation(StageScene.StocksSex, "fast", {pc="pc", npc=npcID, pcCum=true, npcCum=true, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
 
 		saynn("[say=npc]Inmate state: close. Injecting simulated cum.[/say]")
@@ -240,6 +247,55 @@ func _run():
 		saynn("Now you need to figure out how to escape here")
 		
 		addButton("Continue", "Ouch", "loseandendthescene")
+
+	if(state == "force_vagina"):
+		playAnimation(StageScene.StocksSex, "sex", {pc="pc", npc=npcID, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
+		saynn("The android thick cock force penetrate inside your pussy.")
+
+		saynn("[say=pc]Please... Stop....[/say]")
+
+		saynn("The android ignore your request, mechanically insert back and forth again and again")
+
+		addButton("Submit", "Ahh", "force_vagina_end")
+
+	if(state == "force_vagina_end"):
+		playAnimation(StageScene.StocksSex, "fast", {pc="pc", npc=npcID, pcCum=true, npcCum=true, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
+
+		saynn("[say=npc]Inmate state: close. Injecting simulated cum.[/say]")
+
+		saynn("All of sudden, you feel massive amount of hot liquid flux into your womb. But the cum don't stop, you feel your stomach become bigger and bigger.")
+
+		saynn("[say=pc]Ahh.....h....h...[/say]")
+		saynn("[say=npc]Punishment completed. Enjoy rest of your day, {pc.name}.[/say]")
+
+		saynn("Now you need to figure out how to escape here")
+		
+		addButton("Continue", "Ouch", "loseandendthescene")
+
+
+	if(state == "force_oral"):
+		playAnimation(StageScene.StocksSexOral, "sex", {pc="pc", npc=npcID, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
+		saynn("The android move to the front and deepthroat your month.")
+
+		saynn("[say=pc]Mmmph....[/say]")
+
+		addButton("Submit", "Ahh", "force_oral_end")
+
+	if(state == "force_oral_end"):
+		playAnimation(StageScene.StocksSexOral, "fast", {pc="pc", npc=npcID, pcCum=true, npcCum=true, bodyState={exposedCrotch=true}, npcBodyState={exposedCrotch=true, hard=true}})
+
+		saynn("[say=npc]Inmate state: close. Injecting simulated cum.[/say]")
+
+		saynn("All of sudden, you feel massive amount of hot liquid flux through your throat and flow into your stomach.")
+
+		saynn("[say=pc]Pff..f.[/say]")
+		saynn("[say=npc]Punishment completed. Enjoy rest of your day, {pc.name}.[/say]")
+
+		saynn("Now you need to figure out how to escape here")
+		
+		addButton("Continue", "Ouch", "loseandendthescene")
+
+
 
 	if(state == "won_fight"):
 		
@@ -391,12 +447,30 @@ func _react(_action: String, _args):
 	
 
 
-	if(_action == "force_end"):
+	if(_action == "force_anal_end"):
 		processTime(30*60)
 		GM.pc.doPainfullyStretchHole(BodypartSlot.Anus, npcID)
 		GM.pc.gotAnusFuckedBy(npcID)
 		GM.pc.cummedInAnusBy(npcID, FluidSource.Penis,20)
 		GM.pc.cummedInMouthBy("pc", FluidSource.Penis)
+		
+		GM.pc.addSkillExperience(Skill.SexSlave, 20)
+
+	if(_action == "force_vagina_end"):
+		processTime(30*60)
+		GM.pc.doPainfullyStretchHole(BodypartSlot.Vagina, npcID)
+		GM.pc.gotVaginaFuckedBy(npcID)
+		GM.pc.cummedInVaginaBy(npcID, FluidSource.Penis,20)
+		# GM.pc.cummedInMouthBy("pc", FluidSource.Penis)
+		
+		GM.pc.addSkillExperience(Skill.SexSlave, 20)
+
+	if(_action == "force_oral_end"):
+		processTime(30*60)
+		# GM.pc.doPainfullyStretchHole(BodypartSlot.Anus, npcID)
+		GM.pc.gotThroatFuckedBy(npcID)
+		GM.pc.cummedInMouthBy(npcID, FluidSource.Penis,20)
+		GM.pc.cummedInAnusBy("pc", FluidSource.Penis)
 		
 		GM.pc.addSkillExperience(Skill.SexSlave, 20)
 
@@ -443,7 +517,8 @@ func _react(_action: String, _args):
 				_penis.lengthCM = initialSize
 			else:
 				var _penis = _npc.removeBodypart(BodypartSlot.Penis)
-		runScene("StocksPunishmentScene")
+		# runScene("StocksPunishmentScene") # Nope, Rahi stop use the old punishment scene, it's time for new interaction! yay
+		GM.main.IS.startInteraction("InStocks", {inmate="pc"})
 		endScene()
 		return
 		
