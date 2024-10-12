@@ -6,7 +6,7 @@ var charges:int = 1
 func useCharge(amount = 1):
 	charges -= amount
 	if(charges <= 0):
-		destroyMe()
+		removeXOrDestroy(1)
 
 func getCharges():
 	return charges
@@ -43,6 +43,20 @@ func getPrice():
 
 func canSell():
 	return true
+
+
+func saveData():
+	var data = .saveData()
+	
+	data["charges"] = charges
+	
+	return data
+	
+func loadData(data):
+	.loadData(data)
+	
+	charges = SAVE.loadVar(data, "charges", 1)
+
 
 func canCombine():
 	return true

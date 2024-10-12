@@ -164,10 +164,22 @@ func _run():
 		saynn("=========================================")
 		saynn("[color=red]Warning: Unidentified lifeform detected. Please ensure the assembly room is cleared before proceeding with activation.[/color]")
 
-		saynn("Hum, a warning shown on the screen, what will do you now?")
+		if(!getModuleFlag("NanoRevolutionModule","NanoAttackSceneWarned",false)):
+			setModuleFlag("NanoRevolutionModule","NanoAttackSceneWarned",true)
+			saynn("[say=humoi]Hey, {pc.name}. Can you hear me?[/say]")
 
-		addButton("ACTIVATE", "Safety regulations? Just scary tricks, nothing more.\n(Content Warning: Force Transformation, Inanimate Transformation)", "do_activate")
-		addDisabledButton("leave", "Yeah, rules don't exist without a reason. We can just leave this room and see what will happened\n (Sorry, not implemented yet qwq)")
+			saynn("A voice crackles through the controller. How on earth did she hack into this?")
+
+			saynn("[say=pc]Yeah, I hear you. What’s up?[/say]")
+
+			saynn("[say=humoi]Just noticed you're about to activate the prototype manufacturing process. Heads up—once you hit that button, it'll cause a permanent change to your body. Just thought I’d give you a friendly reminder. But hey, your call![/say]")
+		else:
+			saynn("[say=humoi]Friendly reminder again~ You're about to activate the prototype manufacturing process. Heads up—once you hit that button, it'll cause a permanent change to your body.[/say]")
+
+		saynn("Hum, what will do you now?")
+
+		addButton("ACTIVATE", "Activate it anyway.\n(Content Warning: Force Transformation, Inanimate Transformation, Irreversible Change.)", "do_activate")
+		# addDisabledButton("leave", "Yeah, rules don't exist without a reason. We can just leave this room and see what will happened\n (Sorry, not implemented yet qwq)")
 		addButton("CANCEL", "Better think twice", "datapad")
 	if(state == "do_activate"):
 		# addCharacter("NanoSystem")
@@ -197,16 +209,60 @@ func _run():
 			GM.pc.getInventory().unequipItem(item)
 
 		saynn("You try your best to get to the door you entered. Unfortunately, it seems locked by this system. Before you notice, several latex tentacles grip your arm and leg, hold you in to the air.")
-		addButton("Struggle", "Try to stop it", "machine_try_stop")
-	if(state == "machine_try_stop"):
+		addButton("Struggle", "Hold your mind, resist the change.\n(Though you still change into nano android race, but you can keep your body attribute.)","machine_try_keep")
+		addButton("Embrace", "Maybe being an android isn't a bad idea? \n(Randomly change your body)", "machine_try_stop")
+
+	if(state == "machine_try_keep"):
 		
 		saynn("You try to pull the goo tentacles away, but it doesn't work. The black goo starts climbing your legs, arm, and than covering your whole body.")
 
 		saynn("[say=pc]Help! Can anyone hear me?[/say]")
 
-		saynn("You yell, cry, but no one response. Without warning, several tentacles start to penetrate every holes in your body. Huge amount of black goos flux into your mouth.")
+		saynn("You yell, cry, but no one response. Without warning, several tentacles start to penetrate every holes in your body. Huge amount of black goos flux into your mouth. You try your best to keep your mind.")
+
+		saynn("[say=NanoSystem][color=red]WARNING[/color]: Detecting no variance signal from the template, skip modifying body components, jump to whole body converting.[/say]")
+		var thePC = GM.pc
+		saynn("You feel those black goo flow to your crotch. Suddenly, great pleasure shocks your head, making you hard to think anything.")
+		if(thePC.getGender() != Gender.Female):
+			saynn("You fight to hold on to your thoughts, your memories, but they’re shooting away with your cum, drowned out by the relentless pleasure. You feel the goo flow in your body progressly replace every fragment of your body. Strangely, you feel that becoming an android isn't that bad....")
+		else:
+			saynn("You fight to hold on to your thoughts, your memories, but they’re fading away as you keep cumming, drowned out by the relentless pleasure. You feel the goo flow in your body progressly replace every fragment of your body. Strangely, you feel that becoming an android isn't that bad....")
+
 		
-			
+		var pcSkinData={
+		"hair": {"r": Color("ff21253e"),"g": Color("ff4143a8"),"b": Color("ff000000"),},
+		"penis": {"r": Color("ff242424"),"g": Color("ff070707"),"b": Color("ff01b2f9"),},
+		}
+		thePC.pickedSkin="HumanSkin"
+		thePC.pickedSkinRColor=Color("ff080808")
+		thePC.pickedSkinGColor=Color("ff363636")
+		thePC.pickedSkinBColor=Color("ff678def")
+		
+		thePC.setSpecies(["nanoAndroid"]) # yeah this magical function change PC's species 
+		
+
+		for bodypartSlot in pcSkinData:
+			if(!thePC.hasBodypart(bodypartSlot)):
+				continue
+			var bodypart = thePC.getBodypart(bodypartSlot)
+			var bodypartSkinData = pcSkinData[bodypartSlot]
+			if(bodypartSkinData.has("skin")):
+				bodypart.pickedSkin = bodypartSkinData["skin"]
+			if(bodypartSkinData.has("r")):
+				bodypart.pickedRColor = bodypartSkinData["r"]
+			if(bodypartSkinData.has("g")):
+				bodypart.pickedGColor = bodypartSkinData["g"]
+			if(bodypartSkinData.has("b")):
+				bodypart.pickedBColor = bodypartSkinData["b"]
+		thePC.updateAppearance()
+	
+
+		addButton("Obey", "....", "machine_complete")
+
+	if(state == "machine_try_stop"):
+		
+		saynn("You stop struggling, awating the machine to convert your body.")
+
 		var thePC = GM.pc
 		var _theSpecies = thePC.getSpecies()
 		# first random generate a new gender for pc

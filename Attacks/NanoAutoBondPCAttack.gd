@@ -12,13 +12,19 @@ func getVisibleDesc(_context = {}):
 	return "Threw an automatic bonder to your enemy."
 	
 func _doAttack(_attacker, _receiver, _context = {}):
-
+	var item = getItem(_context)
+	if(item != null):
+		# damageRange = item.getDamageRange()
+		item.useCharge()
 	var texts = [
 		"{attacker.name} threw an auto bonder to {receiver.name}.",
 	]
 	var text = RNG.pick(texts)
-	for item in _receiver.getInventory().forceRestraintsWithTag(ItemTag.CanBeForcedByGuards, RNG.randi_range(3, 5)):
-		GM.main.addMessage(item.getForcedOnMessage(false))
+	for restr in _receiver.getInventory().forceRestraintsWithTag(ItemTag.CanBeForcedByGuards, RNG.randi_range(3, 5)):
+		
+		GM.main.addMessage(GM.ui.processString(restr.getForcedOnMessage(false), {receiver=_receiver.getID()}))
+
+
 	return {
 		text = text,
 	}
@@ -30,6 +36,7 @@ func getAttackHitReactAnimation(_attacker, _receiver, _result):
 
 func getRequirements():
 	return [AttackRequirement.FreeArms, AttackRequirement.FreeHands]
+
 
 
 func getAttackSoloAnimation():

@@ -116,12 +116,27 @@ func _run():
 		"Guard BDSM",
 		3,coreAmount)
 
+		addTagItem(ItemTag.SoldByUnderwearVendomat,
+		"Cloth Collection",
+		"A collection featuring various clothing items, from uniforms to pants, for both inmates and guards. Forget about complex tailoring—it's the Nano Age!",
+		"Cloth",
+		3,coreAmount)
+
 		if(GM.pc.hasPerk("NanoCraftingT2")):
 			addTagItem(ItemTag.SoldByMedicalVendomat,
 			"Medical Collection",
 			"A collection for crafting medical items!(≧ω≦)/ \nYeah, I won’t show you this until you’ve gained more experience—it's too risky for novices to access this blueprint set.(￣^￣)",
 			"Medical",
 			4,coreAmount)
+
+			addTagItem(ItemTag.SoldByGeneralVendomat,
+			"Daily Collection",
+			"A collection for crafting items in the General Vendomat. Since many aspects of daily life are closely tied to the body, integrating nanomachines into everyday use isn't easy. You'll need medical skills to access this collection.",
+			"Daily",
+			4,coreAmount)
+		
+		else:
+			saynn("(There are two potential collections hidden by your Nano Crafting skill. You need to upgrade this skill to Tier 2 to unlock them.)")
 
 
 
@@ -174,12 +189,29 @@ func _react(_action: String, _args):
 	if(_action == "trade_tag"):
 		var tagToTrade = _args[0]
 		var cost = _args[1]
-		craftingItemsTags.append(tagToTrade)
 		GM.pc.getInventory().removeXOfOrDestroy("NanoCore",cost)
+		craftingItemsTags.append(tagToTrade)
 		justPurchased = true
 		var craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
 		craftableTag[tagToTrade] = true
 		GM.main.setModuleFlag("NanoRevolutionModule", "NanoCraftableTag", craftableTag)
+
+		if(tagToTrade == ItemTag.SoldByUnderwearVendomat):
+			var addTags = [ItemTag.GuardUniform,
+						ItemTag.NurseUniform,
+						ItemTag.EngineerUniform,
+						ItemTag.GeneralInmateUniform,
+						ItemTag.HighSecurityInmateUniform,
+						ItemTag.SexualDeviantInmateUniform,]
+			for addTagToTrade in addTags:
+				craftingItemsTags.append(addTagToTrade)
+				# justPurchased = true
+				# craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
+				craftableTag[addTagToTrade] = true
+				GM.main.setModuleFlag("NanoRevolutionModule", "NanoCraftableTag", craftableTag)
+
+
+			
 		setState("tag_select")
 		return
 

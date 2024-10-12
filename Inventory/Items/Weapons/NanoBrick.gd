@@ -5,7 +5,7 @@ var charges:int = 1
 func useCharge(amount = 1):
 	charges -= amount
 	if(charges <= 0):
-		destroyMe()
+		removeXOrDestroy(1)
 
 func getCharges():
 	return charges

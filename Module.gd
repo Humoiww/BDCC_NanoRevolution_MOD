@@ -10,6 +10,7 @@ func getFlags():
 		"NanoCheckSRefuseTimes": flag(FlagType.Number),
 		"NanoCheckHappened": flag(FlagType.Bool),
 		"NanoAttackSceneHappened": flag(FlagType.Bool),
+		"NanoAttackSceneWarned": flag(FlagType.Bool),
 		"NanoCraftingTableEnabled": flag(FlagType.Bool),
 		"NanoMeetHumoi": flag(FlagType.Bool),
 		# "NanoAndroidMaxCockSize": flag(FlagType.Number),

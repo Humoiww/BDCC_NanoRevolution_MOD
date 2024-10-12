@@ -61,7 +61,7 @@ func useInCombat(_attacker, _receiver):
 func getPossibleActions():
 	var action = []
 	action.append({
-			"name": "Setting!",
+			"name": "Setting",
 			"scene": "NanoSetting",
 			"description": "Entering the setting part",
 			"onlyWhenCalm": true,
@@ -71,6 +71,13 @@ func getPossibleActions():
 				"name": "Calling",
 				"scene": "UseItemLikeInCombatScene",
 				"description": "(Charge: 4) Call one of your sex doll. Useless if you don't have any sex doll.",
+		})
+	if(GM.pc.getSpecies().has("nanoAndroid")):
+		action.append({
+				"name": "Status",
+				"scene": "NanoSetting",
+				"description": "Check your body status.",
+				"onlyWhenCalm": true,
 		})
 	return action
 
