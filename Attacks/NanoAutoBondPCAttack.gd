@@ -1,7 +1,7 @@
 extends Attack
 var attacker
 func _init():
-	id = "NanoAutoBondPCAttack"
+	id = "NanoAutoBondPCAttack" 
 	category = Category.Special
 	aiCategory = AICategory.Offensive
 	

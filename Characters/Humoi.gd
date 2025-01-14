@@ -81,6 +81,11 @@ func _init():
 		InterestTopic.HasCockOnly: Interest.Dislikes,
 	}
 	
+
+func getDefaultArtwork(_variant = []):
+	return "res://Modules/NanoRevolution/Images/Humoi_avator/Humoi_avator.png"
+
+
 func _getName():
 	return "Humoi"
 
