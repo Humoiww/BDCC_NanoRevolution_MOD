@@ -1,8 +1,8 @@
 extends Module
 class_name NanoModule
-var NIS = preload("res://Modules/NanoRevolution/InteractionSystem/NanoInteractionSystem.gd").new()
 
-
+var interactions = []
+var pawnTypes = []
 
 func getFlags():
 	return {
@@ -130,6 +130,8 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/Alex_TalkAboutAndroid.gd",
 		"res://Modules/NanoRevolution/Scenes/HumoiSecondKeyScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoBlueprintHumoi.gd",
+		# transform scene
+		"res://Modules/NanoRevolution/Scenes/Nano_TransformVictimScene.gd",
 		]
 	characters = [
 		"res://Modules/NanoRevolution/Characters/NanoAssemble.gd",
@@ -151,6 +153,8 @@ func _init():
 		"res://Modules/NanoRevolution/Events/Event/NanoVisitHumoiEvent.gd",
 		"res://Modules/NanoRevolution/Events/Event/Nano_AlexLearnEvent.gd",
 		"res://Modules/NanoRevolution/Events/Event/Nano_NewInteraction.gd",
+		# transform event
+		"res://Modules/NanoRevolution/Events/Event/Nano_TransformVictimEvent.gd",
 	]
 	perks = [
 		"res://Modules/NanoRevolution/Skills/Perk/NanoBetterExtration.gd",
@@ -160,6 +164,7 @@ func _init():
 		"res://Modules/NanoRevolution/Skills/Perk/NanoDistraction.gd",
 		"res://Modules/NanoRevolution/Skills/Perk/NanoCallBackUp.gd",
 		"res://Modules/NanoRevolution/Skills/Perk/NanoCraftingT2.gd",
+		
 	]
 	skills = [
 		"res://Modules/NanoRevolution/Skills/Skill/NanoENGR.gd",
@@ -185,6 +190,28 @@ func _init():
 	]
 
 
+
+#	custom register
+	interactions = [
+		"res://Modules/NanoRevolution/Interaction/NanoInteractionTest.gd",
+	]
+	pawnTypes =[
+		"res://Modules/NanoRevolution/Characters/Dynamic/NanoAndroidPawn/SexDoll.gd"
+	]
+	
+
+func register():
+	.register()
+	for interaction in interactions:
+		GlobalRegistry.registerInteraction(interaction)
+
+	for pawnType in pawnTypes:
+		GlobalRegistry.registerPawnType(pawnType)
+
+	# GlobalRegistry.registerInteraction("")
+
+
+
 func resetFlagsOnNewDay():
 	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
 	GM.main.setModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", charge)
@@ -197,3 +224,39 @@ func getCraftCost(itemObject:ItemBase):
 
 	itemObject.getVisibleName()
 	return ceil(itemObject.getPrice()/5.0) if (itemObject.getPrice()>0) else 1.0
+
+func debugSceneStack():
+	print("========Show All scene Stack=========")
+	for scene in GM.main.sceneStack:
+		print(scene.sceneID)
+	print("========End  All scene Stack=========")
+
+func transformCharToNano(thePC:Character):
+	
+	thePC.npcSpecies = ["nanoAndroid"]
+	var pcSkinData={
+		"hair": {"r": Color("ff21253e"),"g": Color("ff4143a8"),"b": Color("ff000000"),},
+		"penis": {"r": Color("ff242424"),"g": Color("ff070707"),"b": Color("ff01b2f9"),},
+		}
+	thePC.pickedSkin="HumanSkin"
+	thePC.pickedSkinRColor=Color("ff080808")
+	thePC.pickedSkinGColor=Color("ff363636")
+	thePC.pickedSkinBColor=Color("ff678def")
+	
+	# thePC.setSpecies(["nanoAndroid"]) # yeah this magical function change PC's species 
+	
+
+	for bodypartSlot in pcSkinData:
+		if(!thePC.hasBodypart(bodypartSlot)):
+			continue
+		var bodypart = thePC.getBodypart(bodypartSlot)
+		var bodypartSkinData = pcSkinData[bodypartSlot]
+		if(bodypartSkinData.has("skin")):
+			bodypart.pickedSkin = bodypartSkinData["skin"]
+		if(bodypartSkinData.has("r")):
+			bodypart.pickedRColor = bodypartSkinData["r"]
+		if(bodypartSkinData.has("g")):
+			bodypart.pickedGColor = bodypartSkinData["g"]
+		if(bodypartSkinData.has("b")):
+			bodypart.pickedBColor = bodypartSkinData["b"]
+	thePC.updateAppearance()

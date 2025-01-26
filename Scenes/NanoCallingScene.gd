@@ -47,7 +47,7 @@ func _run():
 		playAnimation(StageScene.Choking, "idle", {pc = npcID2, npc=npcID, bodyState={exposedCrotch=true,hard=true}})
 	if(state == ""):
 
-		saynn("[say=npc]Wha?[/say]")
+		saynn("[say=npc]Wha?[/say]") 
 
 		# (if not naked)
 		

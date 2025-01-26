@@ -17,6 +17,7 @@ func run(_triggerID, _args):
 	# 			addDisabledButton("Nano Android", "Better go and check that blue dragon first.")
 	
 	print("Hello, im talking with dynamic character, am I still working?")
+	# this trigger does not work anymore
 	
 	return
 	
