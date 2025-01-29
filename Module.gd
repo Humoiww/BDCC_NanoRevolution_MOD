@@ -194,6 +194,7 @@ func _init():
 #	custom register
 	interactions = [
 		"res://Modules/NanoRevolution/Interaction/NanoInteractionTest.gd",
+		"res://Modules/NanoRevolution/Interaction/NanoAskSexService.gd",
 	]
 	pawnTypes =[
 		"res://Modules/NanoRevolution/Characters/Dynamic/NanoAndroidPawn/SexDoll.gd"

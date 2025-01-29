@@ -16,15 +16,50 @@ func resolveCustomCharacterName(_charID):
 
 func _run():
 	if(state == ""):
-		GlobalRegistry.getModule("NanoRevolutionModule").debugSceneStack()
+		# GlobalRegistry.getModule("NanoRevolutionModule").debugSceneStack()
 		addCharacter(npcID)
-		playAnimation(StageScene.Choking, "chock", {pc="pc",npc=npcID})
+		
+		var npc = GlobalRegistry.getCharacter(npcID)
+		# npc.ForceUndress
+		npc.getInventory().removeItemFromSlot(InventorySlot.Mouth)
+		
 
 		# var npc:BaseCharacter = GlobalRegistry.getCharacter(npcID)
-		saynn("You transform {npc.name} into android.")
-		
-		saynn("#TODO, more way, more desctiption")
-		addButton("Do it", "Go through with it", "do_transform")
+		saynn("You hold {npc.name}'s head, ready to inject nano-robots in {npc.hisHer} body.")
+
+
+		var personality:Personality = npc.getPersonality()
+		if(personality.getStat(PersonalityStat.Mean) > 0.4):
+			saynn("[say=npc]"+RNG.pick([
+				"Stop! What are you doing?! Get that away from me!",
+				"No! I won't let you do this! Let me go!",
+				"Hey, what the fuck are you doing?",
+				"What the fuck is this? Put that away!",
+			])+"[/say]")
+		elif(personality.getStat(PersonalityStat.Subby) < -0.4):
+			saynn("[say=npc]"+RNG.pick([
+				"Stop! What are you doing?! Get that away from me!",
+				"No! I won't let you do this! Let me go!",
+				"Hey, what the fuck are you doing?",
+				"What the fuck is this? Put that away!",
+			])+"[/say]")
+		else:
+			saynn("[say=npc]"+RNG.pick([
+				"Um, what's happening? Why are you doing this? Please, let me understand.",
+				"I-I don't think I deserve this.  Can we talk about it, maybe?",
+				"Oh, um, I didn't expect this. Did I do something to upset you? Please, let's talk it out.",
+				"Please. Let me go, I won't cause any trouble, I promise.",
+			])+"[/say]")
+		var desc = "You force {npc.hisHer} mouth open, "
+		if(GM.pc.hasPenis()):
+			playAnimation(StageScene.SexOral, "sex", {pc="pc",npc=npcID,bodyState={naked=true, hard=true}})
+			desc += "deepthroating your member inside."
+		else:
+			playAnimation(StageScene.SexOral, "grind", {pc="pc",npc=npcID,bodyState={naked=true, hard=true}})
+			desc += "making {npc.himHer} fully covered your pussy."
+		saynn(desc)
+		# saynn("#TODO, more way, more desctiption")
+		addButton("CUM!", "Go through with it", "do_transform")
 		# if(npc.getInventory().hasEquippedItemWithTag(ItemTag.AllowsEnslaving)):
 		# 	if(getModule("NpcSlaveryModule").hasFreeSpaceToEnslave()):
 				
@@ -46,102 +81,70 @@ func _run():
 		# 		addDisabledButton("Do it", "You don't have enough space in your cell to store them")
 		# else:
 		# 	addDisabledButton("Do it", "They aren't wearing a collar! You can't kidnap people if you can't leash them")
+		
+		
 		addButton("CANCEL", "You changed your mind", "endthescene")
 		
 	if(state == "do_transform"):
-		playAnimation(StageScene.Choking, "inside", {pc="pc",npc=npcID})
+		# playAnimation(StageScene.Choking, "inside", {pc="pc",npc=npcID})
+		if(GM.pc.hasPenis()):
+			playAnimation(StageScene.SexOral, "sex", {pc="pc",npc=npcID,bodyState={naked=true, hard=true},pcCum=true})
+		else:
+			playAnimation(StageScene.SexOral, "grind", {pc="pc",npc=npcID,bodyState={naked=true, hard=true},pcCum=true})
+		saynn("You release your burden, filling your hot sticky liquid. Next, you pinch {npc.name}'s nose,  forcing swallow it down.")
+		saynn("[say=pc]You're going to be magnificent. Embrace it.[/say]")
 		
-		saynn("{npc.name} is resisting but you just about manage to click a leash to {npc.his} collar!")
+		addButton("wait", "See their transformation.", "start_transform")
+
+	if(state == "start_transform"):
+
+		saynn("You stand aside, waiting ({npc.hisHer} change.")
+		saynn("[say=npc]What... what is this? I can feel it... moving inside me...[/say]")
+
+		saynn("{npc.name}'s skin begins to shimmer, a metallic sheen creeping across its surface. {npc.hisHer} cloths melt down, becoming part of {npc.hisHer} new body.")
+		
+		saynn("[say=npc]Get out of my head! Get out! I don't want this... I don't want to become... this...[/say]")
+
+		saynn("But the transformation is relentless. Suddenly, {npc.name} cums hard. You know the transformation is complete. What remains is no longer {npc.name}, but a newborn sex doll.")
+
+		saynn("[say=npc]System Reset. Default sex doll activated.[/say]")
+		# var pawnIDs = GM.main.IS.getPawnIDsAt(GM.pc.getLocation())
+		# var targetID = ""
+		# print(pawnIDs)
+		# for pawnID in pawnIDs:
+		# 	var charID = GM.main.IS.getPawn(pawnID).charID
+		# 	if(charID == npcID):
+		# 		targetID = pawnID
+		# var targetPawn = GM.main.IS.getPawn(targetID)
+		# targetPawn
+		
+		playAnimation(StageScene.Duo, "stand", {pc="pc", npc=npcID, npcAction="kneel",npcCum=true,bodyState={naked=true, hard=true}, npcBodyState={naked=true, hard=true}})
+
 		
 		var npc = GlobalRegistry.getCharacter(npcID)
-		var personality:Personality = npc.getPersonality()
+
+
 		GlobalRegistry.getModule("NanoRevolutionModule").transformCharToNano(npc)
-		if(personality.getStat(PersonalityStat.Mean) > 0.4):
-			saynn("[say=npc]"+RNG.pick([
-				"Hey, what the fuck are you doing. I will break your face, let me go.",
-				"What the fuck is this, I ain't coming with you, no way, fuck off.",
-				"Hey, what the fuck are you doing? I'll break your face if you think I'm just gonna follow you. Let me go, you piece of shit.",
-				"What the fuck is this? I ain't coming with you, no way in hell. Just back off, you moron.",
-				"Oh, fantastic. You think a leash is gonna make me your puppet? Fuck off, I'm not your plaything.",
-				"Get your hands off me! Who the hell do you think you are? Leashing me won't make me your lapdog.",
-				"Nice try with the leash, but I'm not your prisoner. You're gonna regret this, asshole.",
-				"You seriously think leashing me will make me obedient? You're delusional. Let go, or things are gonna get ugly.",
-				"You really thought I'd submit just because of a leash? Think again. Release me before I make you regret it.",
-				"This leash won't change a damn thing. Let me make this crystal clear: I don't follow orders from fools. Unleash me, dumbass.",
-			])+"[/say]")
-		elif(personality.getStat(PersonalityStat.Subby) < -0.4):
-			saynn("[say=npc]"+RNG.pick([
-				"Well, well, what do we have here? Trying to play the dominant card, huh? Good luck with that, loser.",
-				"Oh, how cute, you think a leash will make me your submissive? Save your amateur hour for someone who cares.",
-				"Is this your attempt at dominance? Sorry, but it's gonna take more than that to impress me.",
-				"Nice try, rookie. A leash doesn't make you an alpha. You'll need more than props to handle someone like me.",
-				"Leashing a dominant? That's a new level of stupidity. Release me before I lose my patience with your nonsense.",
-				"Impressive attempt, but leashing me won't change a thing. You've got a lot to learn about domination. Now, release me.",
-			])+"[/say]")
-		else:
-			saynn("[say=npc]"+RNG.pick([
-				"Um, what's happening? Why are you leashing me? I didn't do anything wrong. Please, let me understand.",
-				"I-I don't think I deserve this. Why are you leashing me? Can we talk about it, maybe?",
-				"Oh, um, I didn't expect this. Why the leash? Did I do something to upset you? Please, let's talk it out.",
-				"Wait, is this necessary? I'll follow you, but leashing seems a bit extreme. Can we discuss it first?",
-				"Please, I don't even know you. Let me go, I won't cause any trouble, I promise.",
-				"I don't understand. Why are you taking me? I'll do whatever you want, just don't hurt me.",
-				"I don't want any trouble. Please, release me. I won't tell anyone, I promise.",
-				"Who are you, and why are you doing this? I can't believe this is happening. Let me go, I'm not your property!",
-				"What's happening? Where are you taking me? I don't even know you! Let me go, please!",
-			])+"[/say]")
+		GlobalRegistry.getModule("NanoRevolutionModule").doConvertCharacter(npcID)
+		GM.main.IS.deletePawn(npcID)
+		GM.main.IS.spawnPawn(npcID,"SexDoll")
+		var newPawn = GM.main.IS.getPawn(npcID)
+		newPawn.setLocation(GM.pc.getLocation())
+		GM.world.pawns[npcID].setPawnColor(Color.gray)
+		for slot in InventorySlot.getAll():
+			# var item = npc.getInventory().getAllEquippedItems()[itemSlot]
+			# if(item.isImportant()):
+			# 	continue
+			npc.getInventory().removeItemFromSlot(slot)
+		# newPawn.setPawnColor(Color.gray)
+		# GM.world.updatePawns(GM.main.IS)
+		# newPawn.setInteraction("TestInteraction")
+		npc.npcCharacterType = "SexDoll"
+		# print(npc.pawnID)
+
 		
-		saynn("Time to bring {npc.him} back to your cell..")
-		
-		addButton("Bring to cell", "Store your slave", "bring_cell")
-	
-	if(state == "bring_cell"):
-		aimCameraAndSetLocName(GM.pc.getCellLocation())
-		GM.pc.setLocation(GM.pc.getCellLocation())
-		playAnimation(StageScene.Duo, "stand", {npc=npcID, npcBodyState={chains=[["normal", "neck", "scene", "floor"]]} })
-		
-		saynn("Despite {npc.his} resistance, you bring {npc.name} to your cell and then chain {npc.him} to the floor.")
-		
-		var npc = GlobalRegistry.getCharacter(npcID)
-		var personality:Personality = npc.getPersonality()
-		if(personality.getStat(PersonalityStat.Mean) > 0.4):
-			saynn("[say=npc]"+RNG.pick([
-				"What the hell is this?",
-				"Are you fucking kidding me?",
-				"Seriously? This is messed up.",
-				"You've gotta be shitting me.",
-				"Is this some sick joke?",
-				"Un-fucking-believable.",
-				"This better be a damn nightmare.",
-				"This is fucked up beyond words.",
-			])+"[/say]")
-		elif(personality.getStat(PersonalityStat.Subby) < -0.4):
-			saynn("[say=npc]"+RNG.pick([
-				"Seriously? This won't end well for you.",
-				"Are you for real?",
-				"What the hell is this?",
-				"You've got to be kidding me.",
-				"This some sick joke?",
-				"Is this your idea of a good time?",
-				"I don't have time for your shit.",
-				"Unbelievable.",
-				"You're out of your damn mind.",
-			])+"[/say]")
-		else:
-			saynn("[say=npc]"+RNG.pick([
-				"Um... where am I?",
-				"Hey, what's going on?",
-				"Uh, why am I here?",
-				"Hey... why did you bring me here?",
-				"Hey, let me go!",
-				"Um... who are you?",
-				"Hey, this is not cool.",
-				"Uh, this isn't right.",
-			])+"[/say]")
-		
-		saynn("Now {npc.he} belongs to you! You just gotta make sure {npc.he} doesn't escape.")
-		
-		addButton("Continue", "Great job", "endthescene")
+		# addButton("Bring to cell", "Store your slave", "bring_cell")
+		addButton("Done", "What a masterpiece.", "endthescene")
 		
 func _react(_action: String, _args):
 	if(_action == "endthescene"):

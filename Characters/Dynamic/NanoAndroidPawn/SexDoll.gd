@@ -13,7 +13,7 @@ func _init():
 
 
 func getDistributionWeight() -> float:
-	return 10.0
+	return 2.0
 
 func getSpawnLocations(_character) -> Array:
 	return ["main_stairs1", "main_stairs2"]
@@ -48,7 +48,7 @@ func getCustomPawnColor(_pawn):
 func customCheckAlonePawnInteraction(_pawn) -> bool:
 	if(_pawn.currentInteraction == null):
 		# GM.main.IS.startInteraction("AloneInteraction", {main = _pawn.charID}, {})
-		GM.main.IS.startInteraction("TestInteraction", {main = _pawn.charID}, {})
+		GM.main.IS.startInteraction("NanoBaseInteraction", {main = _pawn.charID}, {})
 	return true
 
 func shouldPawnInterruptOtherPawns(_pawn) -> bool:

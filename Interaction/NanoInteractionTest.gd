@@ -34,7 +34,7 @@ func loadData(_data):
 			goal.loadData(SAVE.loadVar(goalData, "data", {}))
 
 func _init():
-	id = "TestInteraction"
+	id = "NanoBaseInteraction"
 
 # func getCurrentActionText() -> String:
 # 	return "Monday makes me broken."
@@ -60,27 +60,29 @@ func getGoalsWithScores(aboveKeepScore:bool = true) -> Array:
 	for goalID in goals:
 		if(goal != null && goalID == goal.id):
 			continue
+		if(!(goalID in ["Wander","Hangout"])):
+			continue
 		var newGoalRef:InteractionGoalBase = InteractionGoal.getRef(goalID)
 		
 		var newScore = newGoalRef.getScore(pawn)
 		if(newScore > keepScore || goal == null):
 			possibleNew.append([goalID, newScore])
 	
-	for globalTaskID in GM.main.IS.getGlobalTasks():
-		var globalTask:GlobalTask = GM.main.IS.getGlobalTask(globalTaskID)
+	# for globalTaskID in GM.main.IS.getGlobalTasks():
+	# 	var globalTask:GlobalTask = GM.main.IS.getGlobalTask(globalTaskID)
 		
-		if(!globalTask.canDoTaskFinal(pawn)):
-			continue
+	# 	if(!globalTask.canDoTaskFinal(pawn)):
+	# 		continue
 		
-		var goalID = globalTask.getGoalID(pawn)
-		var newgoal = InteractionGoal.create(goalID)
-		if(newgoal == null):
-			continue
+	# 	var goalID = globalTask.getGoalID(pawn)
+	# 	var newgoal = InteractionGoal.create(goalID)
+	# 	if(newgoal == null):
+	# 		continue
 		
-		globalTask.configureGoalFinal(pawn, newgoal)
-		var newScore = newgoal.getScore(pawn)
-		if(newScore > keepScore || newgoal == null):
-			possibleNew.append([newgoal, newScore])
+	# 	globalTask.configureGoalFinal(pawn, newgoal)
+	# 	var newScore = newgoal.getScore(pawn)
+	# 	if(newScore > keepScore || newgoal == null):
+	# 		possibleNew.append([newgoal, newScore])
 	return possibleNew
 
 func calculateBestGoal():
@@ -205,33 +207,33 @@ func getInterruptActions(_pawn:CharacterPawn) -> Array:
 		return []
 	var result:Array = []
 	result.append({
-		id = "talk",
-		name = "Talk",
-		desc = "Talk with them",
+		id = "ask",
+		name = "Ask",
+		desc = "Asking their service",
 		score = 1.0,
 		scoreType = "approach",
 		scoreRole = "main",
 		args = {},
 	})
-	if(getRolePawn("main").canGrabAndFuck() && _pawn.getChar().canStartSex()):
-		result.append({
-			id = "grab_and_fuck",
-			name = "Grab&Fuck",
-			desc = "They have so many restraints that you can just fuck them..",
-			score = 1.0,
-			scoreType = "sexUse",
-			scoreRole = "main",
-			args = {},
-		})
+	# if(getRolePawn("main").canGrabAndFuck() && _pawn.getChar().canStartSex()):
+	# 	result.append({
+	# 		id = "grab_and_fuck",
+	# 		name = "Grab&Fuck",
+	# 		desc = "They have so many restraints that you can just fuck them..",
+	# 		score = 1.0,
+	# 		scoreType = "sexUse",
+	# 		scoreRole = "main",
+	# 		args = {},
+	# 	})
 	return result
 
 func doInterruptAction(_pawn:CharacterPawn, _id:String, _args:Dictionary, _context:Dictionary):
-	if(_id == "talk"):
+	if(_id == "ask"):
 		if(_pawn.isPlayer()):
 			if(triggerTalkReactEvents("main")):
 				return
 		
-		startInteraction("Talking", {starter=_pawn.charID, reacter=getRoleID("main")})
+		startInteraction("NanoAskSexService", {starter=_pawn.charID, reacter=getRoleID("main")})
 	if(_id == "grab_and_fuck"):
 		startInteraction("Talking", {starter=_pawn.charID, reacter=getRoleID("main")}, {grab_and_fuck=true})
 

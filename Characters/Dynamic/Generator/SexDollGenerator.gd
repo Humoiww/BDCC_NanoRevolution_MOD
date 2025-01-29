@@ -147,7 +147,7 @@ func pickLustInterests(character:DynamicCharacter, _args = {}):
 		[Interest.Dislikes, 0],
 		[Interest.SlightlyDislikes, 0],
 		[Interest.KindaLikes, 0],
-		[Interest.Likes, 1.0],
+		[Interest.Likes, 0.0],
 		[Interest.ReallyLikes, 1.0],
 		[Interest.Loves, 1.0],
 	]
@@ -160,6 +160,26 @@ func pickLustInterests(character:DynamicCharacter, _args = {}):
 			
 			if(pickedInterest != Interest.Neutral):
 				character.getLustInterests().addInterest(id, pickedInterest)
+
+func pickPersonality(character:DynamicCharacter, _args = {}):
+	var personality = character.getPersonality()
+	
+	personality.clear()
+	for statID in PersonalityStat.getAll():
+		personality.setStat(statID, RNG.randf_range(-0.3, 0.3))
+		if(RNG.chance(5)):
+			personality.setStat(statID, RNG.randf_range(-0.3, 0.3)*5.0)
+	
+	for archetype in character.npcArchetypes:
+		var personalityChanges = CharacterArchetype.getPersonalityChanges(archetype)
+		for personalityStat in personalityChanges:
+			var howMuchMax = personalityChanges[personalityStat]
+			
+			if(howMuchMax > 0.0):
+				personality.addStat(personalityStat, RNG.randf_range(0.0, howMuchMax))
+			elif(howMuchMax < 0.0):
+				personality.addStat(personalityStat, -RNG.randf_range(0.0, -howMuchMax))
+	personality.setStat("Brat", -1.0)
 
 
 
