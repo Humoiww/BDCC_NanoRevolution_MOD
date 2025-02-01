@@ -1,5 +1,5 @@
 extends "res://Game/InteractionSystem/PawnTypeBase.gd"
-var SexDollGenerator = preload("res://Modules/NanoRevolution/Characters/Dynamic/Generator/SexDollGenerator.gd")
+var NanoGuardGenerator = preload("res://Modules/NanoRevolution/Characters/Dynamic/Generator/NanoGuardGenerator.gd")
 
 # Declare member variables here. Examples:
 # var a = 2
@@ -8,7 +8,7 @@ var SexDollGenerator = preload("res://Modules/NanoRevolution/Characters/Dynamic/
 
 # Called when the node enters the scene tree for the first time.
 func _init():
-	id = "SexDoll"
+	id = "NanoGuard"
 
 
 
@@ -36,18 +36,18 @@ func onPawnSpawned(_pawn):
 
 	
 func getCharacterPool() -> String:
-	return "SexDoll"
+	return "NanoGuard"
 
 func getCharacterGenerator():
-	return SexDollGenerator.new()
+	return NanoGuardGenerator.new()
 
 
 func getCustomPawnColor(_pawn):
-	return Color( 0.201961, 0, 0.201961, 1 )
+	return Color( 0.5, 0.5, 1, 1 )
 
 func customCheckAlonePawnInteraction(_pawn) -> bool:
 	if(_pawn.currentInteraction == null): #This condition is important, allowing goal transition.
-		GM.main.IS.startInteraction("NanoBaseInteraction", {main = _pawn.charID}, {})
+		GM.main.IS.startInteraction("NanoGuardBaseInteraction", {main = _pawn.charID}, {})
 	return true
 
 func shouldPawnInterruptOtherPawns(_pawn) -> bool:

@@ -10,7 +10,7 @@ var tryCount = 0
 var askCredits = 0
 var didAmount = 0
 var gotDenied = false
-
+var isTriggered = false
 func _init():
 	id = "NanoAskSexService"
 
@@ -22,17 +22,40 @@ func start(_pawns:Dictionary, _args:Dictionary):
 	else:
 		setState("", "starter")
 
+
+func shouldRunOnMeet(_pawn1, _pawn2, _pawn2Moved:bool):
+	if(!_pawn1.canBeInterrupted() || !_pawn2.canBeInterrupted()):
+		return [false]
+		
+	if(_pawn2.getCharType() in CharacterType.getAll() && _pawn1.getCharType() == "SexDoll"):
+		var pawnTemp = _pawn1
+		_pawn1 = _pawn2
+		_pawn2 = pawnTemp
+	
+	if(_pawn1.getCharType() in CharacterType.getAll()  && _pawn2.getCharType() == "SexDoll"):
+		if(_pawn1.isPlayer()):
+			return[false]
+		if(_pawn1.social > 0.6):
+			return [true, {starter=_pawn1.charID, reacter=_pawn2.charID}, {}]
+			
+
+	return [false]
+
+
 func sayCharater(ch,text):
 	saynn("[say=" +ch+ "]" +text + "[/say]")
 	
 
 func init_text():
+	isTriggered = false
 	if(!notFirst):
 		saynn("{starter.name} approaches {reacter.you}.")
 		notFirst=true
 	else:
 		saynn("{starter.name} is standing near {reacter.you}.")
 
+	if(isPlayerInvolved() && !GM.main.getModuleFlag("NanoRevolutionModule", "NanoSexDollMeeted", false)):
+		GM.main.setModuleFlag("NanoRevolutionModule", "NanoSexDollMeeted", true)
 	sayCharater("reacter","Sex Doll {reacter.name} awaiting your command. How may I help you today?")
 	# saynn("{reacter.Your} affection with {starter.you} is "+getAffectionString("starter", "reacter")+".\nLust is "+getLustString("starter", "reacter")+".")
 
@@ -46,12 +69,12 @@ func init_text():
 	# 	addDisabledAction("Flirt", "They don't seem to be in a flirty mood..")
 	# if(getRolePawn("reacter").canGrabAndFuck() && roleCanStartSex("starter")):
 	# 	addAction("grab_and_fuck", "Grab&Fuck", "They have so many restraints that you can just fuck them..", "sexUse", 5.0, 60, {})
-	addAction("attack", "Attack", "Make them regret it!", "attack", 1.0 if (didAmount <= 0 || gotDenied) else 0.1, 30, {})
+	addAction("attack", "Attack", "Make them regret it!", "attack", 0.1, 30, {})
 	if(roleCanStartSex("starter")):
 		addAction("offersex", "Offer sex", "Offer to fuck them", "sexDom", 0.2, 60, {})
 	else:
 		addDisabledAction("Offer sex", "You can't start sex like this..")
-	addAction("offerself", "Offer self", "Offer them to fuck you", "sexSub", 0.2, 60, {})
+	addAction("offerself", "Fuck me", "command them to fuck you", "sexSub", 0.2, 60, {})
 	if(getRoleChar("starter").getInventory().hasRemovableRestraintsNoLockedSmartlocks()):
 		addAction("ask_help_restraints", "Ask for help", "Ask for help with your restraints..", "help", 0.0, 60, {})
 		# if(getRolePawn("starter").getAffection(getRolePawn("reacter")) >= 0.5 && getRolePawn("reacter").canSocial()):
@@ -86,7 +109,7 @@ func init_do(_id:String, _args:Dictionary, _context:Dictionary):
 	# if(_id == "grab_and_fuck"):
 	# 	setState("grabbed_about_to_fuck", "reacter")
 	if(_id == "attack"):
-		startInteraction("GenericAttack", {starter=getRoleID("starter"), reacter=getRoleID("reacter")})
+		startInteraction("NanoAndroidGenericAttack", {starter=getRoleID("starter"), reacter=getRoleID("reacter")})
 		# if(!getRolePawn("reacter").isPlayer()):
 		# 	affectAffection("reacter", "starter", -0.25)
 	if(_id == "offersex"):
@@ -392,7 +415,10 @@ func offered_self_deny_do(_id:String, _args:Dictionary, _context:Dictionary):
 
 func after_sex_text():
 	saynn("After that sex, it was time to go your separate ways..")
-
+	if(isPlayerInvolved() && !isTriggered):
+		addMessage("You're becoming more familiar with nanotechnology.")
+		GM.pc.addSkillExperience("NanoENGR", 20)
+		isTriggered = true
 	addAction("continue", "Continue", "", "default", 1.0, 60, {})
 
 func after_sex_do(_id:String, _args:Dictionary, _context:Dictionary):

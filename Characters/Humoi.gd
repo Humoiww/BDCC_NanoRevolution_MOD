@@ -83,7 +83,8 @@ func _init():
 	
 
 func getDefaultArtwork(_variant = []):
-	return "res://Modules/NanoRevolution/Images/Humoi_avator/Humoi_avator.png"
+	# return "res://Modules/NanoRevolution/Images/Humoi_avator/Humoi_avator.png"
+	return
 
 
 func _getName():

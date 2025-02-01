@@ -91,19 +91,25 @@ func _run():
 			playAnimation(StageScene.SexOral, "sex", {pc="pc",npc=npcID,bodyState={naked=true, hard=true},pcCum=true})
 		else:
 			playAnimation(StageScene.SexOral, "grind", {pc="pc",npc=npcID,bodyState={naked=true, hard=true},pcCum=true})
-		saynn("You release your burden, filling your hot sticky liquid. Next, you pinch {npc.name}'s nose,  forcing swallow it down.")
-		saynn("[say=pc]You're going to be magnificent. Embrace it.[/say]")
+		saynn("Your hot sticky liquid flux into {npc.name}'s mouth. Your fingers clamp down on {npc.hisHer} nose, forcing an involuntary swallow.")
+		saynn("[say=npc]What... what is this? I can feel it... moving inside me...[/say]")
+		# saynn("[say=pc]You're going to be magnificent. Embrace it.[/say]")
 		
-		addButton("wait", "See their transformation.", "start_transform")
+		addButton("Wait", "See their transformation.", "start_transform")
 
 	if(state == "start_transform"):
 
 		saynn("You stand aside, waiting ({npc.hisHer} change.")
-		saynn("[say=npc]What... what is this? I can feel it... moving inside me...[/say]")
 
 		saynn("{npc.name}'s skin begins to shimmer, a metallic sheen creeping across its surface. {npc.hisHer} cloths melt down, becoming part of {npc.hisHer} new body.")
 		
-		saynn("[say=npc]Get out of my head! Get out! I don't want this... I don't want to become... this...[/say]")
+		saynn("[say=npc]"+RNG.pick(["Get out of my head! Get out! I don't want this... I don't want to become... this...",
+									"This isn't me! I can feel myself slipping away...",
+									"I can't think straight... my thoughts are getting tangled...",
+									"... I can't keep myself together...",
+									"My thoughts keep slipping away... like sand through my fingers...",
+									"This isn't what I wanted... this isn't who I wanted to be...",
+									"My own voice sounds foreign... what's happening to me?"])+"[/say]")
 
 		saynn("But the transformation is relentless. Suddenly, {npc.name} cums hard. You know the transformation is complete. What remains is no longer {npc.name}, but a newborn sex doll.")
 
@@ -126,20 +132,7 @@ func _run():
 
 		GlobalRegistry.getModule("NanoRevolutionModule").transformCharToNano(npc)
 		GlobalRegistry.getModule("NanoRevolutionModule").doConvertCharacter(npcID)
-		GM.main.IS.deletePawn(npcID)
-		GM.main.IS.spawnPawn(npcID,"SexDoll")
-		var newPawn = GM.main.IS.getPawn(npcID)
-		newPawn.setLocation(GM.pc.getLocation())
-		GM.world.pawns[npcID].setPawnColor(Color.gray)
-		for slot in InventorySlot.getAll():
-			# var item = npc.getInventory().getAllEquippedItems()[itemSlot]
-			# if(item.isImportant()):
-			# 	continue
-			npc.getInventory().removeItemFromSlot(slot)
-		# newPawn.setPawnColor(Color.gray)
-		# GM.world.updatePawns(GM.main.IS)
-		# newPawn.setInteraction("TestInteraction")
-		npc.npcCharacterType = "SexDoll"
+		
 		# print(npc.pawnID)
 
 		

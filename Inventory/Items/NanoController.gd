@@ -14,12 +14,18 @@ func getDescription():
 	if(GM.pc.hasPerk("NanoSexMode")):
 		desc += "Hack android during the fight (charge:5) or after the fight (No charge use)\n"
 	if(GM.pc.hasPerk("NanoCallBackUp")):
-		desc += "Call the android with your own backend.(Charge:4)\n"
+		desc += "Attract one of the sex doll.(Charge:3)\n"
+	if(GM.pc.hasPerk("NanoEdit")):
+		desc += "Edit your body.(Charge:0)\n"
+	# if(GM.pc.getSpecies().has("nanoAndroid")):
+	# 	desc += "Call the android with your own backend.(Charge:4)\n"
 	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1)
 	var fullcharge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
 	desc += "\n\nCharge remain: "+ str(charge) + "/" + str(fullcharge) + "\n"
 	desc += "["
 	for i in range(fullcharge):
+		if(i % 10 == 0 && i != 0):
+			desc += "]\n["
 		if i < charge:
 			desc += "■"
 		else:
@@ -31,10 +37,14 @@ func getDescription():
 
 
 func useInCombat(_attacker, _receiver):
-	if(GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1) >= 4):
+	if(GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1) >= 3):
 		var sexDollPool = GM.main.getDynamicCharacterIDsFromPool("SexDoll")
 		if(sexDollPool.size() > 0):
 			var idToUse = NpcFinder.grabNpcIDFromPool("SexDoll")
+			GM.main.IS.deletePawn(idToUse)
+			GM.main.IS.spawnPawn(idToUse,"SexDoll")
+			var newPawn = GM.main.IS.getPawn(idToUse)
+			newPawn.setLocation(GM.pc.getLocation())
 			if (GM.main.getCurrentFightScene() != null):
 				var summon = GM.main.getCharacter(idToUse)
 				var damage = summon.painThreshold()
@@ -45,11 +55,14 @@ func useInCombat(_attacker, _receiver):
 					GM.main.getCurrentFightScene().endScene(["win"])
 				else:
 					_receiver.addPain(damage)
-					GM.main.removeDynamicCharacterFromAllPools(idToUse)
+					GM.main.removeDynamicCharacter(idToUse)
 					return "You try to call " + summon.getName() + " to attack " + _receiver.getName() + ". Unfortunately, it's not strong enough to defeat " + _receiver.getName() + " and collapses into a pool of goo. Before it's gone, it deals " + str(damage) + " damage to " + _receiver.getName() + "."
 			else:
-				GM.main.runScene("NanoMeetSexDollScene",[idToUse])
-			GM.main.increaseModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", -4)
+				
+				GM.main.IS.startInteraction("NanoAskSexService", {starter="pc", reacter=idToUse}, {})
+				GM.main.endCurrentScene()
+				return "A sex doll approach to your current location."
+			GM.main.increaseModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", -3)
 			return "You let your sex doll leave away, waiting for your next command."
 		else:
 			return "You don't have any Sex Doll, better go and get some?"
@@ -70,13 +83,21 @@ func getPossibleActions():
 		action.append({
 				"name": "Calling",
 				"scene": "UseItemLikeInCombatScene",
-				"description": "(Charge: 4) Call one of your sex doll. Useless if you don't have any sex doll.",
+				"description": "(Charge: 4) Call one of the sex doll.",
 		})
-	if(GM.pc.getSpecies().has("nanoAndroid")):
+	# if(GM.pc.getSpecies().has("nanoAndroid")):
+	# 	action.append({
+	# 			"name": "Status",
+	# 			"scene": "NanoSetting",
+	# 			"description": "Check your body status.",
+	# 			"onlyWhenCalm": true,
+	# 	})
+	# 	# runScene("CharacterCreatorScene", [true])
+	if(GM.pc.hasPerk("NanoEdit")):
 		action.append({
-				"name": "Status",
-				"scene": "NanoSetting",
-				"description": "Check your body status.",
+				"name": "Edit",
+				"scene": "NanoCharacterScene",
+				"description": "Edit your body.",
 				"onlyWhenCalm": true,
 		})
 	return action

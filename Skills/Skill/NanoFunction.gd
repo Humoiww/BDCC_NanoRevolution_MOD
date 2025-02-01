@@ -1,10 +1,10 @@
 extends SkillBase
 
 func _init():
-	id = "NanoFunct"
+	id = "NanoFunction"
 
 func getVisibleName():
-	return "Embrace Nano"
+	return "Nano Instinct"
 
 func getVisibleDescription():
 	return "A skill set that you learn through your nano instinct."

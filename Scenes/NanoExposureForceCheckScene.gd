@@ -52,6 +52,10 @@ func _initScene(_args = []):
 		npcVariation = "kind"
 	if(personality.getStat(PersonalityStat.Subby) > 0.6 || personality.getStat(PersonalityStat.Coward) > 0.8):
 		npcVariation = "subby"
+
+	if(_args.size() > 1):
+		setState(_args[1])
+		GM.pc.addSkillExperience("NanoENGR", 50)
 	
 func resolveCustomCharacterName(_charID):
 	if(_charID == "npc"):
@@ -298,7 +302,8 @@ func _run():
 
 
 	if(state == "won_fight"):
-		
+		addCharacter(npcID)
+		playAnimation(StageScene.SexStart, "start", {pc="pc", npc=npcID})
 		saynn("The defeated guard sits on the floor, unable to continue fighting.")
 
 		saynn("[say=npc]FATAL ERROR: Damage exceed system threshold. Entering energy saving mode[/say]")
@@ -398,18 +403,29 @@ func _run():
 			saynn("You make a cautious choice, taking only one core from the android. Suddenly, the android guard collapses into a pool of black goo and slips away.")
 
 		saynn("You have a feeling that you will never meet {npc.name} again")
-		GM.main.removeDynamicCharacterFromAllPools(npcID)
+		# GM.main.removeDynamicCharacterFromAllPools(npcID)
+		
 		addButton("Done", "Excellent", "allowFullAndendthescene")
 
 	if(state == "convert_to_sex_mode"):
-		saynn("You successfully convert it to sex mode.")
-
-		addButton("Continue","See what happened next","convertsexend")
+		saynn("You successfully convert the android to sex mode.")
+		addWonButton()
+		# addButton("Continue","See what happened next","convertsexend")
 
 	if(state == "convert_to_guard_mode"):
-		saynn("You switch the android to guard mode, nothing changed.")
+		saynn("You switch the android to guard mode.")
 		
 		addWonButton()
+
+	if(state == "quick_hack_scene"):
+		saynn("Which mode will the android switch to")
+		addButton("Guard", "Switch to something that will frisk you.", "do_quick_hack",["guard"])
+		addButton("Sex Doll", "Switch to something that you can play with.", "do_quick_hack",["sex"])
+	
+	if(state == "do_absorb"):
+		playAnimation(StageScene.Choking, "idle", {pc = "pc", npc=npcID})
+		saynn("You grab {npc.name}'s neck, absorb them through your hand.")
+		addButton("Done...", "You need more...", "allowFullAndendthescene")
 
 func addWonButton():
 	addButton("Walk away", "You got your pass, you can just go", "allowFullAndendthescene")
@@ -422,16 +438,34 @@ func addWonButton():
 					ButtonChecks.NotBlindfolded,]
 	if(GM.pc.hasPerk("NanoSexMode")):
 		addButtonWithChecks("Hack!", "Try to hack in the android system", "enter_hack_scene", [], check)
+	if (GM.main.getModuleFlag("NanoRevolutionModule", "NanoUnlockQuickHack",false)):
+		addButtonWithChecks("Quick Hack!", "Switch the mode of android instantly.", "quick_hack_scene", [], check)
+		
 		# addButton("Submit to", "Switch the android to dominative mode", "startsexsubby")
-	addDisabledButton("Sex!", "The system has shutted down.")
-	addDisabledButton("Submit to", "The system has shutted down.")
+	# addDisabledButton("Sex!", "The system has shutted down.")
+	# addDisabledButton("Submit to", "The system has shutted down.")
 	addButton("Inventory", "Look at your inventory", "openinventory")
 	if(GM.pc.hasPerk("NanoExtration")):
 		addButtonWithChecks("Extract Core","get this android core through its hole","extract_core", [], check)
+	if(GM.pc.hasPerk("NanoAbsorption")):
+		addButtonWithChecks("Absorb!","Making them as a part of you.","do_absorb", [], check)
 	if(GM.pc.getInventory().hasRemovableRestraints()):
 		addButton("Struggle", "Struggle out of your restraints", "strugglemenu")
+	
 
 func _react(_action: String, _args):
+	if(_action == "do_absorb"):
+		var npc = getCharacter(npcID)
+		var level = npc.npcLevel
+		var finalExp = 0
+		for i in range(level):
+			finalExp += 100 + i * 10 + int(sqrt(max(0,i))) * 10
+		addMessage("You absorb "+str(finalExp)+" experience and from " +npc.getName() + ".")
+		addMessage("You feel closer to your nano instinct...")
+		addExperienceToPlayer(finalExp)
+		GM.pc.addSkillExperience("NanoFunction", int(finalExp/10))
+
+		
 	if(_action == "get_frisked"):
 		for item in GM.pc.getInventory().getItemsWithTag(ItemTag.Illegal):
 			addMessage(item.getStackName()+" was taken away")
@@ -483,7 +517,7 @@ func _react(_action: String, _args):
 		
 
 	if(_action == "convertsexend"):
-		runScene("NanoMeetSexDollScene",[npcID])
+		# runScene("NanoMeetSexDollScene",[npcID])
 		endScene()
 		return
 		
@@ -498,6 +532,7 @@ func _react(_action: String, _args):
 		GM.pc.cummedInMouthBy(npcID, FluidSource.Penis)
 		GM.pc.addSkillExperience(Skill.SexSlave, 20)
 	if(_action == "allowFullAndendthescene"):
+		GM.main.removeDynamicCharacter(npcID)
 		endScene()
 		return
 
@@ -589,6 +624,16 @@ func _react(_action: String, _args):
 					if(bodypartSkinData.has("b")):
 						bodypart.pickedBColor = bodypartSkinData["b"]
 			_npc.updateAppearance()
+	if(_action == "do_quick_hack"):
+		newMode = _args[0]
+		if(newMode == "guard"):
+			setState("convert_to_guard_mode")
+			getModule("NanoRevolutionModule").doConvertCharacterGuard(npcID)
+			return
+		if(newMode == "sex"):
+			setState("convert_to_sex_mode")
+			getModule("NanoRevolutionModule").doConvertCharacter(npcID)
+			return
 				
 	
 	setState(_action)
@@ -622,15 +667,19 @@ func _react_scene_end(_tag, _result):
 	if(_tag == "computerhack"):
 		print(_result)
 		if(_result[0] == true):
+			GM.pc.addSkillExperience("NanoENGR", 20)
+			addMessage("You get more familiar with nano androids.")
+			if (!GM.main.getModuleFlag("NanoRevolutionModule", "NanoUnlockQuickHack",false)):
+				addMessage("Quick hack unlocked, you can change android's mode instantly after defeating the android")
+				GM.main.setModuleFlag("NanoRevolutionModule", "NanoUnlockQuickHack",true)
 			var parameter = _result[1]
 			newMode = parameter[0]
 			if(newMode == "guard"):
 				setState("convert_to_guard_mode")
+				getModule("NanoRevolutionModule").doConvertCharacterGuard(npcID)
 			if(newMode == "sex"):
-				GM.pc.addSkillExperience("NanoENGR", 50)
-				addMessage("You get more familiar with nano androids.")
+				
 				setState("convert_to_sex_mode")
-				var _npc = getCharacter(npcID)
 				getModule("NanoRevolutionModule").doConvertCharacter(npcID)
 		else:
 			setState("hack_fail")

@@ -150,21 +150,15 @@ func _run():
 
 		saynn("[say=pc]Psychological status?[/say]")
 
-		saynn("[say=humoi]Yeah, a few months ago, BDCC launched the android assistant program, where androids help with tough tasks, like inspecting inmates. It seemed to work at first, but over time, multiple cases showed that these androids—especially their punishment mechanisms—might be causing some mental health issues.[/say]")
-
-		
-
-		saynn("[say=pc]Android? What do you mean? I haven't seen them anywhere.[/say]")
-
-		saynn("[say=humoi]Well, due to some technical issues, the engineering department can’t allow those androids wandering around. Since they’re nano androids, they use a special drainage system designed for the jail to move around and check on inmates periodically—specifically every 6 to 7 hours.[/say]")
+		saynn("[say=humoi]A few months ago, BDCC launched the Android Assistant Program, designed to assist with challenging tasks like inmate inspections. Initially, it appeared successful, but over time, numerous cases suggested that these androids—particularly their punishment mechanisms—could be contributing to mental health issues.[/say]")
 
 		saynn("She sighs a little, and continues.")
 
-		saynn("[say=humoi]I didn’t want others to feel uncomfortable with it, so I asked Eliza, the doctor in charge of the medical team here, to address the issue through questionnaires. We collect the inmates' responses periodically, report their needs to the engineering department, and implement any necessary changes.[/say]")
+		saynn("[say=humoi]After months of requests, they finally agree to add official sex doll androids to provide balance. Now everyone will be able to use them. You know, just for fun.[/say]")
 
 		saynn("She's moving closer.")
 
-		saynn("[say=humoi]Now, do you have time to fill out this quick questionnaire for me? You can use me after you answering whole question~ [/say]")
+		saynn("[say=humoi]Although everything seems working well, occasional questionnaires are still necessary. So, do you have a moment to fill out this quick one for me? You can use me after you answering whole question~ [/say]")
 
 		saynn("Well, maybe that's why she suggested a questionnaire solution to the medic.")
 
@@ -348,7 +342,7 @@ func _run():
 		saynn("Question 3:")
 
 		saynn("Currently our android visible component size range is:")
-		sizeDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
+		sizeDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",getModule("NanoRevolutionModule").getDefaultSize())
 		if (sizeDict[BodypartSlot.Penis] == null) or (sizeDict[BodypartSlot.Breasts] == null):
 			sizeDict = defaultSizeDict
 			setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
@@ -368,7 +362,7 @@ func _run():
 		add_panel()
 
 		saynn("Currently our android visible component size range is:")
-		sizeDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",defaultSizeDict)
+		sizeDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",getModule("NanoRevolutionModule").getDefaultSize())
 
 		sayn("Minimum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][1]))
 		sayn("Maximum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][2]))
@@ -414,14 +408,14 @@ func _run():
 		# var prob = float(targetWeight)/(float(targetWeight) + totalWeight)
 		# print(prob)
 		# var probability = ("%.2f" % (prob*100)) + "%"
-		var currentCheckTime = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", 21600.0)
-		var currentCheckHours = ("%.1f" % (currentCheckTime/3600)) + "~" +("%.1f" % (currentCheckTime/3600 + 1))
+		# var currentCheckProb = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", 0.1)
 		add_panel()
 
 		saynn("Question 4:")
 		# saynn("[color=red]This question is no longer valid since the last cell update, but we’ve decided to keep this part for future development. \n --Humoi (∠・ω<)[/color]")
 		# saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
-		saynn("Currently, the Nano Guards check on inmates approximately every [color=red]" + currentCheckHours + "[/color] hours. This timing starts counting from every morning and resets with each check.")
+		var prob = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckChance", 0.1)
+		saynn("If you haven't been searched today, the NanoGuard has a [color=red]" + str(prob*100) + "%[/color] chance to frisk you during each encounter.")
 		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes. Otherwise, click \"Next\" to proceed to the next question")
 		
 		
@@ -433,12 +427,9 @@ func _run():
 
 	if(state == "Q4_menu"):
 		add_panel()
-		var currentCheckTime = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", 21600.0)
-		var currentCheckHours = ("%.1f" % (currentCheckTime/3600)) + "~" +("%.1f" % (currentCheckTime/3600 + 1))
-		# saynn("[color=red]This question is no longer valid since the last cell update, but we’ve decided to keep this part for future development. \n --Humoi (∠・ω<)[/color]")
-		# saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
-		saynn("Currently, the Nano Guards check on inmates approximately every [color=red]" + currentCheckHours + "[/color] hours. This timing starts counting from every morning and resets with each check.")
-		saynn("Change the prefered hours through following selection. Click the \"Done button\" if you are satisfied with current selection. ")
+		var prob = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckChance", 0.1)
+		saynn("If you haven't been searched today, the NanoGuard has a [color=red]" + str(prob*100) + "%[/color] chance to frisk you during each encounter.")
+		saynn("Change the prefered probablity through following selection. Click the \"Done button\" if you are satisfied with current selection. ")
 		# var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]
 		# totalWeight = 0
 		
@@ -461,22 +452,23 @@ func _run():
 
 		# saynn("Please note that it's not possible to completely avoid inmate encounters, so you can only increase this setting up to 99%")
 
-		for selectTime in range(19):
-			addButton(str(selectTime) + "~" + str(selectTime+1),"Change the hour","Q4_edit",[selectTime*3600])
-		# addButton("0%", "Change the probability", "Q4_edit", [0])
-		# addButton("25%", "Change the probability", "Q4_edit", [0.25])
-		# addButton("50%", "Change the probability", "Q4_edit", [0.5])
-		# addButton("75%", "Change the probability", "Q4_edit", [0.75])
-		# addButton("99%", "Change the probability", "Q4_edit", [0.99])
-		# addButton("-15%", "Change the probability", "Q4_edit", [prob-0.15])
-		# addButton("-5%", "Change the probability", "Q4_edit", [prob-0.05])
-		# addButton("-1%", "Change the probability", "Q4_edit", [prob-0.01])
-		# addButton("+1%", "Change the probability", "Q4_edit", [prob+0.01])
-		# addButton("+5%", "Change the probability", "Q4_edit", [prob+0.05])
-		# addButton("+15%", "Change the probability", "Q4_edit", [prob+0.15])
+		# for selectChance in range(20):
+		# 	addButton(str(selectTime) + "~" + str(selectTime+1),"Change the hour","Q4_edit",[selectTime*3600])
+		addButton("0%", "Change the probability", "Q4_edit", [0])
+		addButton("25%", "Change the probability", "Q4_edit", [0.25])
+		addButton("50%", "Change the probability", "Q4_edit", [0.5])
+		addButton("75%", "Change the probability", "Q4_edit", [0.75])
+		addButton("100%", "Change the probability", "Q4_edit", [1.0])
+		addButton("-15%", "Change the probability", "Q4_edit", [prob-0.15])
+		addButton("-5%", "Change the probability", "Q4_edit", [prob-0.05])
+		addButton("-1%", "Change the probability", "Q4_edit", [prob-0.01])
+		addButton("+1%", "Change the probability", "Q4_edit", [prob+0.01])
+		addButton("+5%", "Change the probability", "Q4_edit", [prob+0.05])
+		addButton("+15%", "Change the probability", "Q4_edit", [prob+0.15])
 		addButtonAt(14,"Done","Save changes","Q4")
 	if(state == "Q5"):
 		add_panel()
+		saynn("[color=red]Please note that since 0.5.0 update, this option is no longer avalaible[/color]")
 		saynn("Now, imagine you’re the manager of this program. Here are some actions the androids might take with inmates. You have the authority to enable or disable these events. Toggle your choices, and click \"Next\" when you’re satisfied.")
 		
 		var flag = "NanoToughEnable"
@@ -618,14 +610,16 @@ func _react(_action: String, _args):
 
 	if(_action == "Q4_edit"):
 		if(_args.size() > 0):
-			var target_Hour = _args[0]
-			GM.main.setModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", target_Hour)
-			GM.main.setModuleFlag("NanoRevolutionModule", "NanoNextCheckTime", generate_random_times())
-			# var target_prob = _args[0]
-			# if(target_prob < 0):
-			# 	target_prob = 0
-			# if(target_prob > 0.99):
-			# 	target_prob = 0.99
+			# var target_Hour = _args[0]
+			# GM.main.setModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", target_Hour)
+			# GM.main.setModuleFlag("NanoRevolutionModule", "NanoNextCheckTime", generate_random_times())
+			var target_prob = _args[0]
+			if(target_prob < 0):
+				target_prob = 0
+			if(target_prob > 1):
+				target_prob = 1
+				# var prob = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckChance", 0.1)
+			setModuleFlag("NanoRevolutionModule", "NanoCheckChance", target_prob)
 			# var new_weight = float(totalWeight)*target_prob/(1-target_prob)
 			# print("debug:")
 			# print(totalWeight)

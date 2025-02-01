@@ -11,14 +11,15 @@ func run(_triggerID, _args):
 	var npcID = _args[0]
 	var character:DynamicCharacter = getCharacter(npcID)
 	
-	if(!character.isDynamicCharacter()):
+	if(!character.isDynamicCharacter() || character.getSpecies().has("nanoAndroid")):
 		return
 	
 	if(character.isSlaveToPlayer()):
 		return
-	addButton("Debug1", "Try to transform them.", "doTransfrom", [_args[0]])
+	if(GM.pc.hasPerk("NanoAssimilation")):
+		addButtonWithChecks("Assimilate", "Inject your nano robots to their body.", "doTransfrom", [_args[0]],[ButtonChecks.HasReachablePenis,ButtonChecks.HasReachableVagina,ButtonChecks.NotHandsBlocked,ButtonChecks.NotArmsRestrained])
 	# addButton("Debug2!", "Try to enslave them", "doenslave", [_args[0]])
-	GlobalRegistry.getModule("NanoRevolutionModule").debugSceneStack()
+	# GlobalRegistry.getModule("NanoRevolutionModule").debugSceneStack()
 	# if(character.hasEnslaveQuest()):
 	# 	var enslaveQuest:NpcEnslavementQuest = character.getEnslaveQuest()
 	# 	if(enslaveQuest.isEverythingCompleted()):

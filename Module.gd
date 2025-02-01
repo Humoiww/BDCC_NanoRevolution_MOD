@@ -9,6 +9,7 @@ func getFlags():
 		# Nano module
 		"NanoCheckSRefuseTimes": flag(FlagType.Number),
 		"NanoCheckHappened": flag(FlagType.Bool),
+		"NanoSexDollMeeted": flag(FlagType.Bool),
 		"NanoAttackSceneHappened": flag(FlagType.Bool),
 		"NanoAttackSceneWarned": flag(FlagType.Bool),
 		"NanoCraftingTableEnabled": flag(FlagType.Bool),
@@ -42,15 +43,23 @@ func getFlags():
 		"NanoKnowAndroidKey": flag(FlagType.Bool),
 		"NanoAskHumoiKey": flag(FlagType.Bool),
 		"NanoAskAlexKey": flag(FlagType.Bool),
+		"NanoUnlockQuickHack": flag(FlagType.Bool),
+
+		#Nano Species Flag
+		"NanoGrantedInitialExp": flag(FlagType.Bool),
 
 		#Nano New Interaction Flag 
-		"NanoIsGenerateThisMorning": flag(FlagType.Bool),# I know might stupid but try this lol
-		"NanoIsGenerateThisAfternoon": flag(FlagType.Bool),
-		"NanoIsGenerateThisEvening": flag(FlagType.Bool),
-		"NanoCheckedToday": flag(FlagType.Bool),
-		"NanoLastCheckTime": flag(FlagType.Number),
-		"NanoNextCheckTime": flag(FlagType.Number),
-		"NanoCheckTimePeriod": flag(FlagType.Number),
+
+		"NanoCharacterCheckedToday": flag(FlagType.Dict),
+		"NanoCheckChance": flag(FlagType.Number),
+		"NanoCharacterBeingHacked": flag(FlagType.Dict),
+		# "NanoIsGenerateThisMorning": flag(FlagType.Bool),# I know might stupid but try this lol
+		# "NanoIsGenerateThisAfternoon": flag(FlagType.Bool),
+		# "NanoIsGenerateThisEvening": flag(FlagType.Bool),
+		
+		# "NanoLastCheckTime": flag(FlagType.Number),
+		# "NanoNextCheckTime": flag(FlagType.Number),
+		# "NanoCheckTimePeriod": flag(FlagType.Number),
 		
 	}
 
@@ -82,33 +91,61 @@ func getNanoBreastSize():
 func doConvertCharacter(npcID):
 	var theChar:DynamicCharacter = GlobalRegistry.getCharacter(npcID)
 	theChar.addEffect("NanoSexMark")
+
+	GM.main.IS.deletePawn(npcID)
+	GM.main.IS.spawnPawn(npcID,"SexDoll")
+	var newPawn = GM.main.IS.getPawn(npcID)
+	newPawn.setLocation(GM.pc.getLocation())
+	GM.world.pawns[npcID].setPawnColor(Color( 0.201961, 0, 0.201961, 1 ))
+	for slot in InventorySlot.getAll():
+		# var item = npc.getInventory().getAllEquippedItems()[itemSlot]
+		# if(item.isImportant()):
+		# 	continue
+		theChar.getInventory().removeItemFromSlot(slot)
+	# newPawn.setPawnColor(Color.gray)
+	# GM.world.updatePawns(GM.main.IS)
+	# newPawn.setInteraction("TestInteraction")
+	theChar.npcCharacterType = "SexDoll"
 	
-	# if(theChar == null || !theChar.isDynamicCharacter()):
-	# 	return false
-	# if(theChar.isSlaveToPlayer()):
-	# 	return false
+	var thedesc = ""
+	thedesc += Util.getSpeciesName(theChar.npcSpecies)
+	thedesc += ". "
+	thedesc += NpcGender.getVisibleName(theChar.npcGeneratedGender)+"."
 	
-	# var theEnslaveQuest:NpcEnslavementQuest = theChar.getEnslaveQuest()
-	# theChar.setEnslaveQuest(null)
-	
-	# var slaveType = defaultSlaveType
-	# if(theEnslaveQuest != null):
-	# 	slaveType = theEnslaveQuest.slaveType
-	
-	# var newNpcSlavery = NpcSlave.new()
-	# newNpcSlavery.setChar(theChar)
-	# newNpcSlavery.setMainSlaveType(slaveType)
-	# newNpcSlavery.slaveSpecializations = {
-	# 	slaveType: 0,
-	# }
-	# #newNpcSlavery.generateTasks()
-	# theChar.setNpcSlavery(newNpcSlavery)
-	# newNpcSlavery.onEnslave()
-	
+	theChar.npcSmallDescription = "One of the sex doll. " + thedesc
 	GM.main.removeDynamicCharacterFromAllPools(npcID)
 	GM.main.addDynamicCharacterToPool(npcID, "SexDoll")
 	return true
 
+func doConvertCharacterGuard(npcID):
+	var theChar:DynamicCharacter = GlobalRegistry.getCharacter(npcID)
+	theChar.removeEffect("NanoSexMark")
+
+	GM.main.IS.deletePawn(npcID)
+	GM.main.IS.spawnPawn(npcID,"NanoGuard")
+	var newPawn = GM.main.IS.getPawn(npcID)
+	newPawn.setLocation(GM.pc.getLocation())
+	GM.world.pawns[npcID].setPawnColor(Color( 0.5, 0.5, 1, 1))
+	for slot in InventorySlot.getAll():
+		# var item = npc.getInventory().getAllEquippedItems()[itemSlot]
+		# if(item.isImportant()):
+		# 	continue
+		theChar.getInventory().removeItemFromSlot(slot)
+	# newPawn.setPawnColor(Color.gray)
+	# GM.world.updatePawns(GM.main.IS)
+	# newPawn.setInteraction("TestInteraction")
+	theChar.npcCharacterType = "NanoGuard"
+
+	var thedesc = ""
+	thedesc += Util.getSpeciesName(theChar.npcSpecies)
+	thedesc += ". "
+	thedesc += NpcGender.getVisibleName(theChar.npcGeneratedGender)+"."
+	
+	theChar.npcSmallDescription = "One of the guard. " + thedesc
+	
+	GM.main.removeDynamicCharacterFromAllPools(npcID)
+	GM.main.addDynamicCharacterToPool(npcID, "NanoGuard")
+	return true
 
 
 func _init():
@@ -118,6 +155,11 @@ func _init():
 		"res://Modules/NanoRevolution/Attacks/NanoHackPCAttack.gd",
 		"res://Modules/NanoRevolution/Attacks/NanoBrickPCAttack.gd",
 		"res://Modules/NanoRevolution/Attacks/NanoAutoBondPCAttack.gd",
+		"res://Modules/NanoRevolution/Attacks/NanoAttacks/NanoHeatGrenade.gd", 
+		"res://Modules/NanoRevolution/Attacks/NanoAttacks/NanoLatexBarrage.gd", 
+		"res://Modules/NanoRevolution/Attacks/NanoAttacks/NanoLatexRegeneration.gd", 
+		"res://Modules/NanoRevolution/Attacks/NanoAttacks/NanoLatexSlam.gd", 
+		"res://Modules/NanoRevolution/Attacks/NanoAttacks/NanoLatexStrike.gd"
 	]
 	scenes = [
 		"res://Modules/NanoRevolution/Scenes/NanoAttackScene.gd",
@@ -130,6 +172,7 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/Alex_TalkAboutAndroid.gd",
 		"res://Modules/NanoRevolution/Scenes/HumoiSecondKeyScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoBlueprintHumoi.gd",
+		"res://Modules/NanoRevolution/Scenes/NanoAndroidFunction/NanoCharacterScene.gd",
 		# transform scene
 		"res://Modules/NanoRevolution/Scenes/Nano_TransformVictimScene.gd",
 		]
@@ -152,7 +195,6 @@ func _init():
 		"res://Modules/NanoRevolution/Events/Event/NanoAndroidCheck.gd",
 		"res://Modules/NanoRevolution/Events/Event/NanoVisitHumoiEvent.gd",
 		"res://Modules/NanoRevolution/Events/Event/Nano_AlexLearnEvent.gd",
-		"res://Modules/NanoRevolution/Events/Event/Nano_NewInteraction.gd",
 		# transform event
 		"res://Modules/NanoRevolution/Events/Event/Nano_TransformVictimEvent.gd",
 	]
@@ -164,10 +206,17 @@ func _init():
 		"res://Modules/NanoRevolution/Skills/Perk/NanoDistraction.gd",
 		"res://Modules/NanoRevolution/Skills/Perk/NanoCallBackUp.gd",
 		"res://Modules/NanoRevolution/Skills/Perk/NanoCraftingT2.gd",
+		"res://Modules/NanoRevolution/Skills/Perk/NanoCraftingT3.gd",
+		# Nano Instinct
+		"res://Modules/NanoRevolution/Skills/Perk/NanoFunction/NanoAttackSet.gd",
+		"res://Modules/NanoRevolution/Skills/Perk/NanoFunction/NanoAbsorption.gd", 
+		"res://Modules/NanoRevolution/Skills/Perk/NanoFunction/NanoAssimilation.gd", 
+		"res://Modules/NanoRevolution/Skills/Perk/NanoFunction/NanoEdit.gd"
 		
 	]
 	skills = [
 		"res://Modules/NanoRevolution/Skills/Skill/NanoENGR.gd",
+		"res://Modules/NanoRevolution/Skills/Skill/NanoFunction.gd",
 
 	]
 	species = [
@@ -195,9 +244,14 @@ func _init():
 	interactions = [
 		"res://Modules/NanoRevolution/Interaction/NanoInteractionTest.gd",
 		"res://Modules/NanoRevolution/Interaction/NanoAskSexService.gd",
+		"res://Modules/NanoRevolution/Interaction/NanoAndroidGenericAttack.gd",
+		"res://Modules/NanoRevolution/Interaction/NanoGuardBasicInteraction.gd",
+		"res://Modules/NanoRevolution/Interaction/NanoGuardFrisk.gd",
 	]
 	pawnTypes =[
-		"res://Modules/NanoRevolution/Characters/Dynamic/NanoAndroidPawn/SexDoll.gd"
+		"res://Modules/NanoRevolution/Characters/Dynamic/NanoAndroidPawn/SexDoll.gd",
+		"res://Modules/NanoRevolution/Characters/Dynamic/NanoAndroidPawn/NanoGuard.gd",
+		
 	]
 	
 
@@ -216,9 +270,21 @@ func register():
 func resetFlagsOnNewDay():
 	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
 	GM.main.setModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", charge)
-	GM.main.setModuleFlag("NanoRevolutionModule", "NanoIsGenerateThisMorning",false)
-	GM.main.setModuleFlag("NanoRevolutionModule", "NanoCheckedToday",false)
-	GM.main.setModuleFlag("NanoRevolutionModule", "NanoLastCheckTime", 21600)
+	# GM.main.setModuleFlag("NanoRevolutionModule", "NanoIsGenerateThisMorning",false)
+	# GM.main.setModuleFlag("NanoRevolutionModule", "NanoCheckedToday",false)
+	GM.main.setModuleFlag("NanoRevolutionModule", "NanoCharacterCheckedToday", {})
+
+	# give me some skill
+	
+	if(GM.pc.getSpecies().has("nanoAndroid")):
+		GM.main.addMessage("You feel a strange instinct altering your thoughts...")
+		if (!GM.main.getModuleFlag("NanoRevolutionModule", "NanoGrantedInitialExp",false)):
+			GM.main.setModuleFlag("NanoRevolutionModule", "NanoGrantedInitialExp",true)
+			
+			GM.pc.addSkillExperience("NanoFunction", 100)
+			
+		else:
+			GM.pc.addSkillExperience("NanoFunction", 20)
 
 
 func getCraftCost(itemObject:ItemBase):
@@ -226,11 +292,6 @@ func getCraftCost(itemObject:ItemBase):
 	itemObject.getVisibleName()
 	return ceil(itemObject.getPrice()/5.0) if (itemObject.getPrice()>0) else 1.0
 
-func debugSceneStack():
-	print("========Show All scene Stack=========")
-	for scene in GM.main.sceneStack:
-		print(scene.sceneID)
-	print("========End  All scene Stack=========")
 
 func transformCharToNano(thePC:Character):
 	

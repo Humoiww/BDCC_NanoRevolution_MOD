@@ -34,7 +34,7 @@ func loadData(_data):
 			goal.loadData(SAVE.loadVar(goalData, "data", {}))
 
 func _init():
-	id = "NanoBaseInteraction"
+	id = "NanoGuardBaseInteraction"
 
 # func getCurrentActionText() -> String:
 # 	return "Monday makes me broken."
@@ -130,8 +130,6 @@ func start(_pawns:Dictionary, _args:Dictionary):
 	doInvolvePawn("main", _pawns["main"])
 	setCurrentRole("main")
 	setLocation(getRolePawn("main").getLocation())
-	var theChar = getRoleChar("main")
-	theChar.addEffect("NanoSexMark")
 
 func getOutputText() -> String:
 	var theGoal = getGoal()
@@ -150,7 +148,6 @@ func doAction(_id:String, _args:Dictionary, _context:Dictionary):
 	var pawn = getRolePawn("main")
 	pawn.social = 0.0
 	pawn.hunger = 0.0
-	
 	if(theGoal != null):
 		return theGoal.doAction(_id, _args)
 
@@ -213,10 +210,10 @@ func getInterruptActions(_pawn:CharacterPawn) -> Array:
 		return []
 	var result:Array = []
 	result.append({
-		id = "ask",
+		id = "approach",
 		name = "Approach",
-		desc = "Asking their service",
-		score = 1.0,
+		desc = "Getting close to the nano guard.",
+		score = 0.0,
 		scoreType = "approach",
 		scoreRole = "main",
 		args = {},
@@ -234,12 +231,12 @@ func getInterruptActions(_pawn:CharacterPawn) -> Array:
 	return result
 
 func doInterruptAction(_pawn:CharacterPawn, _id:String, _args:Dictionary, _context:Dictionary):
-	if(_id == "ask"):
+	if(_id == "approach"):
 		if(_pawn.isPlayer()):
 			if(triggerTalkReactEvents("main")):
 				return
 		
-		startInteraction("NanoAskSexService", {starter=_pawn.charID, reacter=getRoleID("main")})
+		startInteraction("NanoGuardFrisk", {starter=_pawn.charID, reacter=getRoleID("main")})
 	if(_id == "grab_and_fuck"):
 		startInteraction("Talking", {starter=_pawn.charID, reacter=getRoleID("main")}, {grab_and_fuck=true})
 
@@ -251,7 +248,7 @@ func canCharIDBeInterrupted(_charID:String) -> bool:
 
 func getPreviewLineForRole(_role:String) -> String:
 
-	return "{pawn.name} is waiting for commands."
+	return "{pawn.name} is patrolling"
 	# if(_role == "main"):
 	# 	if(goal != null):
 	# 		return goal.getText().split("\n")[0]

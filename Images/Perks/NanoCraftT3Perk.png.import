@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Humoi_avator.png-4c9252c7e4e5f4a5f571a71aae251a2e.stex"
+path="res://.import/NanoCraftT3Perk.png-16803ced725e95920bd97aeb6334db6c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Modules/NanoRevolution/Images/Humoi_avator/Humoi_avator.png"
-dest_files=[ "res://.import/Humoi_avator.png-4c9252c7e4e5f4a5f571a71aae251a2e.stex" ]
+source_file="res://Modules/NanoRevolution/Images/Perks/NanoCraftT3Perk.png"
+dest_files=[ "res://.import/NanoCraftT3Perk.png-16803ced725e95920bd97aeb6334db6c.stex" ]
 
 [params]
 

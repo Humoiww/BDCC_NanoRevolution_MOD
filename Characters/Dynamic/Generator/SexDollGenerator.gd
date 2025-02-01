@@ -33,6 +33,7 @@ func pickSpecies(character:DynamicCharacter, _args = {}):
 	# so, we use default species here xwx, and change part in next
 	# character.npcSpecies = [randomSpecies]
 	character.npcSpecies = ["nanoAndroid"]
+	
 
 func createBodyparts(character:DynamicCharacter, _args = {}):
 	# When a new nano Android appear, it will randomly simulate one existed species

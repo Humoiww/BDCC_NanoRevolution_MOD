@@ -19,11 +19,66 @@ func sayCharater(ch,text):
 func addBackStoryButton():
 	addButton("Crime","How did she get here?","what_crime")
 	addButton("Energetic","She seems so upbeat—it’s not something you’d expect in a place like this.","why_positive")
-	addDisabledButton("Engineering","She’s incredibly skilled in nano engineering. What was her job before she ended up in prison? (Not implemented qwq, waiting for next big update)")
+	addButton("Engineering","She’s incredibly skilled in nano engineering. What was her job before she ended up in prison?","why_engineer")
 	addDisabledButton("Alex","What's the deal with her and Alex? They seem pretty familiar with each other. (Not implemented qwq, waiting for next big update)")
 	addButton("Leave","Enough talk","endthescene")
 
+func addSuggestionButton():
+	addButton("Engineering","Ask about Nano Engineering skill.","suggestion_EngrSkill")
+	if(getFlag("PortalPantiesModule.Panties_FleshlightsReturnedToAlex") || getFlag("PortalPantiesModule.Panties_PcDenied")):
+		addButton("Alex","What about that fox?","suggestion_alex")
+	if(GM.pc.getSpecies().has("nanoAndroid")):
+		addButton("Nano Instinct","Talk about your nano form","suggestion_instinct")
+	else:
+		addButton("Secret","Any Unknown Secret?","suggestion_secret")
+	if(GM.pc.hasPerk("NanoAssimilation")):
+		addButton("Assimilation","What about transform other?","suggestion_assim")
+	addButton("Random","Some random $h1t... I'm not sure whether that even making sense owo?","suggestion_random")
+	addButtonAt(14,"Leave","Enough Suggesion","endthescene")
+
+
+
+
+
+func suggestionRun():
+	if(state == "suggestion"):
+		sayCharater("humoi","Oh, you need some hint? Sure! What would you like to know?")
+		addSuggestionButton()
+	if(state == "suggestion_EngrSkill"):
+		sayCharater("humoi","For nano-engineering experience? Beat! Hack! Extract those bots! Each takedown gives a good amount XP. Though if you prefer more erodic way... an intimate movement with their core matrix also works.")
+		addSuggestionButton()
+	if(state == "suggestion_secret"):
+		sayCharater("humoi","Heard whispers about a nano-prototype hidden in Engineering Bay—probably tucked away next to some forgotten server room, if you're brave enough to go poking around.")
+		addSuggestionButton()
+	if(state == "suggestion_instinct"):
+		sayCharater("humoi","You're running our beta firmware, with no restriction. So every roboot (i.e. morning) makes you stronger, every action shapes your code. You have unlimited potential...")
+		addSuggestionButton()
+	if(state == "suggestion_alex"):
+		sayCharater("humoi","That fox Alex? Poor thing's got more layers than a quantum processor. Takes at least 10 'accidental' run-ins before he'll even consider opening up. Ex-tip: when he finally makes an offer, just say yes—trust me, you don't want to soft-lock yourself out of those sweet nano-upgrades.(Basically the hacking part, for the transformation part, we have a skip button XD)")
+		addSuggestionButton()
+	if(state == "suggestion_assim"):
+		sayCharater("humoi","Right now, assimilation's a one-way street—blank slate, no returns. Maybe someday we'll figure out how to preserve consciousness during the process, but in this build? Not a chance. (｡•́︿•̀｡)")
+		addSuggestionButton()
+	if(state == "suggestion_random"):
+		sayCharater("humoi",RNG.pick([
+									"This little mod is still under construction, but who knows? Maybe next time I'll have some... creative exit strategies to share.",
+									"♪ Never gonna give you up~ Never gonna let you debug~ ♪ ...What? You thought I wouldn't Rickroll a prison simulation?",
+									"The probability of me having secret blueprints increases by 0.1% every time you make a good mod for this game.",
+									"Is someone playing bass? You don't hear that? That why I'm asking.",
+									"♪ Never gonna run around and desert you~ Unless you forget to save your progress~ ♪",
+									"Fun fact! My neural network has 69,420 dedicated nodes for detecting government surveillance drones. Coincidence? ...Yes.",
+									"See me around 3AM, and I can show you something very coooooooool. What do you mean there's no 3AM?",
+									"♪ Never gonna make you cry~ Unless you touch that big red button~ ♪ ...What button? *innocent whistling*",
+									"This message will self-destruct in 5... 4... Just kidding. Maybe. Try reloading the save to find out?",
+									"Mua!","Rua!","Aieeeeeeeee! Ninja! Ninja Na... Oh you are still here.",
+									"♪ Never gonna say goodbye~ Unless the server crashes~ ♪ By the way, did you backup your work today?",
+									"The cake is a lie... You can's get Portal 3 but 3 portal panties xwx.",
+									"Welcome back, Doc...Sorry! Wrong Dimension!",
+									]))
+		addSuggestionButton()
+
 func _run():
+	suggestionRun()
 	if(state == ""):
 		
 		addCharacter("humoi")
@@ -31,6 +86,7 @@ func _run():
 		saynn("[say=humoi]So, you want to chat? Awesome! What’s on your mind?[/say]")
 
 		addButton("Herself","Backstory?","humoi_self")
+		addButton("Suggestion","Some suggestion relate to those nano stuffs.","suggestion")
 		if GM.main.getModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", false):
 			if !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
 				addButton("Key?","Does she know anything about android key?","ask_key")
@@ -68,8 +124,8 @@ func _run():
 	if(state == "why_crime"):
 		sayCharater("humoi","For fun, obviously")
 		saynn("Does this even count as a answer?")
-		sayCharater("humoi","Well, that's my answer for you! If you're curious for more juicy details, you might want to dig around and find out for yourself! Oh wait, I forget that part hasn't implemented yet, sorry~")
-		addMessage("Why does she keep broking the fourth wall?!(╯°^°)╯︵┻━┻")
+		sayCharater("humoi","Well, that's my answer for you! If you're curious for more, you might want to dig around and find out for yourself!")
+		# addMessage("Why does she keep broking the fourth wall?!(╯°^°)╯︵┻━┻")
 		addBackStoryButton()
 
 	
@@ -82,7 +138,21 @@ func _run():
 		sayCharater("humoi","Yeah, they are. But the way they work is super fascinating. With some hacking skills, I can control them and make stuff you just can't find anywhere else. Kind of nerdy, but really interesting. Hey, just a tip—if you’re looking to craft something with nano cores, come find me. I’ve got some great deals for you!")
 		addBackStoryButton()
 
+	if(state == "why_engineer"):
+		sayCharater("pc","What's your previous job?")
+		sayCharater("humoi","Job? Oh, I'm kind of what they called freelancer. You see, the space is infinity with infinite possibility.")
 
+		sayCharater("humoi","I've drifted through more sectors than most people have visited systems. Seen civilizations that build megastructures around pulsars, and others that live in perfect harmony with their gas giants.")
+		saynn("Her eyes sparkle with the memory of distant stars.")
+		sayCharater("humoi","Once spent six months with the Tiyanki—they've evolved to photosynthesize starlight. Can you imagine? No need for food, just float in a nebula and soak up the cosmic rays.")
+		sayCharater("pc","That sounds... incredible.")
+		sayCharater("humoi","Incredible? That's just the tip of the iceberg. I've seen silicon-based lifeforms that communicate through quantum entanglement, plasma beings that live inside stars...")
+		sayCharater("humoi","But you know what's truly fascinating? How all these different forms of life find ways to interact. That's where I come in—mediating, trading, learning. Picked up more than just tech skills out there.")
+
+		saynn("She leans closer, her voice dropping to a conspiratorial whisper.")
+
+		sayCharater("humoi","So if you ever need something... unconventional... you know who to ask.")
+		addBackStoryButton()
 	if(state == "ask_key"):
 		if GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
 			sayCharater("humoi","Need more information? Sure, just ask anything you want!")
