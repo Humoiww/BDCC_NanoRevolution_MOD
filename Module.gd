@@ -1,6 +1,19 @@
 extends Module
 class_name NanoModule
 
+# 0.5 plan
+# add the something called infection rate 
+# How this work, reference to BoS module in Skyrim
+# add the event when you transform to android, some will try to hack you
+# this is more like portal pants event, but somewhat force
+	# the issue need to done is to change the way that pc interact with others.
+	# few options:
+		#1. add a mask when player try to interact someone, then force close current interaction
+			# and switch to new scene
+		#2. Or change the interaction code, but this could be much harder
+	# How can player escape this?
+		# Simple: find  Alex or Humoi to reset current condition.
+
 var interactions = []
 var pawnTypes = []
 
