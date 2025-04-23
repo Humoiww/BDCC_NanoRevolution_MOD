@@ -1,6 +1,6 @@
 extends EventBase
 var NanoGuardGenerator = preload("res://Modules/NanoRevolution/Characters/Dynamic/Generator/NanoGuardGenerator.gd")
-
+# var ThemeManager = preload("res://Modules/NanoRevolution/UI/Theme/themeManager.gd")
 
 func _init():
 	id = "NanoAndroidCheck"
@@ -49,6 +49,9 @@ func run(_triggerID, _args):
 	# clockBasedAndroidSpawn()
 
 	# addButton("DEBUG GEN","generate_android pawn????","generate_android")
+
+	addButton("DEBUG THEME","switch current theme????","switch_scene")
+	
 	# var thePC = GM.pc
 	# var pcColor = thePC.getBaseSkinColors()
 	# print(thePC.getSpecies().has("nanoAndroid"))
@@ -111,4 +114,47 @@ func onButton(_method, _args):
 	if(_method == "generate_android"):
 		generateAndroidBaseCount(1)
 
+	if(_method == "switch_scene"):
+		var _u = 1
 
+		# ThemeManager.change_theme()
+		change_theme_to_skyblue() 
+		# emit_signal("triggered")
+
+
+func change_theme_to_skyblue() -> void:
+	# 1) Build the SkyBlue theme
+	var path = "res://GlobalTheme.tres"
+	var base_theme = ResourceLoader.load(path)
+	if base_theme == null:
+		push_error("ThemeModule: Not found: " + path)
+		return
+
+	# 2) 深拷贝一份，以免改到磁盘上的资源 deeeeeeep copy!
+	var t = base_theme.duplicate(true)
+	# var sky = Color8(135, 206, 235)
+	# # var t = Theme.new()
+	t.set_color("font_color", "Control", Color.skyblue)
+	# var panel_sb = StyleBoxFlat.new()
+	# panel_sb.bg_color = sky
+	# t.set_stylebox("panel", "Panel", panel_sb)
+	# var btn_sb = StyleBoxFlat.new()
+	# btn_sb.bg_color = sky
+	# t.set_stylebox("normal", "Button", btn_sb)
+
+	# 2) Grab the SceneTree and root viewport
+	var tree = Engine.get_main_loop() as SceneTree
+	var root_vp = tree.get_root()
+
+	# 3) Recursively apply to every Control
+	_apply_theme_recursively(root_vp, t)
+
+	VisualServer.set_default_clear_color(Color.green)
+
+
+func _apply_theme_recursively(node: Node, theme: Theme) -> void:
+	if node is Control:
+		node.theme = theme
+	for child in node.get_children():
+		if child is Node:
+			_apply_theme_recursively(child, theme)

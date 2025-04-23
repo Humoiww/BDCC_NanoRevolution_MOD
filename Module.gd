@@ -162,6 +162,7 @@ func doConvertCharacterGuard(npcID):
 
 
 func _init():
+
 	id = "NanoRevolutionModule"
 	author = "Humoi"
 	attacks = [
