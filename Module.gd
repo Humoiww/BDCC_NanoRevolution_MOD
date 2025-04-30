@@ -12,7 +12,7 @@ class_name NanoModule
 			# and switch to new scene
 		#2. Or change the interaction code, but this could be much harder
 	# How can player escape this?
-		# Simple: find  Alex or Humoi to reset current condition.
+		# Simple: find  Alex or Humoi to reset current condition. x
 
 var interactions = []
 var pawnTypes = []
