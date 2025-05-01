@@ -12,7 +12,26 @@ class_name NanoModule
 			# and switch to new scene
 		#2. Or change the interaction code, but this could be much harder
 	# How can player escape this?
-		# Simple: find  Alex or Humoi to reset current condition. x
+		# Simple: find  Humoi to reset current condition. x
+# Honestly, I want to reduce the Alex contents
+# you see, sometimes Alex and Humoi contents are greatly overlap
+# Plus Alex line is comprehensive now...
+# Hmmm Interesting Idea, Humoi, she is the network it self, the network building is actually 
+# extract part of her, and expand like the network....
+
+
+
+# Let's build a proper workflow! 
+# Key Finding Line Rework
+	# When you try to hack in nano android, key find line start!
+		# First, the android will notice the administrator requirement, attach with an connect address
+		# Then player can use this address to connect someone(Humoi actually)
+		# Notice that, to do this we need to add controller function (network texting!)
+		# Then if player ask humoi for the code, the humoi will offer a quest
+		# quest: testing humoi new nano prototype - taint!
+			# why don't self: answer, need someone abort if too dangerous
+			# provide others?: 
+
 
 var interactions = []
 var pawnTypes = []
