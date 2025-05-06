@@ -50,7 +50,7 @@ func run(_triggerID, _args):
 
 	# addButton("DEBUG GEN","generate_android pawn????","generate_android")
 
-	addButton("DEBUG THEME","switch current theme????","switch_scene")
+	# addButton("DEBUG THEME","switch current theme????","switch_scene")
 	
 	# var thePC = GM.pc
 	# var pcColor = thePC.getBaseSkinColors()
