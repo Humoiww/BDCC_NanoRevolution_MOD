@@ -132,7 +132,7 @@ func start(_pawns:Dictionary, _args:Dictionary):
 	setLocation(getRolePawn("main").getLocation())
 	var theChar = getRoleChar("main")
 	theChar.addEffect("NanoSexMark")
-
+	theChar.addEffect("Nano_Contamination",[9999999]) #stupid way to avoid any recession
 func getOutputText() -> String:
 	var theGoal = getGoal()
 	if(theGoal != null):

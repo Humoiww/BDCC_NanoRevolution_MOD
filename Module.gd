@@ -265,7 +265,8 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/NanoAndroidFunction/Nano_HackAndroid.gd"
 	]
 	statusEffects = [
-		"res://Modules/NanoRevolution/StatusEffect/NanoSexMark.gd"
+		"res://Modules/NanoRevolution/StatusEffect/NanoSexMark.gd",
+		"res://Modules/NanoRevolution/StatusEffect/NanoContamination.gd"
 	]
 	sexActivities = [
 		"res://Modules/NanoRevolution/SexActivities/UseNanoStuff.gd",
