@@ -275,7 +275,7 @@ func _init():
 
 #	custom register
 	interactions = [
-		"res://Modules/NanoRevolution/Interaction/NanoInteractionTest.gd",
+		"res://Modules/NanoRevolution/Interaction/NanoBaseInteraction.gd",
 		"res://Modules/NanoRevolution/Interaction/NanoAskSexService.gd",
 		"res://Modules/NanoRevolution/Interaction/NanoAndroidGenericAttack.gd",
 		"res://Modules/NanoRevolution/Interaction/NanoGuardBasicInteraction.gd",
