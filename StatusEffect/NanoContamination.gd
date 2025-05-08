@@ -32,29 +32,32 @@ func processTime(_seconds: int):
 func onSleeping():
 	stacks = min(stacks, 25)
 	
-	
+
 func isNanoAndroid():
 	return (stacks >= 100) #in trance threshold
 		
 func getEffectName():
-	if(isNanoAndroid):
+	if(isNanoAndroid()):
 		return "Nano Form"
 	return "Contaminated"
 
 func getEffectDesc():
-	if(isNanoAndroid):u
+	if(isNanoAndroid()):
 		return "As an android, your nano body help you resist physical and heat damage, but permantly infertile."
 	var text
-	if(stacks <= 35):
-		text = "Some black goo stick on your body. Yark~"
-	elif(!isInTrance()):
-		text = "Something not correct"
+	if(stacks <= 20):
+		text = "Some black goo stick on your body. Sticky~ you can't pull it off."
+	elif(stacks <= 70):
+		text = "Some black goo starts to sink into your body; no matter how you wash it, you just can't get rid of it. Your skin takes on a strange dark color and begins to feel like latex. You can't tell... but you can feel the world starting to change in a strange way."
+	elif(stacks <= 90):
+		text = "Can't think clearly... what am I?"
 	else:
-		text = "You are fully in trance!"
-		
+		text = "..."
 	return text + "\n\n("+str(ceil(stacks))+"%)"
 
 func getEffectImage():
+	if(isNanoAndroid()):
+		return "res://Images/StatusEffects/hypnosis.png"
 	if(!isHypnotized()):
 		return "res://Modules/HypnokinkModule/Icons/StatusEffects/hypno1.png"
 	elif(!isInTrance()):
@@ -72,12 +75,6 @@ func getIconColor():
 
 func getBuffs():
 	var mult = 1.0
-	if(character.hasPerk(Perk.HypnosisMantraMinded)):
-		mult -= 0.1
-	if(character.hasPerk(Perk.HypnosisDetachment)):
-		mult -= 0.2
-	if(character.hasPerk(Perk.HypnosisLucidTrance)):
-		mult -= 0.3
 	var buffs = []
 	if(stacks > 20):
 		buffs.append(buff(Buff.PhysicalDamageBuff, [round(mult * -(min(stacks - 20, 80)))]))
