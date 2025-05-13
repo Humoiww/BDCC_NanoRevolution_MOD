@@ -21,6 +21,11 @@ func updateEverything():
 			setModuleFlag("NanoRevolutionModule", "NanoHasController",true)
 			GM.pc.getInventory().addItemID("NanoController")
 
+	# will delete the effect disable transform?
+	var sexDollPool = GM.main.getDynamicCharacterIDsFromPool("SexDoll")
+	for androidID in sexDollPool:
+
+
 
 func generateAndroidBaseCount(count):
 	for _i in range(count):
