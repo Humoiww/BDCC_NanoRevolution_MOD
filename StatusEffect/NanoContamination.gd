@@ -50,7 +50,7 @@ func getEffectDesc():
 	elif(stacks <= 70):
 		text = "Some black goo starts to sink into your body; no matter how you wash it, you just can't get rid of it. Your skin takes on a strange dark color and begins to feel like latex. You can't tell... but you can feel the world starting to change in a strange way."
 	elif(stacks <= 90):
-		text = "Can't think clearly... what am I?"
+		text = "Can't think clearly... "
 	else:
 		text = "..."
 	return text + "\n\n("+str(ceil(stacks))+"%)"
