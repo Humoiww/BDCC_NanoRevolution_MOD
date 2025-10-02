@@ -32,7 +32,11 @@ Then, use godot 3.x to open this project. Start debug, and you can try the mod n
 - [x] make sure the options are working without bug
 - [x] Fully developed nano engineering skill tree. You can make something really powerful with this skill.
 - [ ] More nano android type. nano engineers, nurses, and even android sextoys, enrich the BDCC life. 
+- [ ] A new floor that only allow android enter?
 - [ ] Mature nano species side path. A new skill tree that is closely related to how to use your new body.
+- - [ ] New transformation path, instead of touching the weird stuff in engineering bay.  
+- - - [ ] Contamination technique your skin color will change depending on your contamination. UI changes
 - - [x] Ability to turn other into nano android
-- - [ ] Possible new endings with this new form, including bad endz, good ends and vbrWARNING:zNObvACCESShiurPERMISSIONbuieb
-- - [ ] Since Alex is in charge of this program, more story line and interaction with Alex when you accidentally turn into nano android. 
+- - [ ] Possible new endings with this new form, including bad ends, good ends 
+- - [ ] Reduce Alex reliance for the story. Since Alex path is ended, instead of extending his story, a better way is to further explain humoi, which could be more user-friendly.
+

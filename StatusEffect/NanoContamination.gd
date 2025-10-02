@@ -46,7 +46,7 @@ func getEffectDesc():
 		return "As an android, your nano body help you resist physical and heat damage, but permantly infertile."
 	var text
 	if(stacks <= 20):
-		text = "Some black goo stick on your body. Sticky~ you can't pull it off."
+		text = "Some black goo stick on your body. Sticky, you can't pull it off."
 	elif(stacks <= 70):
 		text = "Some black goo starts to sink into your body; no matter how you wash it, you just can't get rid of it. Your skin takes on a strange dark color and begins to feel like latex. You can't tell... but you can feel the world starting to change in a strange way."
 	elif(stacks <= 90):
@@ -56,6 +56,7 @@ func getEffectDesc():
 	return text + "\n\n("+str(ceil(stacks))+"%)"
 
 func getEffectImage():
+	# place holder, change here
 	if(isNanoAndroid()):
 		return "res://Images/StatusEffects/hypnosis.png"
 	if(!isHypnotized()):
