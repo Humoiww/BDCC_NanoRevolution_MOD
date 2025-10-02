@@ -74,6 +74,8 @@ func suggestionRun():
 									"♪ Never gonna say goodbye~ Unless the server crashes~ ♪ By the way, did you backup your work today?",
 									"The cake is a lie... You can's get Portal 3 but 3 portal panties xwx.",
 									"Welcome back, Doc...Sorry! Wrong Dimension!",
+									"Unexpected ERROR! humoi.os will explode in 3! 2! 1! 0!!!! 4294967295!!!!",
+									"Coding nightmere: \n ！!？?；;，,：: \n ",
 									]))
 		addSuggestionButton()
 
@@ -157,20 +159,21 @@ func _run():
 		if GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
 			sayCharater("humoi","Need more information? Sure, just ask anything you want!")
 		else:
-			sayCharater("humoi","So, you’ve found the backdoor software I created for these androids? Nice work! Unfortunately, I still don’t have any clues on how to access those keys. Maybe you should check with Alex. He’s a smart fox working in the engineering bay near the mining area, and he might have more information once he gets to know you better.")
+			sayCharater("humoi","So, you’ve found the backdoor software I created for these androids? Nice work! But if you want key... I have a small quest for you.")
 			GM.main.setModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", true)
 			addMessage("Updated: Figure out key quest")
 		
-		addButton("Strange","She designed the software but doesn’t have the key to access it? Why?","why_key")
-		addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
-		addButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?","why_me")
+		addButton("Quest","Then what quest?","why_key")
+		# say good bye to alex!
+		# addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
+		# addButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?","why_me")
 		addButton("Leave","OK then","endthescene")
 
 	if(state == "why_key"):
-		sayCharater("humoi","Well, that’s a common issue in engineering. Sometimes, we design a project but don’t anticipate every possible case. When we encounter an unexpected situation, we often have to pause the project until we find a solution.")
-		saynn("She blinks and continues.")
-		sayCharater("humoi","Once you have any clues about the key, I can probably make something to help with your hacking.")
-
+		sayCharater("humoi","So, I've been working on a project, that can simulate these android condition and cheat the system. And I just build a prototype.")
+		saynn("She brings a headset and continues.")
+		sayCharater("humoi","Unfortunately, this simulator will temporarily block the user's free will, since it build from the basic android type, the sex doll one.")
+		sayCharater("humoi","I need a volunteer, to test this device. All you need to do is wear this one day, and after that I will help you take off it.")
 
 		addDisabledButton("Strange","She designed the software but doesn’t have the key to access it? Why?")
 		addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
