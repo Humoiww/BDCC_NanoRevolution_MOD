@@ -2,6 +2,7 @@ extends Module
 class_name NanoModule
 
 # 0.5 plan
+# I really need to erase the 
 # add the something called infection rate 
 # How this work, reference to BoS module in Skyrim
 # add the event when you transform to android, some will try to hack you
@@ -21,7 +22,7 @@ class_name NanoModule
 
 
 
-# Let's build a proper workflow! 
+# Let's build a proper workflow! (ignore this for now better for 0.6)
 # Key Finding Line Rework
 	# When you try to hack in nano android, key find line start!
 		# First, the android will notice the administrator requirement, attach with an connect address
