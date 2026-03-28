@@ -166,6 +166,33 @@ func _run():
 		addButton("Nope","I don't care about android settings. Default is just fine","no_change")
 		addButton("Sex?","Check if the survey is really necessary.","skip_and_sex")
 
+	if(state == "see_again_first"):
+		addCharacter("humoi")
+		playAnimation(StageScene.Duo, "stand", {pc = "pc", npc="humoi"})
+		saynn("You stand in Humoi's cell.")
+		saynn("[say=humoi]Oh, hey. It's you.[/say]")
+
+		saynn("Humoi leans against the wall, flipping that survey datapad like a coin. She catches it and gives you a knowing smirk.")
+
+		saynn("[say=humoi]You're not really here for the questions, are you? I can tell. You're one of those who likes to poke at the edges of things.[/say]")
+
+		saynn("She pushes off the wall, walking over to you. She doesn't say anything, just shoves the datapad into your hands, followed by a thin, worn-out booklet.")
+
+		saynn("[say=humoi]Here. That pad's more than just a survey tool. And this... is the quick-start guide. Or whatever.[/say]")
+
+		saynn("She taps a finger on your forehead, her grin widening slightly.")
+
+		saynn("[say=humoi]You've got the right kind of brain for it. Don't even need to read the manual, probably. Just... feel it out. You'll get it.[/say]")
+
+		saynn("[say=humoi]Go on, figure it out on your own time. So. What was it you came for, do the survey? Or having some fun?[/say]")
+
+		addMessage("A strange booklet add to your Inventory")
+
+		addButton("Certainly","Do the survey","Start_survey")
+		addButton("Sex?","You just come here for sex","skip_and_sex")
+		addButton("Talk","You want to understand more about her.","talkandendscene")
+		addButton("Leave","Sorry, wrong cell","endthescene")
+
 	if(state == "see_again"):
 		addCharacter("humoi")
 		playAnimation(StageScene.Duo, "stand", {pc = "pc", npc="humoi"})
@@ -176,8 +203,6 @@ func _run():
 		addButton("Sex?","You just come here for sex","skip_and_sex")
 		addButton("Talk","You want to understand more about her.","talkandendscene")
 		addButton("Leave","Sorry, wrong cell","endthescene")
-		if (GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskAlexKey", false)) && (!GM.main.getModuleFlag("NanoRevolutionModule", "NanoKnowAndroidKey", false)):
-			addButton("Key!","Interrogate her about key","ask_key_second")
 		# addButton("Debug","comment this","test_effects")
 	if(state == "test_effects"):
 		saynn("Hypno text: [tornado radius=3.0 freq=2.0 connected=1][pulse color=#FF33FF height=0.0 freq=3.0]Hypnoword[/pulse][/tornado]")
@@ -541,7 +566,7 @@ func _run():
 			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
 			saynn("[say=humoi]Now, make me~[/say]")
 		else:
-			saynn("[say=humoi]Looks like someone is pretty horny today. Yes, use me as an useless sextory~[/say]")
+			saynn("[say=humoi]Looks like someone is pretty horny today. Yes, use me as an useless sextoy~[/say]")
 
 		addButtonWithChecks("Sex!", "Time to fuck!", "startsexasdom", [], [ButtonChecks.CanStartSex])
 		addButton("Leave","You changed your idea","after_sex")
@@ -671,10 +696,10 @@ func _react(_action: String, _args):
 
 func _react_scene_end(_tag, _result):
 	if(_tag in ["subbysex", "domsex"]):
-		var sexresult = _result[0]
+		# var sexresult = _result[0]
 		
-		if(sexresult.has("subs") && sexresult["subs"].has("humoi")):
-			timesCame = sexresult["subs"]["humoi"]["timesCame"]
+		# if(sexresult.has("subs") && sexresult["subs"].has("humoi")):
+		# 	timesCame = sexresult["subs"]["humoi"]["timesCame"]
 
 		setState("after_sex")
 

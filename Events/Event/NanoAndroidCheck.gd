@@ -1,6 +1,6 @@
 extends EventBase
 var NanoGuardGenerator = preload("res://Modules/NanoRevolution/Characters/Dynamic/Generator/NanoGuardGenerator.gd")
-# var ThemeManager = preload("res://Modules/NanoRevolution/UI/Theme/themeManager.gd")
+var ThemeManager = preload("res://Modules/NanoRevolution/UI/Theme/themeManager.gd")
 
 func _init():
 	id = "NanoAndroidCheck"
@@ -22,8 +22,8 @@ func updateEverything():
 			GM.pc.getInventory().addItemID("NanoController")
 
 	# will delete the effect disable transform?
-	var sexDollPool = GM.main.getDynamicCharacterIDsFromPool("SexDoll")
-	for androidID in sexDollPool:
+	#var sexDollPool = GM.main.getDynamicCharacterIDsFromPool("SexDoll")
+#	for androidID in sexDollPool:
 
 
 
@@ -55,7 +55,7 @@ func run(_triggerID, _args):
 
 	# addButton("DEBUG GEN","generate_android pawn????","generate_android")
 
-	# addButton("DEBUG THEME","switch current theme????","switch_scene")
+	addButton("DEBUG THEME","switch current theme????","switch_scene")
 	
 	# var thePC = GM.pc
 	# var pcColor = thePC.getBaseSkinColors()
@@ -122,8 +122,8 @@ func onButton(_method, _args):
 	if(_method == "switch_scene"):
 		var _u = 1
 
-		# ThemeManager.change_theme()
-		change_theme_to_skyblue() 
+		ThemeManager.change_theme()
+		# change_theme_to_skyblue() 
 		# emit_signal("triggered")
 
 

@@ -40,3 +40,10 @@ Then, use godot 3.x to open this project. Start debug, and you can try the mod n
 - - [ ] Possible new endings with this new form, including bad ends, good ends 
 - - [ ] Reduce Alex reliance for the story. Since Alex path is ended, instead of extending his story, a better way is to further explain humoi, which could be more user-friendly.
 
+
+## Change Log
+
+Remove the Alex content related to the android.
+- The main reason for this is I think it's risky to integrate my oc content with other oc. Even though theoratically they may have relation in the plot, it's actually block how I will design the story line, so I just directly deleted the realted content and make the new one.
+- The old tranformation path is removed, instead of finding the android in the engineering bay now you only need to learn how to extract robot core. And you will get contamination during the extraction and progressively transform into nano form. Currently this feature is still WIP. This only content a trigger when you get fully contaminated. You will see the simple scene to indicate you are nano android now.
+

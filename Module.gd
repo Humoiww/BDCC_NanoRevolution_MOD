@@ -2,7 +2,7 @@ extends Module
 class_name NanoModule
 
 # 0.5 plan
-# I really need to erase the 
+# I really need to erase the Alex content, so make it simple, when contact the nano bot, Humoi will point out a warning, to hint player if you want to do transform, just keep contact nano bots.
 # add the something called infection rate 
 # How this work, reference to BoS module in Skyrim
 # add the event when you transform to android, some will try to hack you
@@ -220,6 +220,7 @@ func _init():
 		"res://Modules/NanoRevolution/Inventory/Items/Weapons/NanoBrick.gd",
 		"res://Modules/NanoRevolution/Inventory/Items/Nano_InstantCharger.gd",
 		"res://Modules/NanoRevolution/Inventory/Items/Nano_AutoBonder.gd",
+		"res://Modules/NanoRevolution/Inventory/Items/NanoManual.gd",
 		
 	]
 	events = [

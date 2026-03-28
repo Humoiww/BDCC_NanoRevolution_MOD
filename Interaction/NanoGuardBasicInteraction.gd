@@ -130,6 +130,8 @@ func start(_pawns:Dictionary, _args:Dictionary):
 	doInvolvePawn("main", _pawns["main"])
 	setCurrentRole("main")
 	setLocation(getRolePawn("main").getLocation())
+	var theChar = getRoleChar("main")
+	theChar.addEffect("Nano_Contamination",[150]) #stupid way to avoid any recession
 
 func getOutputText() -> String:
 	var theGoal = getGoal()

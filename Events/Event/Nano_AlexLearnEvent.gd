@@ -1,10 +1,12 @@
 extends EventBase
 
+# this part will remove in the next version.
 func _init():
 	id = "AlexLearnEvent"
 
 func registerTriggers(es):
-	es.addTrigger(self, Trigger.TalkingToNPC, "alexrynard")
+	# es.addTrigger(self, Trigger.TalkingToNPC, "alexrynard")
+	return
 	
 func run(_triggerID, _args):
 	print("I'm activate ---------------------------------Alexlearn")

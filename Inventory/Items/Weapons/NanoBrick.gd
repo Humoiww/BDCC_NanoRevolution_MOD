@@ -20,7 +20,7 @@ func getVisibleName():
 	return "Nano Brick"
 
 func getDescription():
-	var text = "From the first stirrings of life beneath water... to the great beasts of the Stone Age... to man taking his first upright steps, you have come far. Now, harnessing the combined power of all intelligence, you’ve created this — the Nano Brick! Use it to deliver a powerful shock to your enemy’s mind, physically, of course. \n\n Usage: throw this to enemy."
+	var text = "From the first stirrings of life beneath water... to the great beasts of the Stone Age... to man taking his first upright steps, you have come far. Now, harnessing the combined power of all intelligence, you’ve created this — the Nano Brick! Use it to deliver a powerful shock to your enemy’s mind, physically, of course. \n\n Usage: throw this to enemy. Just like a normal brick."
 
 	return text
 

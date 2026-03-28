@@ -20,13 +20,13 @@ func addBackStoryButton():
 	addButton("Crime","How did she get here?","what_crime")
 	addButton("Energetic","She seems so upbeat—it’s not something you’d expect in a place like this.","why_positive")
 	addButton("Engineering","She’s incredibly skilled in nano engineering. What was her job before she ended up in prison?","why_engineer")
-	addDisabledButton("Alex","What's the deal with her and Alex? They seem pretty familiar with each other. (Not implemented qwq, waiting for next big update)")
+	# addDisabledButton("Alex","What's the deal with her and Alex? They seem pretty familiar with each other. (Not implemented qwq, waiting for next big update)")
 	addButton("Leave","Enough talk","endthescene")
 
 func addSuggestionButton():
 	addButton("Engineering","Ask about Nano Engineering skill.","suggestion_EngrSkill")
-	if(getFlag("PortalPantiesModule.Panties_FleshlightsReturnedToAlex") || getFlag("PortalPantiesModule.Panties_PcDenied")):
-		addButton("Alex","What about that fox?","suggestion_alex")
+	# if(getFlag("PortalPantiesModule.Panties_FleshlightsReturnedToAlex") || getFlag("PortalPantiesModule.Panties_PcDenied")):
+		# addButton("Alex","What about that fox?","suggestion_alex")
 	if(GM.pc.getSpecies().has("nanoAndroid")):
 		addButton("Nano Instinct","Talk about your nano form","suggestion_instinct")
 	else:
@@ -45,19 +45,18 @@ func suggestionRun():
 		sayCharater("humoi","Oh, you need some hint? Sure! What would you like to know?")
 		addSuggestionButton()
 	if(state == "suggestion_EngrSkill"):
-		sayCharater("humoi","For nano-engineering experience? Beat! Hack! Extract those bots! Each takedown gives a good amount XP. Though if you prefer more erodic way... an intimate movement with their core matrix also works.")
+		sayCharater("humoi","Wanna level up your nano-engineering? Easy. Just go beat up some bots, hack 'em, and rip out their guts. Each takedown gives you a nice chunk of XP.")
+		sayCharater("humoi","...Or, if you're looking for a more... *erotic* approach? An intimate little dance with their core matrix works wonders too. Gets you way more XP, for the record. Just sayin'.")
 		addSuggestionButton()
 	if(state == "suggestion_secret"):
-		sayCharater("humoi","Heard whispers about a nano-prototype hidden in Engineering Bay—probably tucked away next to some forgotten server room, if you're brave enough to go poking around.")
+		sayCharater("humoi","Psst, hey. Little secret. In like, a much more boring version of reality, you were supposed to do a whole long, tedious quest line to hack androids.")
+		sayCharater("humoi","But like, who has time for that? I sure don't wanna be the NPC that sends you on a fetch quest. So I just unlocked it for you. Yay for shortcuts! ^-^")
 		addSuggestionButton()
 	if(state == "suggestion_instinct"):
-		sayCharater("humoi","You're running our beta firmware, with no restriction. So every roboot (i.e. morning) makes you stronger, every action shapes your code. You have unlimited potential...")
-		addSuggestionButton()
-	if(state == "suggestion_alex"):
-		sayCharater("humoi","That fox Alex? Poor thing's got more layers than a quantum processor. Takes at least 10 'accidental' run-ins before he'll even consider opening up. Ex-tip: when he finally makes an offer, just say yes—trust me, you don't want to soft-lock yourself out of those sweet nano-upgrades.(Basically the hacking part, for the transformation part, we have a skip button XD)")
+		sayCharater("humoi","You're basically running on a jailbroken firmware with no safety limits. Every time you 'reboot'—you know, wake up in the morning—you get stronger. Every single thing you do shapes your base code. Your potential is kinda limitless, you know?")
 		addSuggestionButton()
 	if(state == "suggestion_assim"):
-		sayCharater("humoi","Right now, assimilation's a one-way street—blank slate, no returns. Maybe someday we'll figure out how to preserve consciousness during the process, but in this build? Not a chance. (｡•́︿•̀｡)")
+		sayCharater("humoi","Be careful with assimilation, okay? Right now, it's a one-way street. It just... blanks them. No coming back. Maybe someday we'll figure out how to save their consciousness, but... not in this build. Not a chance. (｡•́︿•̀｡)")
 		addSuggestionButton()
 	if(state == "suggestion_random"):
 		sayCharater("humoi",RNG.pick([
@@ -74,8 +73,9 @@ func suggestionRun():
 									"♪ Never gonna say goodbye~ Unless the server crashes~ ♪ By the way, did you backup your work today?",
 									"The cake is a lie... You can's get Portal 3 but 3 portal panties xwx.",
 									"Welcome back, Doc...Sorry! Wrong Dimension!",
-									"Unexpected ERROR! humoi.os will explode in 3! 2! 1! 0!!!! 4294967295!!!!",
+									"Unexpected ERROR! humoi.os will update in 3! 2! 1! 0!!!! just kiding.",
 									"Coding nightmere: \n ！!？?；;，,：: \n ",
+									"Hm, I heard someone jave paused updating their project for a year long, guess who is it?"
 									]))
 		addSuggestionButton()
 

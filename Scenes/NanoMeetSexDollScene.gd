@@ -193,7 +193,7 @@ func _run():
 	if(state == "convert_to_sex_mode"):
 		saynn("You use your terminal and hack in the android guard module. Quiet complex, but you notice that there's an unused sex doll part.")
 
-		saynn("You adjust a bit, and switch success. (TODO: change this text)")
+		saynn("You adjust a bit, and switch success.")
 		addButton("Continue","See what happened next","convertsexend")
 
 func addWonButton():
@@ -286,6 +286,7 @@ func _react(_action: String, _args):
 	
 	if(_action == "extract_core"):
 		GM.pc.addSkillExperience("NanoENGR", 25)
+		print("am I working?")
 		GM.pc.addEffect("Nano_Contamination",[5])
 
 	if(_action == "extract_continue"):

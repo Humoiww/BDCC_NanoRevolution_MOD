@@ -385,8 +385,8 @@ func _run():
 			playAnimation(StageScene.Sleeping, "idle", {pc=npcID, pcCum=true, bodyState={naked=true}})
 			saynn("Unfortunately, when you try to grab another core, the android can't handle the additional extraction. Its body collapses into a pool of black goo and slips away.")
 
-			saynn("You’ve just lost all the cores you collected in this extraction.")
-			addButton("Well", "Better luck next time", "allowFullAndendthescene")
+			saynn("You've just lost all the cores you collected in this extraction.  All these core melted into a pile of goo and stick on your body.")
+			addButton("Well", "Better luck next time", "extract_fail")
 	if(state == "extract_end"):
 		playAnimation(StageScene.SexFisting, "tease", {
 				pc="pc", npc=npcID, npcCum=true,
@@ -403,8 +403,7 @@ func _run():
 			saynn("You make a cautious choice, taking only one core from the android. Suddenly, the android guard collapses into a pool of black goo and slips away.")
 
 		saynn("You have a feeling that you will never meet {npc.name} again")
-		# GM.main.removeDynamicCharacterFromAllPools(npcID)
-		
+		GM.main.removeDynamicCharacterFromAllPools(npcID)
 		addButton("Done", "Excellent", "allowFullAndendthescene")
 
 	if(state == "convert_to_sex_mode"):
@@ -567,9 +566,17 @@ func _react(_action: String, _args):
 	
 	if(_action == "extract_core"):
 		GM.pc.addSkillExperience("NanoENGR", 25)
+		print("am I working?")
+		GM.pc.addEffect("Nano_Contamination",[5])
 
 	if(_action == "extract_continue"):
 		GM.pc.addSkillExperience("NanoENGR", 10)
+		GM.pc.addEffect("Nano_Contamination",[1])
+
+	if(_action == "extract_fail"):
+		GM.pc.addEffect("Nano_Contamination",[10])
+		endScene()
+		return
 	
 	if(_action == "startsexsubby"):
 		getCharacter(npcID).prepareForSexAsDom()
