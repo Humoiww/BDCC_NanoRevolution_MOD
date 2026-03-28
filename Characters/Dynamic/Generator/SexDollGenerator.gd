@@ -32,99 +32,52 @@ func pickGender(character:DynamicCharacter, _args = {}):
 func pickSpecies(character:DynamicCharacter, _args = {}):
 	# so, we use default species here xwx, and change part in next
 	# character.npcSpecies = [randomSpecies]
+
+	
 	character.npcSpecies = ["nanoAndroid"]
 	
-
-func createBodyparts(character:DynamicCharacter, _args = {}):
-	# When a new nano Android appear, it will randomly simulate one existed species
-	# Size should be something in species part
-	var allSpecies = GlobalRegistry.getAllSpecies()
 	
-	var basicSpeciesDict = {}
+func createBodyparts(character:DynamicCharacter, _args = {}):
+	# original pick species
+	if(_args.has(NpcGen.Species)):
+		character.npcSpecies = [_args[NpcGen.Species]]
+		return
+	
+	var speciesType = pickedSpeciesType(_args)
+	var allSpecies = GlobalRegistry.getAllSpecies()
+	var possibleSpecies = []
 	for speciesID in allSpecies:
 		var specie = allSpecies[speciesID]
-		if(!specie.canBeUsedForNPCType("guard")):
+		if(!specie.canBeUsedForNPCType(speciesType)):
 			continue
 		
 		var weight = GM.main.getEncounterSettings().getSpeciesWeight(speciesID)
 		if(weight != null && weight > 0.0):
-			basicSpeciesDict[speciesID] =  weight
-	var speciesDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",{})
-	if (are_keys_equal(speciesDict,basicSpeciesDict)):
-		print("different key detect, erase original -- generater")
-		speciesDict = basicSpeciesDict
-		GM.main.setModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",speciesDict)
-
-	var possible = []
-	for species in speciesDict:
-		possible.append([species, speciesDict[species]])
-
-
-	var randomSpecies = RNG.pickWeightedPairs(possible)
+			possibleSpecies.append([speciesID, weight])
+	
+	var randomSpecies = RNG.pickWeightedPairs(possibleSpecies)
 	if(randomSpecies == null):
 		randomSpecies = Species.Canine
+
+	# put the random Species here for generation
+	var theSpecies:Array = [randomSpecies]
 	
-	var theSpecies = [randomSpecies]
 	for bodypartSlot in BodypartSlot.getAll():
-		possible = []
-		var fullWeight = 0.0
-		#if(!BodypartSlot.isEssential(bodypartSlot)):
-		#	possible.append([null, 1.0])
+		var possible := Bodypart.findPossibleBodypartIDs(bodypartSlot, character, theSpecies, character.npcGeneratedGender)
+		var fullWeight:float = 0.0
+		for pairs in possible:
+			fullWeight += max(0.0, pairs[1])
 		
-		var allbodypartsIDs = GlobalRegistry.getBodypartsIdsBySlot(bodypartSlot)
-		for bodypartID in allbodypartsIDs:
-			var bodypart = GlobalRegistry.getBodypartRef(bodypartID)
-			var supportedSpecies = bodypart.getCompatibleSpecies()
-			
-			var hasInSupported = false
-			var hasInAllowed = false
-			
-			for supported in supportedSpecies:
-				if((supported in theSpecies) || supported == Species.AnyNPC): # || supported == Species.Any
-					hasInSupported = true
-					break
-				
-			for playerSpecie in theSpecies:
-				var speciesObject = GlobalRegistry.getSpecies(playerSpecie)
-				if(bodypartID in speciesObject.getAllowedBodyparts()):
-					hasInAllowed = true
-					break
-			
-			if(hasInSupported || hasInAllowed):
-				var weight = bodypart.npcGenerationWeight(character)
-				if(weight != null && weight > 0.0):
-					possible.append([bodypartID, weight])
-					fullWeight += weight
-
-		# Adding the default bodypart of this species into the mix
-		for specie in theSpecies:
-			var speciesObject = GlobalRegistry.getSpecies(specie)
-			var bodypartID = speciesObject.getDefaultForSlotForNpcGender(bodypartSlot, character.npcGeneratedGender)
-			var alreadyHasInPossible = false
-			for possibleEntry in possible:
-				if(possibleEntry[0] == bodypartID):
-					alreadyHasInPossible = true
-					break
-			if(alreadyHasInPossible):
-				continue
-			if(bodypartID == null):
-				possible.append([null, 1.0])
-				fullWeight += 1.0
-				continue
-			var bodypart = GlobalRegistry.getBodypartRef(bodypartID)
-			var weight = bodypart.npcGenerationWeight(character)
-			if(weight != null && weight > 0.0):
-				possible.append([bodypartID, weight])
-				fullWeight += weight
-
 		#print(bodypartSlot, " ", possible) # Uncomment for debug
 		if(possible.size() > 0):
 			if(!RNG.chance(fullWeight * 100.0)):
 				continue
 			
 			var bodypartID = RNG.pickWeightedPairs(possible)
-			if(bodypartID != null):
+			if(bodypartID != null && bodypartID != ""):
 				var bodypart = GlobalRegistry.createBodypart(bodypartID)
+				if(!bodypart):
+					continue
 				character.giveBodypartUnlessSame(bodypart)
 				bodypart.generateDataFor(character)
 
