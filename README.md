@@ -39,6 +39,7 @@ Then, use godot 3.x to open this project. Start debug, and you can try the mod n
 - - [x] Ability to turn other into nano android
 - - [ ] Possible new endings with this new form, including bad ends, good ends 
 - - [ ] Reduce Alex reliance for the story. Since Alex path is ended, instead of extending his story, a better way is to further explain humoi, which could be more user-friendly.
+- - - [ ] To be honest, directly delete the Alex content, we will work by our self!
 
 
 ## Change Log
