@@ -5,7 +5,7 @@ class_name ThemeManager
 
 # Change the entire UI theme to the given color (default: SkyBlue)
 static func change_theme(panelcolor: Color = Color8(25, 25, 35)) -> void:
-	var DEFAULT_PANEL_COLOR = Color8(53,34,93)
+	var _DEFAULT_PANEL_COLOR = Color8(53,34,93)
 	# build a fresh Theme
 	# 1) Build the SkyBlue theme
 	var path = "res://GlobalTheme.tres"

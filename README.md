@@ -20,7 +20,7 @@ BDCC
         |---Module.gd
     |---...
 ```
-Then, use godot 3.x to open this project. Start debug, and you can try the mod now. 
+Then, use godot 3.x to open this project. Start debug, and you can try the mod now.  
 
 
 

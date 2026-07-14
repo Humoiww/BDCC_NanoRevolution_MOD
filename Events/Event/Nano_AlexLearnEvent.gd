@@ -4,7 +4,7 @@ extends EventBase
 func _init():
 	id = "AlexLearnEvent"
 
-func registerTriggers(es):
+func registerTriggers(_es):
 	# es.addTrigger(self, Trigger.TalkingToNPC, "alexrynard")
 	return
 	
