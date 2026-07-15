@@ -9,7 +9,7 @@ func registerTriggers(es):
 func run(_triggerID, _args):
 	if(getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false)):
 		if !(GM.main.getModuleFlag("NanoRevolutionModule", "NanoKnowAndroidKey", false)):
-			addButtonUnlessLate("Humoi's cell", "See what the speical gift is", "enter_cell_first")
+			addButtonUnlessLate("Humoi's cell", "See what the special gift is", "enter_cell_first")
 		else:
 			addButtonUnlessLate("Humoi's cell", "Talk about some nano stuff", "enter_cell")
 

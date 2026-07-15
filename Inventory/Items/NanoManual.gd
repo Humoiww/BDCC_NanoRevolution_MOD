@@ -4,7 +4,7 @@ var whoGaveBirth = ""
 
 func _init():
 	id = "NanoManual"
-# so, I just convert the egg item to this new item, wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+
 func getVisibleName():
 	return "Nano Engineering 101"
 
@@ -27,7 +27,7 @@ func getPossibleActions():
 	action.append({
 		"name": "Read  me!",
 		"scene": "UseItemLikeInCombatScene",
-		"description": "Have you even check the description?!",
+		"description": "Learn how to hack",
 	})
 	return action
 

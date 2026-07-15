@@ -698,8 +698,10 @@ func _react_scene_end(_tag, _result):
 	if(_tag in ["subbysex", "domsex"]):
 		# var sexresult = _result[0]
 		
-		# if(sexresult.has("subs") && sexresult["subs"].has("humoi")):
-		# 	timesCame = sexresult["subs"]["humoi"]["timesCame"]
+		if _result.size() > 0:
+			var sex_engine_result = _result[0]
+			if sex_engine_result.hasSub("humoi"):
+				timesCame = sex_engine_result.getSubOrgasmCount("humoi")
 
 		setState("after_sex")
 
