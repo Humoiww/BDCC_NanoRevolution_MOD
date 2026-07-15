@@ -94,6 +94,17 @@ func getFlags():
 		# "NanoNextCheckTime": flag(FlagType.Number),
 		# "NanoCheckTimePeriod": flag(FlagType.Number),
 		
+		# Milestone Quests
+		"Chapter1_Started": flag(FlagType.Bool),
+		"Chapter1_Completed": flag(FlagType.Bool),
+		"Milestone1_IsWaiting": flag(FlagType.Bool),
+		"Milestone1_WaitedOneDay": flag(FlagType.Bool),
+		
+		# Daily Quests
+		"NanoDailyQuestInfo": flag(FlagType.Dict),
+		"NanoDailyQuestProgress": flag(FlagType.Number),
+		"NanoDailyQuestLastDay": flag(FlagType.Number),
+		"NanoDailyQuestAccepted": flag(FlagType.Bool),
 	}
 
 
@@ -182,7 +193,6 @@ func doConvertCharacterGuard(npcID):
 
 
 func _init():
-
 	id = "NanoRevolutionModule"
 	author = "Humoi"
 	attacks = [
@@ -209,6 +219,7 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/NanoAndroidFunction/NanoCharacterScene.gd",
 		# transform scene
 		"res://Modules/NanoRevolution/Scenes/Nano_TransformVictimScene.gd",
+		"res://Modules/NanoRevolution/Scenes/HumoiQuestScene.gd",
 		]
 	characters = [
 		"res://Modules/NanoRevolution/Characters/NanoAssemble.gd",
@@ -261,7 +272,9 @@ func _init():
 #
 #	]
 	quests = [
-		"res://Modules/NanoRevolution/Quests/Nano_FigureOutKey.gd"
+		"res://Modules/NanoRevolution/Quests/Nano_FigureOutKey.gd",
+		"res://Modules/NanoRevolution/Quests/NanoMilestoneQuest1.gd",
+		"res://Modules/NanoRevolution/Quests/NanoDailyQuest.gd",
 	]
 	computers = [
 		"res://Modules/NanoRevolution/Scenes/NanoAndroidFunction/Nano_HackAndroid.gd"
@@ -304,6 +317,15 @@ func register():
 
 
 func resetFlagsOnNewDay():
+	refresh_daily_quest()
+	GM.main.setModuleFlag("NanoRevolutionModule", "NanoDailyQuestAccepted", false)
+	
+	# Milestone 1 Logic
+	if GM.main.getModuleFlag("NanoRevolutionModule", "Milestone1_IsWaiting", false):
+		GM.main.setModuleFlag("NanoRevolutionModule", "Milestone1_WaitedOneDay", true)
+		GM.main.setModuleFlag("NanoRevolutionModule", "Milestone1_IsWaiting", false)
+		GM.main.addMessage("Quest Updated: A Spark of Revolution")
+
 	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
 	GM.main.setModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", charge)
 	# GM.main.setModuleFlag("NanoRevolutionModule", "NanoIsGenerateThisMorning",false)
@@ -358,3 +380,39 @@ func transformCharToNano(thePC:Character):
 		if(bodypartSkinData.has("b")):
 			bodypart.pickedBColor = bodypartSkinData["b"]
 	thePC.updateAppearance()
+
+func refresh_daily_quest():
+	var last_day_refreshed = GM.main.getModuleFlag("NanoRevolutionModule", "NanoDailyQuestLastDay", -1)
+	var current_day = GM.main.currentDay
+
+	if last_day_refreshed == current_day:
+		return # Already refreshed today
+
+	var all_quests = [
+		{
+			"id": "collect_cores",
+			"name": "Core Collection",
+			"description": "Collect 3 Nano Cores from androids.",
+			"type": "item",
+			"target_id": "NanoCore",
+			"target_count": 3,
+			"reward": {"credits": 100}
+		},
+		{
+			"id": "hack_androids",
+			"name": "System Intrusion",
+			"description": "Successfully hack 2 androids.",
+			"type": "hack",
+			"target_id": "any",
+			"target_count": 2,
+			"reward": {"item_id": "Nano_InstantCharger", "amount": 1}
+		}
+	]
+	
+	var new_quest = all_quests[randi() % all_quests.size()]
+	
+	GM.main.setModuleFlag("NanoRevolutionModule", "NanoDailyQuestInfo", new_quest)
+	GM.main.setModuleFlag("NanoRevolutionModule", "NanoDailyQuestProgress", 0)
+	GM.main.setModuleFlag("NanoRevolutionModule", "NanoDailyQuestLastDay", current_day)
+	
+	GM.main.addMessage("A new daily task is available from Humoi.")

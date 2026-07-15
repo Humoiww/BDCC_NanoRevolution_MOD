@@ -87,8 +87,14 @@ func _run():
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
 		saynn("[say=humoi]So, you want to chat? Awesome! What’s on your mind?[/say]")
 
+		addButton("Daily Tasks", "Check daily tasks.", "quests")
 		addButton("Herself","Backstory?","humoi_self")
 		addButton("Suggestion","Some suggestion relate to those nano stuffs.","suggestion")
+		if GM.main.getModuleFlag("NanoRevolutionModule", "Milestone1_WaitedOneDay", false):
+			addButton("Report Analysis", "Ask Humoi about the analysis results.", "report_milestone_1")
+		elif !GM.main.getModuleFlag("NanoRevolutionModule", "Chapter1_Started", false):
+			addButton("A Spark of Revolution", "Ask about the basics of Nano Cores.", "start_milestone_1")
+			
 		if GM.main.getModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", false):
 			if !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
 				addButton("Key?","Does she know anything about android key?","ask_key")
@@ -104,7 +110,13 @@ func _run():
 			addDisabledButton("Controller!","If you don’t have the controller in your inventory, just press this button, and I’ll give you a new one. \n(Note: You can store the controller in your cell and get as many as you want, but remember that the extra controllers are useless, so you’ll only be wasting your time X3)")
 		addButton("Leave","I think that's it","endthescene")
 
-
+	elif state == "start_milestone_1":
+		sayCharater("humoi", "So you want to know about Nano Cores? They're the building blocks of all this cool nano-tech! You can get them from... well, from 'decommissioning' androids. This is just the beginning of your journey. Come back tomorrow, and I should have something for you.")
+		addButton("Continue", "...", "")
+	
+	elif state == "report_milestone_1":
+		sayCharater("humoi", "Ah, you're back! The preliminary analysis is done. It seems these cores have some... interesting properties. Here, take this one. It's a sample. We'll be able to do a lot more with these soon.")
+		addButton("Continue", "...", "")
 
 	if(state == "humoi_self"):
 		sayCharater("humoi","Yay, backstory time! What would you like to know?")
@@ -160,10 +172,9 @@ func _run():
 			sayCharater("humoi","Need more information? Sure, just ask anything you want!")
 		else:
 			sayCharater("humoi","So, you’ve found the backdoor software I created for these androids? Nice work! But if you want key... I have a small quest for you.")
-			GM.main.setModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", true)
-			addMessage("Updated: Figure out key quest")
 		
 		addButton("Quest","Then what quest?","why_key")
+		addButton("Back", "...", "")
 		# say good bye to alex!
 		# addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
 		# addButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?","why_me")
@@ -240,6 +251,27 @@ func _react(_action: String, _args):
 		endScene()
 		return
 
+	if(_action == "quests"):
+		runScene("HumoiQuestScene")
+		endScene()
+		return
+
+	if(_action == "ask_key"):
+		if !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
+			GM.main.setModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", true)
+			GM.main.addMessage("Updated: Figure out key quest")
+
+	if(_action == "start_milestone_1"):
+		GM.main.setModuleFlag("NanoRevolutionModule", "Chapter1_Started", true)
+		GM.main.setModuleFlag("NanoRevolutionModule", "Milestone1_IsWaiting", true)
+		GM.main.addMessage("New quest: A Spark of Revolution")
+
+	if(_action == "report_milestone_1"):
+		GM.pc.getInventory().addXOfItemID("NanoCore", 1)
+		GM.main.addMessage("You received 1x NanoCore.")
+		GM.main.setModuleFlag("NanoRevolutionModule", "Milestone1_WaitedOneDay", false)
+		GM.main.setModuleFlag("NanoRevolutionModule", "Chapter1_Completed", true)
+
 	if(_action == "blueprint"):
 		runScene("NanoBlueprintHumoi")
 		endScene()
@@ -251,15 +283,14 @@ func _react(_action: String, _args):
 		setState("trade")
 		return
 
-
 	if(_action == "aftercare"):
 		processTime(30*60)
+		return
 
 	if(_action == "new_controller"):
 		GM.pc.getInventory().addItemID("NanoController")
-		addMessage("Got it! A new one has just been added to your inventory.(-▽-)/")
-		setState("")
-		return
+		GM.main.addMessage("Got it! A new one has just been added to your inventory.(-▽-)/")
+		
 	setState(_action)
 
 func saveData():
