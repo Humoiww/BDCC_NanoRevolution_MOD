@@ -1,5 +1,7 @@
 extends Control
 
+const MODULE_ID = "NanoRevolutionModule"
+
 onready var itemListContainer = $MarginContainer/HBoxContainer/VBoxContainer2/ScrollContainer/VBoxContainer2/VBoxContainer
 var inventoryEntry = preload("res://Modules/NanoRevolution/UI/Inventory/NanoCraftEntry.tscn")
 var inventoryGroupEntry = preload("res://UI/Inventory/InventoryGroupEntry.tscn")

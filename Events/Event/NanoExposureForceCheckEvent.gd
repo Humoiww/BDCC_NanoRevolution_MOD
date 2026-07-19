@@ -1,9 +1,11 @@
 extends EventBase
+
+const MODULE_ID = "NanoRevolutionModule"
 var NanoGuardGenerator = preload("res://Modules/NanoRevolution/Characters/Dynamic/Generator/NanoGuardGenerator.gd")
 # this whole bunch of stuff just for spawn Humoi qwq
 
 func generate_random_times():
-	var mean_time: float = getModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", 21600.0)  # 6 hours
+	var mean_time: float = getModuleFlag(MODULE_ID, "NanoCheckTimePeriod", 21600.0)  # 6 hours
 	var std_dev: float = 3600
 	var time = randf() * std_dev + mean_time  # 6 ~ 7 hours cool down time
 	print("next generate time:")
@@ -30,10 +32,10 @@ func react(_triggerID, _args):
 	# if(GM.pc.getLocation() == GM.pc.getCellLocation()):
 	# 	# avoid android break into your room :C
 	# 	return
-	# setModuleFlag("NanoRevolutionModule", "NanoLastCheckTime", currentTime)
-	# setModuleFlag("NanoRevolutionModule", "NanoNextCheckTime", generate_random_times())
+	# setModuleFlag(MODULE_ID, "NanoLastCheckTime", currentTime)
+	# setModuleFlag(MODULE_ID, "NanoNextCheckTime", generate_random_times())
 	
-	if(!getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false) && (getModuleFlag("NanoRevolutionModule", "NanoCheckHappened", false) || getModuleFlag("NanoRevolutionModule", "NanoSexDollMeeted", false))):
+	if(!getModuleFlag(MODULE_ID, "NanoMeetHumoi", false) && (getModuleFlag(MODULE_ID, "NanoCheckHappened", false) || getModuleFlag(MODULE_ID, "NanoSexDollMeeted", false))):
 		runScene("NanoSetting")
 		return true
 

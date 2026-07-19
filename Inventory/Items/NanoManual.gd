@@ -1,5 +1,7 @@
 extends ItemBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 var whoGaveBirth = ""
 
 func _init():

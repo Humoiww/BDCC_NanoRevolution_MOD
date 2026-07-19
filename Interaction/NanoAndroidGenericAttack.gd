@@ -1,5 +1,7 @@
 extends PawnInteractionBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 var surrendered = false
 var askCredits = 0
 

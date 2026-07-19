@@ -1,5 +1,7 @@
 extends Species
 
+const MODULE_ID = "NanoRevolutionModule"
+
 func _init():
 	id = "nanoAndroid"
 	
@@ -38,11 +40,11 @@ func onDynamicNpcCreation(_npc, _args):
 
 	if(_npc.hasPenis()):
 		var _penis = _npc.getBodypart(BodypartSlot.Penis)
-		_penis.lengthCM = GlobalRegistry.getModule("NanoRevolutionModule").getNanoCockSize()
+		_penis.lengthCM = GlobalRegistry.getModule(MODULE_ID).getNanoCockSize()
 	if !(_npc.getGender() in [Gender.Male]):
 		var _breasts = _npc.getBodypart(BodypartSlot.Breasts)
 		if(_breasts.size > BreastsSize.FOREVER_FLAT):
-			_breasts.size = GlobalRegistry.getModule("NanoRevolutionModule").getNanoBreastSize()
+			_breasts.size = GlobalRegistry.getModule(MODULE_ID).getNanoBreastSize()
 		
 
 	var npcSkinData={

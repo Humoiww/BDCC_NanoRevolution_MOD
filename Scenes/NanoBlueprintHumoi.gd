@@ -1,5 +1,7 @@
 extends SceneBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 var bratCounter = 0
 var craftingItemsTags = []
 var craftingItems = [
@@ -30,11 +32,11 @@ func _initScene(_args = []):
 		setState(_args[0])
 		if(_args.size() > 1):
 			craftingItemsTags = _args[1]
-	var craftableItem = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableItem", {})
+	var craftableItem = GM.main.getModuleFlag(MODULE_ID, "NanoCraftableItem", {})
 	for itemID in craftableItem:
 		if craftableItem[itemID] == true:
 			craftingItems.append(itemID)
-	var craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
+	var craftableTag = GM.main.getModuleFlag(MODULE_ID, "NanoCraftableTag", {})
 	for tag in craftableTag:
 		if craftableTag[tag] == true:
 			craftingItemsTags.append(int(tag))
@@ -72,13 +74,13 @@ func _run():
 		
 		addCharacter("humoi")
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
-		if (!getModuleFlag("NanoRevolutionModule","NanoAfterFirstBlueprintHumoi",false)):
+		if (!getModuleFlag(MODULE_ID,"NanoAfterFirstBlueprintHumoi",false)):
 			sayCharater("humoi","Great, you’re interested in blueprints for using those nano cores! I’ve got you covered. I offer two types of blueprints:")
 
 			sayCharater("humoi","First, these are general Blueprint Sets and can be used to craft a variety of common items.")
 
 			sayCharater("humoi","Second, these are for crafting special, one-of-a-kind items. You can only obtain these items by using the blueprints, as they’re specifically designed by me.")
-			setModuleFlag("NanoRevolutionModule","NanoAfterFirstBlueprintHumoi",true)
+			setModuleFlag(MODULE_ID,"NanoAfterFirstBlueprintHumoi",true)
 		saynn("[say=humoi]Did anything catch your eye?[/say]")
 
 		addButton("General","You want to check more general blueprint sets","tag_select")
@@ -192,9 +194,9 @@ func _react(_action: String, _args):
 		GM.pc.getInventory().removeXOfOrDestroy("NanoCore",cost)
 		craftingItemsTags.append(tagToTrade)
 		justPurchased = true
-		var craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
+		var craftableTag = GM.main.getModuleFlag(MODULE_ID, "NanoCraftableTag", {})
 		craftableTag[tagToTrade] = true
-		GM.main.setModuleFlag("NanoRevolutionModule", "NanoCraftableTag", craftableTag)
+		GM.main.setModuleFlag(MODULE_ID, "NanoCraftableTag", craftableTag)
 
 		if(tagToTrade == ItemTag.SoldByUnderwearVendomat):
 			var addTags = [ItemTag.GuardUniform,
@@ -206,9 +208,9 @@ func _react(_action: String, _args):
 			for addTagToTrade in addTags:
 				craftingItemsTags.append(addTagToTrade)
 				# justPurchased = true
-				# craftableTag = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableTag", {})
+				# craftableTag = GM.main.getModuleFlag(MODULE_ID, "NanoCraftableTag", {})
 				craftableTag[addTagToTrade] = true
-				GM.main.setModuleFlag("NanoRevolutionModule", "NanoCraftableTag", craftableTag)
+				GM.main.setModuleFlag(MODULE_ID, "NanoCraftableTag", craftableTag)
 
 
 			
@@ -221,9 +223,9 @@ func _react(_action: String, _args):
 		craftingItems.append(itemToTrade)
 		GM.pc.getInventory().removeXOfOrDestroy("NanoCore",cost)
 		justPurchased = true
-		var craftableItem = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCraftableItem", {})
+		var craftableItem = GM.main.getModuleFlag(MODULE_ID, "NanoCraftableItem", {})
 		craftableItem[itemToTrade] = true
-		GM.main.setModuleFlag("NanoRevolutionModule", "NanoCraftableItem", craftableItem)
+		GM.main.setModuleFlag(MODULE_ID, "NanoCraftableItem", craftableItem)
 		setState("item_select")
 		return
 	

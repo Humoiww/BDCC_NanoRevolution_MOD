@@ -1,5 +1,7 @@
 extends SceneBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 var bratCounter = 0
 
 func _init():
@@ -87,18 +89,18 @@ func _run():
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
 		saynn("[say=humoi]So, you want to chat? Awesome! What’s on your mind?[/say]")
 
-		addButton("Daily Tasks", "Check daily tasks.", "quests")
+		addDisabledButton("Daily Tasks", "Daily tasks are under construction! I'm preparing some super fun (and maybe a little naughty) surprises for you, so stay tuned! ☆⌒(ゝ。∂)")
 		addButton("Herself","Backstory?","humoi_self")
 		addButton("Suggestion","Some suggestion relate to those nano stuffs.","suggestion")
-		if GM.main.getModuleFlag("NanoRevolutionModule", "Milestone1_WaitedOneDay", false):
+		if GM.main.getModuleFlag(MODULE_ID, "Milestone1_WaitedOneDay", false):
 			addButton("Report Analysis", "Ask Humoi about the analysis results.", "report_milestone_1")
-		elif !GM.main.getModuleFlag("NanoRevolutionModule", "Chapter1_Started", false):
+		elif !GM.main.getModuleFlag(MODULE_ID, "Chapter1_Started", false):
 			addButton("A Spark of Revolution", "Ask about the basics of Nano Cores.", "start_milestone_1")
 			
-		if GM.main.getModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", false):
-			if !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
+		if GM.main.getModuleFlag(MODULE_ID, "NanoTriggerKeyQuest", false):
+			if !GM.main.getModuleFlag(MODULE_ID, "NanoAskHumoiKey", false):
 				addButton("Key?","Does she know anything about android key?","ask_key")
-			elif !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskAlexKey", false):
+			elif !GM.main.getModuleFlag(MODULE_ID, "NanoAskAlexKey", false):
 				addButton("Key","Review some key information","ask_key")
 		
 		if GM.pc.hasPerk("NanoCraftingT1"):
@@ -168,7 +170,7 @@ func _run():
 		sayCharater("humoi","So if you ever need something... unconventional... you know who to ask.")
 		addBackStoryButton()
 	if(state == "ask_key"):
-		if GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
+		if GM.main.getModuleFlag(MODULE_ID, "NanoAskHumoiKey", false):
 			sayCharater("humoi","Need more information? Sure, just ask anything you want!")
 		else:
 			sayCharater("humoi","So, you’ve found the backdoor software I created for these androids? Nice work! But if you want key... I have a small quest for you.")
@@ -257,20 +259,20 @@ func _react(_action: String, _args):
 		return
 
 	if(_action == "ask_key"):
-		if !GM.main.getModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", false):
-			GM.main.setModuleFlag("NanoRevolutionModule", "NanoAskHumoiKey", true)
+		if !GM.main.getModuleFlag(MODULE_ID, "NanoAskHumoiKey", false):
+			GM.main.setModuleFlag(MODULE_ID, "NanoAskHumoiKey", true)
 			GM.main.addMessage("Updated: Figure out key quest")
 
 	if(_action == "start_milestone_1"):
-		GM.main.setModuleFlag("NanoRevolutionModule", "Chapter1_Started", true)
-		GM.main.setModuleFlag("NanoRevolutionModule", "Milestone1_IsWaiting", true)
+		GM.main.setModuleFlag(MODULE_ID, "Chapter1_Started", true)
+		GM.main.setModuleFlag(MODULE_ID, "Milestone1_IsWaiting", true)
 		GM.main.addMessage("New quest: A Spark of Revolution")
 
 	if(_action == "report_milestone_1"):
 		GM.pc.getInventory().addXOfItemID("NanoCore", 1)
 		GM.main.addMessage("You received 1x NanoCore.")
-		GM.main.setModuleFlag("NanoRevolutionModule", "Milestone1_WaitedOneDay", false)
-		GM.main.setModuleFlag("NanoRevolutionModule", "Chapter1_Completed", true)
+		GM.main.setModuleFlag(MODULE_ID, "Milestone1_WaitedOneDay", false)
+		GM.main.setModuleFlag(MODULE_ID, "Chapter1_Completed", true)
 
 	if(_action == "blueprint"):
 		runScene("NanoBlueprintHumoi")

@@ -1,5 +1,7 @@
 extends EventBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 func _init():
 	id = "NanoCraftingTableEvent"
 
@@ -8,11 +10,11 @@ func registerTriggers(es):
 
 func run(_triggerID, _args):
 	var coreAmount = GM.pc.getInventory().getAmountOf("NanoCore")
-	var fullCharge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
+	var fullCharge = GM.main.getModuleFlag(MODULE_ID, "NanoControllerFullCharge", 10)
 	var upgradeCost = fullCharge - 9
 
 	if(GM.pc.hasPerk("NanoCraftingT1")):
-		if(getModuleFlag("NanoRevolutionModule","NanoCraftingTableEnabled")):
+		if(getModuleFlag(MODULE_ID,"NanoCraftingTableEnabled")):
 			addButton("Station","Use your nano core to make something","craft")
 			if(GM.pc.hasPerk("NanoCraftingT3")):
 				saynn("You can use your core to upgrade your controller.")
@@ -37,11 +39,11 @@ func onButton(_method, _args):
 		runScene("NanoCraftScene",["buymenu"])
 	if(_method == "make"):
 		GM.pc.getInventory().removeXOfOrDestroy("NanoCore",1)
-		setModuleFlag("NanoRevolutionModule","NanoCraftingTableEnabled",true)
+		setModuleFlag(MODULE_ID,"NanoCraftingTableEnabled",true)
 	if(_method == "upgrade"):
 		var cost = _args[0]
 		GM.pc.getInventory().removeXOfOrDestroy("NanoCore",cost)
-		var fullCharge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
+		var fullCharge = GM.main.getModuleFlag(MODULE_ID, "NanoControllerFullCharge", 10)
 		fullCharge += 1
-		GM.main.setModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", fullCharge)
+		GM.main.setModuleFlag(MODULE_ID, "NanoControllerFullCharge", fullCharge)
 	

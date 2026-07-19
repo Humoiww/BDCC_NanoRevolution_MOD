@@ -1,5 +1,7 @@
 extends "res://Scenes/SceneBase.gd"
 
+const MODULE_ID = "NanoRevolutionModule"
+
 var npcID = ""
 var sawBefore = false
 var npcVariation = ""

@@ -1,5 +1,7 @@
 extends PawnInteractionBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 var chat = {}
 var lust = {}
 var chatAnswer = ""
@@ -24,8 +26,8 @@ func start(_pawns:Dictionary, _args:Dictionary):
 
 
 func shouldRunOnMeet(_pawn1, _pawn2, _pawn2Moved:bool):
-	nanoCheckedDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCharacterCheckedToday",{})
-	var prob = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckChance", 0.1)
+	nanoCheckedDict = GM.main.getModuleFlag(MODULE_ID, "NanoCharacterCheckedToday",{})
+	var prob = GM.main.getModuleFlag(MODULE_ID, "NanoCheckChance", 0.1)
 	willFrisking = false
 	if(!_pawn1.canBeInterrupted() || !_pawn2.canBeInterrupted()):
 		return [false]
@@ -55,13 +57,13 @@ func sayCharater(ch,text):
 	
 
 func init_text():
-	nanoCheckedDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCharacterCheckedToday",{})
+	nanoCheckedDict = GM.main.getModuleFlag(MODULE_ID, "NanoCharacterCheckedToday",{})
 	var inmateID = getRoleID("starter")
 	if inmateID in nanoCheckedDict:
 		willFrisking = false
 	else:
 		nanoCheckedDict[inmateID] = 1
-		GM.main.setModuleFlag("NanoRevolutionModule", "NanoCharacterCheckedToday",nanoCheckedDict)
+		GM.main.setModuleFlag(MODULE_ID, "NanoCharacterCheckedToday",nanoCheckedDict)
 		willFrisking = true
 
 
@@ -72,8 +74,8 @@ func init_text():
 		saynn("{reacter.name} is standing near {starter.you}.")
 
 	
-	if(isPlayerInvolved() && !GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckHappened", false)):
-		GM.main.setModuleFlag("NanoRevolutionModule", "NanoCheckHappened", true)
+	if(isPlayerInvolved() && !GM.main.getModuleFlag(MODULE_ID, "NanoCheckHappened", false)):
+		GM.main.setModuleFlag(MODULE_ID, "NanoCheckHappened", true)
 		saynn("{reacter.HeShe} gives you a stop sign.")
 
 		saynn("[say=reacter]Greating, Inmate number {pc.inmateNumber}, how's your day going?[/say]")

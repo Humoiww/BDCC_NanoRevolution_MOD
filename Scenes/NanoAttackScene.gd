@@ -1,5 +1,7 @@
 extends SceneBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 func _init():
 	sceneID = "NanoAttackScene"
 
@@ -164,8 +166,8 @@ func _run():
 		saynn("=========================================")
 		saynn("[color=red]Warning: Unidentified lifeform detected. Please ensure the assembly room is cleared before proceeding with activation.[/color]")
 
-		if(!getModuleFlag("NanoRevolutionModule","NanoAttackSceneWarned",false)):
-			setModuleFlag("NanoRevolutionModule","NanoAttackSceneWarned",true)
+		if(!getModuleFlag(MODULE_ID,"NanoAttackSceneWarned",false)):
+			setModuleFlag(MODULE_ID,"NanoAttackSceneWarned",true)
 			saynn("[say=humoi]Hey, {pc.name}. Can you hear me?[/say]")
 
 			saynn("A voice crackles through the controller. How on earth did she hack into this?")
@@ -270,7 +272,7 @@ func _run():
 		var baseGenderDict = {}
 		for gender in allgenders:
 			baseGenderDict[gender] = NpcGender.getDefaultWeight(gender)
-		var nanoGenderDict = GM.main.getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
+		var nanoGenderDict = GM.main.getModuleFlag(MODULE_ID, "NanoAndroidGenderDistr",baseGenderDict)
 		var stuff = []
 		for gender in NpcGender.getAll():
 			var weight = nanoGenderDict[gender]
@@ -290,8 +292,8 @@ func _run():
 					GM.pc.setGender(Gender.Androgynous)
 					pcGender = Gender.Androgynous
 
-		var cockLength = GlobalRegistry.getModule("NanoRevolutionModule").getNanoCockSize()
-		var breastSize = GlobalRegistry.getModule("NanoRevolutionModule").getNanoBreastSize()
+		var cockLength = GlobalRegistry.getModule(MODULE_ID).getNanoCockSize()
+		var breastSize = GlobalRegistry.getModule(MODULE_ID).getNanoBreastSize()
 
 		if(pcGender == Gender.Androgynous):
 			if(!GM.pc.hasVagina()):
@@ -440,7 +442,7 @@ func _run():
 		saynn("Your mind shocked by drastic impact, faded into unconscious.")
 		
 		
-		GM.main.setModuleFlag("NanoRevolutionModule","NanoAttackSceneHappened",true)
+		GM.main.setModuleFlag(MODULE_ID,"NanoAttackSceneHappened",true)
 		addButton("Faded", "You just lost your conscious", "Alex_wakey")
 
 	if(state == "Alex_wakey"):

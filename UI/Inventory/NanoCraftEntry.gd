@@ -1,5 +1,7 @@
 extends Control
 
+const MODULE_ID = "NanoRevolutionModule"
+
 signal onInteractButtonPressed(item)
 signal onItemSelected(item)
 onready var itemNameLabel = $HBoxContainer/Control/Info/Label
@@ -79,7 +81,7 @@ func updateInfo():
 		itemNameLabel.text = item.getInventoryName()
 	
 	if(isBuy):
-		var price = GlobalRegistry.getModule("NanoRevolutionModule").getCraftCost(item)
+		var price = GlobalRegistry.getModule(MODULE_ID).getCraftCost(item)
 		var priceStr = (str(price)+" core") if price == 1 else (str(price)+" cores")
 		itemNameLabel.text = item.getVisibleName()+" ("+priceStr+")"
 		if(item.getBuyAmount() > 1):
@@ -118,7 +120,7 @@ func updateInfo():
 				if(item.isImportant()):
 					showUseButton(false)
 			if(isBuy):
-				var price = GlobalRegistry.getModule("NanoRevolutionModule").getCraftCost(item)
+				var price = GlobalRegistry.getModule(MODULE_ID).getCraftCost(item)
 				if(GM.pc.getInventory().getAmountOf("NanoCore") < price):
 					$HBoxContainer/HBoxContainer/InteractButton.disabled = true
 				else:

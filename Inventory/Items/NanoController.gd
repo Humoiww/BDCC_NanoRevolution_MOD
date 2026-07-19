@@ -1,5 +1,7 @@
 extends ItemBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 var whoGaveBirth = ""
 
 func _init():
@@ -19,8 +21,8 @@ func getDescription():
 		desc += "Edit your body.(Charge:0)\n"
 	# if(GM.pc.getSpecies().has("nanoAndroid")):
 	# 	desc += "Call the android with your own backend.(Charge:4)\n"
-	var charge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1)
-	var fullcharge = GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerFullCharge", 10)
+	var charge = GM.main.getModuleFlag(MODULE_ID, "NanoControllerRemainCharge", 1)
+	var fullcharge = GM.main.getModuleFlag(MODULE_ID, "NanoControllerFullCharge", 10)
 	desc += "\n\nCharge remain: "+ str(charge) + "/" + str(fullcharge) + "\n"
 	desc += "["
 	for i in range(fullcharge):
@@ -37,7 +39,7 @@ func getDescription():
 
 
 func useInCombat(_attacker, _receiver):
-	if(GM.main.getModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", 1) >= 3):
+	if(GM.main.getModuleFlag(MODULE_ID, "NanoControllerRemainCharge", 1) >= 3):
 		var sexDollPool = GM.main.getDynamicCharacterIDsFromPool("SexDoll")
 		if(sexDollPool.size() > 0):
 			var idToUse = NpcFinder.grabNpcIDFromPool("SexDoll")
@@ -62,7 +64,7 @@ func useInCombat(_attacker, _receiver):
 				GM.main.IS.startInteraction("NanoAskSexService", {starter="pc", reacter=idToUse}, {})
 				GM.main.endCurrentScene()
 				return "A sex doll approach to your current location."
-			GM.main.increaseModuleFlag("NanoRevolutionModule", "NanoControllerRemainCharge", -3)
+			GM.main.increaseModuleFlag(MODULE_ID, "NanoControllerRemainCharge", -3)
 			return "You let your sex doll leave away, waiting for your next command."
 		else:
 			return "You don't have any Sex Doll, better go and get some?"

@@ -1,5 +1,7 @@
 extends EventBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 func _init():
 	id = "NanoTransformDynamicNpcEvent"
 

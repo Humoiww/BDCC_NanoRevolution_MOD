@@ -1,5 +1,7 @@
 extends "res://Scenes/SceneBase.gd"
 
+const MODULE_ID = "NanoRevolutionModule"
+
 var npcID = ""
 var sawBefore = false
 var npcVariation = ""
@@ -69,9 +71,9 @@ func _run():
 	if(state == ""):
 		addCharacter(npcID)
 		playAnimation(StageScene.Duo, "stand", {npc=npcID})
-	if(state == "" && !getModuleFlag("NanoRevolutionModule", "NanoCheckHappened", false)):
-		setModuleFlag("NanoRevolutionModule", "NanoCheckHappened", true)
-		setModuleFlag("NanoRevolutionModule", "NanoCheckSRefuseTimes", 0)
+	if(state == "" && !getModuleFlag(MODULE_ID, "NanoCheckHappened", false)):
+		setModuleFlag(MODULE_ID, "NanoCheckHappened", true)
+		setModuleFlag(MODULE_ID, "NanoCheckSRefuseTimes", 0)
 		saynn("As you walk around, a pool of black goo suddenly emerges from the ground, shaping itself into an android-like creature.")
 
 		saynn("{npc.himHer} gives you a stop sign.")
@@ -164,12 +166,12 @@ func _run():
 		saynn("[say=pc]How about you let me leave peacefully.[/say]")
 
 		saynn("The guard straightens eye start to flash")
-		increaseModuleFlag("NanoRevolutionModule", "NanoCheckSRefuseTimes", 1)
-		refuseTime = getModuleFlag("NanoRevolutionModule", "NanoCheckSRefuseTimes", 0)
+		increaseModuleFlag(MODULE_ID, "NanoCheckSRefuseTimes", 1)
+		refuseTime = getModuleFlag(MODULE_ID, "NanoCheckSRefuseTimes", 0)
 		severity = "tough"
 		if(refuseTime < 5):
 			severity = "slight"
-		elif((refuseTime < 10) || !(getModuleFlag("NanoRevolutionModule", "NanoToughEnable", true))):
+		elif((refuseTime < 10) || !(getModuleFlag(MODULE_ID, "NanoToughEnable", true))):
 			severity = "moderate"
 		if(refuseTime < 2):
 			saynn("[say=npc]I see, {pc.name}. Since this is the first time, we will let you leave. But let me explain our rule, after this time, we will force punishment on you. The severity of punishment is depending on your total refusing times. You can leave now.[/say]")
@@ -316,8 +318,8 @@ func _run():
 		
 	if(state == "hack_fail"):
 		saynn("You try to hack in, but nothing changed.")
-		if(!GM.main.getModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", false)):
-			GM.main.setModuleFlag("NanoRevolutionModule", "NanoTriggerKeyQuest", true)
+		if(!GM.main.getModuleFlag(MODULE_ID, "NanoTriggerKeyQuest", false)):
+			GM.main.setModuleFlag(MODULE_ID, "NanoTriggerKeyQuest", true)
 			saynn("Looks like you need to find the key first.")
 
 			addMessage("Add Quest: 'Figure out the key'")
@@ -437,7 +439,7 @@ func addWonButton():
 					ButtonChecks.NotBlindfolded,]
 	if(GM.pc.hasPerk("NanoSexMode")):
 		addButtonWithChecks("Hack!", "Try to hack in the android system", "enter_hack_scene", [], check)
-	if (GM.main.getModuleFlag("NanoRevolutionModule", "NanoUnlockQuickHack",false)):
+	if (GM.main.getModuleFlag(MODULE_ID, "NanoUnlockQuickHack",false)):
 		addButtonWithChecks("Quick Hack!", "Switch the mode of android instantly.", "quick_hack_scene", [], check)
 		
 		# addButton("Submit to", "Switch the android to dominative mode", "startsexsubby")
@@ -635,11 +637,11 @@ func _react(_action: String, _args):
 		newMode = _args[0]
 		if(newMode == "guard"):
 			setState("convert_to_guard_mode")
-			getModule("NanoRevolutionModule").doConvertCharacterGuard(npcID)
+			getModule(MODULE_ID).doConvertCharacterGuard(npcID)
 			return
 		if(newMode == "sex"):
 			setState("convert_to_sex_mode")
-			getModule("NanoRevolutionModule").doConvertCharacter(npcID)
+			getModule(MODULE_ID).doConvertCharacter(npcID)
 			return
 				
 	
@@ -676,18 +678,18 @@ func _react_scene_end(_tag, _result):
 		if(_result[0] == true):
 			GM.pc.addSkillExperience("NanoENGR", 20)
 			addMessage("You get more familiar with nano androids.")
-			if (!GM.main.getModuleFlag("NanoRevolutionModule", "NanoUnlockQuickHack",false)):
+			if (!GM.main.getModuleFlag(MODULE_ID, "NanoUnlockQuickHack",false)):
 				addMessage("Quick hack unlocked, you can change android's mode instantly after defeating the android")
-				GM.main.setModuleFlag("NanoRevolutionModule", "NanoUnlockQuickHack",true)
+				GM.main.setModuleFlag(MODULE_ID, "NanoUnlockQuickHack",true)
 			var parameter = _result[1]
 			newMode = parameter[0]
 			if(newMode == "guard"):
 				setState("convert_to_guard_mode")
-				getModule("NanoRevolutionModule").doConvertCharacterGuard(npcID)
+				getModule(MODULE_ID).doConvertCharacterGuard(npcID)
 			if(newMode == "sex"):
 				
 				setState("convert_to_sex_mode")
-				getModule("NanoRevolutionModule").doConvertCharacter(npcID)
+				getModule(MODULE_ID).doConvertCharacter(npcID)
 		else:
 			setState("hack_fail")
 

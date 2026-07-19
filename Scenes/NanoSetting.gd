@@ -1,5 +1,7 @@
 extends SceneBase
 
+const MODULE_ID = "NanoRevolutionModule"
+
 var nanoSpeciesDict = {}
 var nanoGenderDict = {}
 var baseGenderDict = {}
@@ -14,7 +16,7 @@ var pickedPartToChange = []
 var accessThroughControl = false
 
 func generate_random_times():
-	var mean_time: float = getModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", 21600.0)  # 6 hours
+	var mean_time: float = getModuleFlag(MODULE_ID, "NanoCheckTimePeriod", 21600.0)  # 6 hours
 	var std_dev: float = 3600
 	var time = randf() * std_dev + mean_time  # 6 ~ 9 hours cool down time
 	print("next generate time:")
@@ -62,29 +64,29 @@ func add_panel():
 
 func setSpeciesWeight(species,chance):
 	nanoSpeciesDict[species] = chance
-	setModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",nanoSpeciesDict)
+	setModuleFlag(MODULE_ID, "NanoAndroidSpeciesDistr",nanoSpeciesDict)
 
 func setGenderWeight(gender,chance):
 	nanoGenderDict[gender] = chance
-	setModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",nanoGenderDict)
+	setModuleFlag(MODULE_ID, "NanoAndroidGenderDistr",nanoGenderDict)
 
 func setSizeDict(size):
 	# print([pickedPartToChange[1]])
 	if (sizeDict[BodypartSlot.Penis] == null) or (sizeDict[BodypartSlot.Breasts] == null):
 		sizeDict = defaultSizeDict
 	sizeDict[pickedPartToChange[0]][pickedPartToChange[1]] = size
-	setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
+	setModuleFlag(MODULE_ID, "NanoAndroidSizePara", sizeDict)
 
 
 func toggleFlag(flag):
-	var current = getModuleFlag("NanoRevolutionModule", flag, true)
+	var current = getModuleFlag(MODULE_ID, flag, true)
 	if current:
-		setModuleFlag("NanoRevolutionModule", flag, false)
+		setModuleFlag(MODULE_ID, flag, false)
 	else:
-		setModuleFlag("NanoRevolutionModule", flag, true)
+		setModuleFlag(MODULE_ID, flag, true)
 
 func showEventState(desc,flag):
-	var enable = getModuleFlag("NanoRevolutionModule", flag, true)
+	var enable = getModuleFlag(MODULE_ID, flag, true)
 	if enable:
 		saynn("[color=green]Enable[/color]:\n" + desc)
 	else:
@@ -105,18 +107,18 @@ func _initScene(_args = []):
 		var weight = GM.main.getEncounterSettings().getSpeciesWeight(speciesID)
 		if(weight != null):
 			basicSpeciesDict[speciesID] =  weight
-	nanoSpeciesDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",{})
+	nanoSpeciesDict = getModuleFlag(MODULE_ID, "NanoAndroidSpeciesDistr",{})
 	if (!are_keys_equal(nanoSpeciesDict,basicSpeciesDict)):
 		print("different key detect, erase original")
 		nanoSpeciesDict = basicSpeciesDict
-		setModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",nanoSpeciesDict)
+		setModuleFlag(MODULE_ID, "NanoAndroidSpeciesDistr",nanoSpeciesDict)
 
 	var allgenders = NpcGender.getAll()
 	for gender in allgenders:
 		baseGenderDict[gender] = NpcGender.getDefaultWeight(gender)
-	nanoGenderDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
+	nanoGenderDict = getModuleFlag(MODULE_ID, "NanoAndroidGenderDistr",baseGenderDict)
 
-	defaultSizeDict = getModule("NanoRevolutionModule").getDefaultSize()
+	defaultSizeDict = getModule(MODULE_ID).getDefaultSize()
 	
 	accessThroughControl = false
 	timesCame = 0
@@ -271,7 +273,7 @@ func _run():
 
 		saynn("Currently our android gender distribution is:")
 
-		nanoGenderDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
+		nanoGenderDict = getModuleFlag(MODULE_ID, "NanoAndroidGenderDistr",baseGenderDict)
 		for gender in nanoGenderDict:
 			var weight = nanoGenderDict[gender]
 			sayn(str(gender)+": "+str(Util.roundF(weight*100.0, 1))+"%")
@@ -291,7 +293,7 @@ func _run():
 		addButton("Back", "Close this menu", "Q1")
 		add_panel()
 		sayn("Relative chances for the gender of encountered npcs:")
-		nanoGenderDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidGenderDistr",baseGenderDict)
+		nanoGenderDict = getModuleFlag(MODULE_ID, "NanoAndroidGenderDistr",baseGenderDict)
 		for gender in nanoGenderDict:
 			var genderName = gender
 			var weight = nanoGenderDict[gender]
@@ -316,7 +318,7 @@ func _run():
 
 		saynn("Currently our android reference species distribution is:")
 
-		nanoSpeciesDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",{})
+		nanoSpeciesDict = getModuleFlag(MODULE_ID, "NanoAndroidSpeciesDistr",{})
 		var species = GlobalRegistry.getAllPlayableSpecies()
 		for speciesID in species:
 			var speciesObject:Species = species[speciesID]
@@ -367,10 +369,10 @@ func _run():
 		saynn("Question 3:")
 
 		saynn("Currently our android visible component size range is:")
-		sizeDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",getModule("NanoRevolutionModule").getDefaultSize())
+		sizeDict = getModuleFlag(MODULE_ID, "NanoAndroidSizePara",getModule(MODULE_ID).getDefaultSize())
 		if (sizeDict[BodypartSlot.Penis] == null) or (sizeDict[BodypartSlot.Breasts] == null):
 			sizeDict = defaultSizeDict
-			setModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara", sizeDict)
+			setModuleFlag(MODULE_ID, "NanoAndroidSizePara", sizeDict)
 		sayn("Minimum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][1]))
 		sayn("Maximum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][2]))
 		sayn("Minimum Breast Size : " + BreastsSize.breastSizeToCupString(sizeDict[BodypartSlot.Breasts][1]))
@@ -387,7 +389,7 @@ func _run():
 		add_panel()
 
 		saynn("Currently our android visible component size range is:")
-		sizeDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSizePara",getModule("NanoRevolutionModule").getDefaultSize())
+		sizeDict = getModuleFlag(MODULE_ID, "NanoAndroidSizePara",getModule(MODULE_ID).getDefaultSize())
 
 		sayn("Minimum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][1]))
 		sayn("Maximum Penis Length : " + Util.cmToString(sizeDict[BodypartSlot.Penis][2]))
@@ -433,13 +435,13 @@ func _run():
 		# var prob = float(targetWeight)/(float(targetWeight) + totalWeight)
 		# print(prob)
 		# var probability = ("%.2f" % (prob*100)) + "%"
-		# var currentCheckProb = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", 0.1)
+		# var currentCheckProb = GM.main.getModuleFlag(MODULE_ID, "NanoCheckTimePeriod", 0.1)
 		add_panel()
 
 		saynn("Question 4:")
 		# saynn("[color=red]This question is no longer valid since the last cell update, but we’ve decided to keep this part for future development. \n --Humoi (∠・ω<)[/color]")
 		# saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
-		var prob = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckChance", 0.1)
+		var prob = GM.main.getModuleFlag(MODULE_ID, "NanoCheckChance", 0.1)
 		saynn("If you haven't been searched today, the NanoGuard has a [color=red]" + str(prob*100) + "%[/color] chance to frisk you during each encounter.")
 		saynn("Are you comfortable with this? If you'd like to adjust, please click \"Edit\" to make changes. Otherwise, click \"Next\" to proceed to the next question")
 		
@@ -452,7 +454,7 @@ func _run():
 
 	if(state == "Q4_menu"):
 		add_panel()
-		var prob = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckChance", 0.1)
+		var prob = GM.main.getModuleFlag(MODULE_ID, "NanoCheckChance", 0.1)
 		saynn("If you haven't been searched today, the NanoGuard has a [color=red]" + str(prob*100) + "%[/color] chance to frisk you during each encounter.")
 		saynn("Change the prefered probablity through following selection. Click the \"Done button\" if you are satisfied with current selection. ")
 		# var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]
@@ -537,7 +539,7 @@ func _run():
 	if(state == "return_datapad"):
 		saynn("You complete all these questions. Humoi grab her datapad back and giggles.")
 
-		if(!getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false)):
+		if(!getModuleFlag(MODULE_ID, "NanoMeetHumoi", false)):
 			saynn("[say=humoi]Looks like someone is waiting for {pc.hisHer} rewards... Oh, I almost forgot. Here, take this controller. Next time, if you want to adjust your response, you can use this instead of tracking me down.[/say]")
 
 			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
@@ -550,7 +552,7 @@ func _run():
 		saynn("[say=pc]Sorry,I am quite busy now.[/say]")
 
 		saynn("Humoi chuckles and grabs the datapad back.")
-		if !(getModuleFlag("NanoRevolutionModule","NanoMeetHumoi",false)):
+		if !(getModuleFlag(MODULE_ID,"NanoMeetHumoi",false)):
 			saynn("[say=humoi]It’s fine. Just remember, you’re always free to find me and change your options. I’m lilac, so you’ll know where to find me. Also, here, take this controller. You can use it to change your response instead of hunting me down. See you around~[/say]")
 
 			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
@@ -561,7 +563,7 @@ func _run():
 	if(state == "skip_and_sex"):
 		saynn("Humoi giggles and put the datapad beside.")
 
-		if !(getModuleFlag("NanoRevolutionModule","NanoMeetHumoi",false)):
+		if !(getModuleFlag(MODULE_ID,"NanoMeetHumoi",false)):
 			saynn("[say=humoi]You don’t want to take the survey? That’s totally fine. Just take this controller, so you can respond whenever you’re ready.[/say]")
 			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
 			saynn("[say=humoi]Now, make me~[/say]")
@@ -572,7 +574,7 @@ func _run():
 		addButton("Leave","You changed your idea","after_sex")
 
 	if(state == "after_sex"):
-		if(!getModuleFlag("NanoRevolutionModule", "NanoMeetHumoi", false)):
+		if(!getModuleFlag(MODULE_ID, "NanoMeetHumoi", false)):
 			if(timesCame < 1):
 				saynn("[say=humoi]Stop now? Ok, if you really in hurry. Just remember, you are free to find me and change responses. I'm lilac, so you know where you can find me. See you around~[/say]")
 			elif(timesCame < 5):
@@ -608,10 +610,10 @@ func _react(_action: String, _args):
 			var weight = GM.main.getEncounterSettings().getSpeciesWeight(speciesID)
 			if(weight != null):
 				basicSpeciesDict[speciesID] =  weight
-		nanoSpeciesDict = getModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",{})
+		nanoSpeciesDict = getModuleFlag(MODULE_ID, "NanoAndroidSpeciesDistr",{})
 		if (!are_keys_equal(nanoSpeciesDict,basicSpeciesDict)):
 			nanoSpeciesDict = basicSpeciesDict
-			setModuleFlag("NanoRevolutionModule", "NanoAndroidSpeciesDistr",nanoSpeciesDict)
+			setModuleFlag(MODULE_ID, "NanoAndroidSpeciesDistr",nanoSpeciesDict)
 
 	if(_action == "startsexasdom"):
 		runScene("GenericSexScene", ["pc", "humoi"], "domsex")
@@ -620,7 +622,7 @@ func _react(_action: String, _args):
 		var _ok = OS.shell_open("https://github.com/Humoiww/BDCC_NanoRevolution_MOD/issues/new/choose")
 
 	if(_action == "endthescene"):
-		setModuleFlag("NanoRevolutionModule","NanoMeetHumoi",true)
+		setModuleFlag(MODULE_ID,"NanoMeetHumoi",true)
 		endScene()
 		return
 	if(_action == "talkandendscene"):
@@ -636,15 +638,15 @@ func _react(_action: String, _args):
 	if(_action == "Q4_edit"):
 		if(_args.size() > 0):
 			# var target_Hour = _args[0]
-			# GM.main.setModuleFlag("NanoRevolutionModule", "NanoCheckTimePeriod", target_Hour)
-			# GM.main.setModuleFlag("NanoRevolutionModule", "NanoNextCheckTime", generate_random_times())
+			# GM.main.setModuleFlag(MODULE_ID, "NanoCheckTimePeriod", target_Hour)
+			# GM.main.setModuleFlag(MODULE_ID, "NanoNextCheckTime", generate_random_times())
 			var target_prob = _args[0]
 			if(target_prob < 0):
 				target_prob = 0
 			if(target_prob > 1):
 				target_prob = 1
-				# var prob = GM.main.getModuleFlag("NanoRevolutionModule", "NanoCheckChance", 0.1)
-			setModuleFlag("NanoRevolutionModule", "NanoCheckChance", target_prob)
+				# var prob = GM.main.getModuleFlag(MODULE_ID, "NanoCheckChance", 0.1)
+			setModuleFlag(MODULE_ID, "NanoCheckChance", target_prob)
 			# var new_weight = float(totalWeight)*target_prob/(1-target_prob)
 			# print("debug:")
 			# print(totalWeight)
@@ -683,9 +685,9 @@ func _react(_action: String, _args):
 
 	# if you make setting through controller
 	if(_action == "no_change" || _action == "return_datapad" || _action == "skip_and_sex"):
-		if (!getModuleFlag("NanoRevolutionModule", "NanoHasController",false)):
+		if (!getModuleFlag(MODULE_ID, "NanoHasController",false)):
 			GM.pc.getInventory().addItemID("NanoController")
-			setModuleFlag("NanoRevolutionModule", "NanoHasController",true)
+			setModuleFlag(MODULE_ID, "NanoHasController",true)
 		if accessThroughControl:
 			endScene()
 			return
