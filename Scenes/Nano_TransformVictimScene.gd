@@ -127,10 +127,10 @@ func _run():
 		playAnimation(StageScene.Duo, "stand", {pc="pc", npc=npcID, npcAction="kneel",npcCum=true,bodyState={naked=true, hard=true}, npcBodyState={naked=true, hard=true}})
 
 		
-		var npc = GlobalRegistry.getCharacter(npcID)
+		# var npc = GlobalRegistry.getCharacter(npcID)
 
 
-		GlobalRegistry.getModule("NanoRevolutionModule").transformCharToNano(npc)
+		GlobalRegistry.getModule("NanoRevolutionModule").transformCharToNano(npcID)
 		GlobalRegistry.getModule("NanoRevolutionModule").doConvertCharacter(npcID)
 		
 		# print(npc.pawnID)

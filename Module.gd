@@ -1,38 +1,6 @@
 extends Module
 class_name NanoModule
 
-# 0.5 plan
-# I really need to erase the Alex content, so make it simple, when contact the nano bot, Humoi will point out a warning, to hint player if you want to do transform, just keep contact nano bots.
-# add the something called infection rate 
-# How this work, reference to BoS module in Skyrim
-# add the event when you transform to android, some will try to hack you
-# this is more like portal pants event, but somewhat force
-	# the issue need to done is to change the way that pc interact with others.
-	# few options:
-		#1. add a mask when player try to interact someone, then force close current interaction
-			# and switch to new scene
-		#2. Or change the interaction code, but this could be much harder
-	# How can player escape this?
-		# Simple: find  Humoi to reset current condition. x
-# Honestly, I want to reduce the Alex contents
-# you see, sometimes Alex and Humoi contents are greatly overlap
-# Plus Alex line is comprehensive now...
-# Hmmm Interesting Idea, Humoi, she is the network it self, the network building is actually 
-# extract part of her, and expand like the network....
-
-
-
-# Let's build a proper workflow! (ignore this for now better for 0.6)
-# Key Finding Line Rework
-	# When you try to hack in nano android, key find line start!
-		# First, the android will notice the administrator requirement, attach with an connect address
-		# Then player can use this address to connect someone(Humoi actually)
-		# Notice that, to do this we need to add controller function (network texting!)
-		# Then if player ask humoi for the code, the humoi will offer a quest
-		# quest: testing humoi new nano prototype - taint!
-			# why don't self: answer, need someone abort if too dangerous
-			# provide others?: 
-
 
 var interactions = []
 var pawnTypes = []
@@ -191,6 +159,19 @@ func doConvertCharacterGuard(npcID):
 	GM.main.addDynamicCharacterToPool(npcID, "NanoGuard")
 	return true
 
+func addContamination(character, amount):
+	var contamination_effect = character.getEffect("Nano_Contamination")
+	var current_stacks = 0
+	if contamination_effect != null:
+		current_stacks = contamination_effect.stacks
+
+	var will_reach_100 = (current_stacks + amount) >= 100
+	
+	character.addEffect("Nano_Contamination", [amount])
+	
+	if character == GM.pc and will_reach_100:
+		GM.main.endCurrentScene()
+		GM.main.runScene("NanoTransformPCScene")
 
 func _init():
 	id = "NanoRevolutionModule"
@@ -219,6 +200,7 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/NanoAndroidFunction/NanoCharacterScene.gd",
 		# transform scene
 		"res://Modules/NanoRevolution/Scenes/Nano_TransformVictimScene.gd",
+		"res://Modules/NanoRevolution/Scenes/NanoTransformPCScene.gd",
 		"res://Modules/NanoRevolution/Scenes/HumoiQuestScene.gd",
 		]
 	characters = [
@@ -296,6 +278,7 @@ func _init():
 		"res://Modules/NanoRevolution/Interaction/NanoAndroidGenericAttack.gd",
 		"res://Modules/NanoRevolution/Interaction/NanoGuardBasicInteraction.gd",
 		"res://Modules/NanoRevolution/Interaction/NanoGuardFrisk.gd",
+		"res://Modules/NanoRevolution/Interaction/ForceWalkToHumoiInteraction.gd",
 	]
 	pawnTypes =[
 		"res://Modules/NanoRevolution/Characters/Dynamic/NanoAndroidPawn/SexDoll.gd",
@@ -351,9 +334,13 @@ func getCraftCost(itemObject:ItemBase):
 	return ceil(itemObject.getPrice()/5.0) if (itemObject.getPrice()>0) else 1.0
 
 
-func transformCharToNano(thePC:Character):
-	
-	thePC.npcSpecies = ["nanoAndroid"]
+func transformCharToNano(npcID):
+	var thePC = GlobalRegistry.getCharacter(npcID)
+
+	if thePC.isPlayer():
+		thePC.setSpecies(["nanoAndroid"]) # yeah this magical function change PC's species 
+	else:
+		thePC.npcSpecies = ["nanoAndroid"]
 	var pcSkinData={
 		"hair": {"r": Color("ff21253e"),"g": Color("ff4143a8"),"b": Color("ff000000"),},
 		"penis": {"r": Color("ff242424"),"g": Color("ff070707"),"b": Color("ff01b2f9"),},
@@ -363,7 +350,7 @@ func transformCharToNano(thePC:Character):
 	thePC.pickedSkinGColor=Color("ff363636")
 	thePC.pickedSkinBColor=Color("ff678def")
 	
-	# thePC.setSpecies(["nanoAndroid"]) # yeah this magical function change PC's species 
+	
 	
 
 	for bodypartSlot in pcSkinData:

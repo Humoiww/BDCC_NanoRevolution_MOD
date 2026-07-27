@@ -456,9 +456,11 @@ func addWonButton():
 
 func _react(_action: String, _args):
 	if(_action == "do_absorb"):
+		# print("DEBUG: NPC ID for absorption is: ", npcID)
 		var npc = getCharacter(npcID)
 		var level = npc.npcLevel
-		var finalExp = 0
+		# print("DEBUG: NPC Level for absorption is: ", level)
+		var finalExp = 100
 		for i in range(level):
 			finalExp += 100 + i * 10 + int(sqrt(max(0,i))) * 10
 		addMessage("You absorb "+str(finalExp)+" experience and from " +npc.getName() + ".")
