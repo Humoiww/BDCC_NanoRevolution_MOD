@@ -202,6 +202,7 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/Nano_TransformVictimScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoTransformPCScene.gd",
 		"res://Modules/NanoRevolution/Scenes/HumoiQuestScene.gd",
+		"res://Modules/NanoRevolution/Scenes/NanoAwakenScene.gd",
 		]
 	characters = [
 		"res://Modules/NanoRevolution/Characters/NanoAssemble.gd",

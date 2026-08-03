@@ -17,7 +17,7 @@ func init_do(_id:String, _args:Dictionary, _context:Dictionary):
 	if(_id == "continue"):
 		goTowards("cellblock_lilac_nearcell")
 		if(getLocation() == "cellblock_lilac_nearcell"):
-			setState("arrived", "walker")
+			setState("arrived", "main")
 		else:
 			setState("", "main")
 
@@ -30,5 +30,5 @@ func arrived_text():
 
 func arrived_do(_id:String, _args:Dictionary, _context:Dictionary):
 	if _id == "continue":
-		runScene("NanoSetting",["see_again_first"]) #change here, put humoi fix you scene
+		runScene("NanoAwakenScene")
 		stopMe()
