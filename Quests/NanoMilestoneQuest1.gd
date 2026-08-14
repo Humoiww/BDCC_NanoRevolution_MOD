@@ -11,7 +11,9 @@ func getVisibleName():
 func getProgress():
 	var result = []
 	
-	if GM.main.getModuleFlag(MODULE_ID, "Milestone1_WaitedOneDay", false):
+	if GM.main.getModuleFlag(MODULE_ID, "Chapter1_contamination_start", false):
+		result.append("Your body is changing. The nano-contamination is spreading, rewriting your very being. Is this the future Humoi spoke of?")
+	elif GM.main.getModuleFlag(MODULE_ID, "Milestone1_WaitedOneDay", false):
 		result.append("Preliminary analysis is complete. You should report back to Humoi.")
 	elif GM.main.getModuleFlag(MODULE_ID, "Milestone1_IsWaiting", false):
 		result.append("Humoi is analyzing the data. Check back with her tomorrow.")

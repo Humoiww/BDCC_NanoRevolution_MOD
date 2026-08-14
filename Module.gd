@@ -67,6 +67,7 @@ func getFlags():
 		"Chapter1_Completed": flag(FlagType.Bool),
 		"Milestone1_IsWaiting": flag(FlagType.Bool),
 		"Milestone1_WaitedOneDay": flag(FlagType.Bool),
+		"Chapter1_contamination_start": flag(FlagType.Bool),
 		
 		# Daily Quests
 		"NanoDailyQuestInfo": flag(FlagType.Dict),
@@ -165,13 +166,22 @@ func addContamination(character, amount):
 	if contamination_effect != null:
 		current_stacks = contamination_effect.stacks
 
-	var will_reach_100 = (current_stacks + amount) >= 100
+	var new_stacks = current_stacks + amount
 	
 	character.addEffect("Nano_Contamination", [amount])
-	
-	if character == GM.pc and will_reach_100:
-		GM.main.endCurrentScene()
-		GM.main.runScene("NanoTransformPCScene")
+
+	if character == GM.pc:
+		var contamination_started = GM.main.getModuleFlag(id, "Chapter1_contamination_start", false)
+		if new_stacks >= 20 and not contamination_started:
+			GM.main.setModuleFlag(id, "Chapter1_contamination_start", true)
+			GM.main.addMessage("Quest Updated: A Spark of Revolution")
+			GM.main.endCurrentScene()
+			GM.main.runScene("NanoTransformPCScene")
+			return
+
+		if new_stacks >= 100:
+			GM.main.endCurrentScene()
+			GM.main.runScene("NanoTransformPCScene")
 
 func _init():
 	id = "NanoRevolutionModule"
