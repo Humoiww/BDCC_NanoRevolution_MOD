@@ -20,27 +20,7 @@ func run(_triggerID, _args):
 		return
 	if(GM.pc.hasPerk("NanoAssimilation")):
 		addButtonWithChecks("Assimilate", "Inject your nano robots to their body.", "doTransfrom", [_args[0]],[ButtonChecks.HasReachablePenis,ButtonChecks.HasReachableVagina,ButtonChecks.NotHandsBlocked,ButtonChecks.NotArmsRestrained])
-	# addButton("Debug2!", "Try to enslave them", "doenslave", [_args[0]])
-	# GlobalRegistry.getModule("NanoRevolutionModule").debugSceneStack()
-	# if(character.hasEnslaveQuest()):
-	# 	var enslaveQuest:NpcEnslavementQuest = character.getEnslaveQuest()
-	# 	if(enslaveQuest.isEverythingCompleted()):
-			
-	# 	else:
-	# 		addDisabledButton("Kidnap!", "They are not ready to be kidnapped")
-	# else:
-	# 	if(!getModule("NpcSlaveryModule").canEnslave()):
-	# 		if(_triggerID == Trigger.DefeatedDynamicNPC):
-	# 			addDisabledButton("Enslave!", "Your cell is not big enough for this. Find someone who can upgrade it first.")
-	# 		return
-		
-	# 	if(!character.hasEnslaveQuest() ):
-	# 		if(character.getInventory().hasEquippedItemWithTag(ItemTag.AllowsEnslaving)):
-				
-	# 		else:
-	# 			if(_triggerID == Trigger.DefeatedDynamicNPC):
-	# 				addDisabledButton("Enslave!", "They need to be wearing a collar for you to be able to enslave them")
-		
+
 
 func getPriority():
 	return 0

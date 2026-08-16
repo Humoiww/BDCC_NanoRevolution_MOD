@@ -1,5 +1,5 @@
 extends "res://Scenes/SceneBase.gd"
-
+# warning! this file only has extraction scene
 const MODULE_ID = "NanoRevolutionModule"
 
 var npcID = ""
@@ -185,6 +185,11 @@ func _run():
 			addButton("Fight", "Start the fight", "fight")
 
 	if(state == "lost_fight"):
+		severity = "tough"
+		if(refuseTime < 5):
+			severity = "slight"
+		elif((refuseTime < 10) || !(getModuleFlag(MODULE_ID, "NanoToughEnable", true))):
+			severity = "moderate"
 		if(severity == "slight"):
 			playAnimation(StageScene.Duo, "Standing", {pc = npcID, npc="pc"})
 			saynn("Defeated, you fall to your knees.")
@@ -358,6 +363,7 @@ func _run():
 			saynn("You pull it out, and suddenly, the android guard colapse and become a pad of black goo, slip away")
 
 			saynn("You have a feeling that you will never meet {npc.name} again")
+			print("bug1")
 			GM.main.removeDynamicCharacterFromAllPools(npcID)
 			addButton("Done", "Weird", "allowFullAndendthescene")
 
@@ -410,12 +416,13 @@ func _run():
 
 	if(state == "convert_to_sex_mode"):
 		saynn("You successfully convert the android to sex mode.")
+		getModule(MODULE_ID).doConvertCharacter(npcID)
 		addWonButton()
 		# addButton("Continue","See what happened next","convertsexend")
 
 	if(state == "convert_to_guard_mode"):
 		saynn("You switch the android to guard mode.")
-		
+		getModule(MODULE_ID).doConvertCharacterGuard(npcID)
 		addWonButton()
 
 	if(state == "quick_hack_scene"):
@@ -426,6 +433,7 @@ func _run():
 	if(state == "do_absorb"):
 		playAnimation(StageScene.Choking, "idle", {pc = "pc", npc=npcID})
 		saynn("You grab {npc.name}'s neck, absorb them through your hand.")
+		GM.main.removeDynamicCharacter(npcID)
 		addButton("Done...", "You need more...", "allowFullAndendthescene")
 
 func addWonButton():
@@ -535,7 +543,8 @@ func _react(_action: String, _args):
 		GM.pc.cummedInMouthBy(npcID, FluidSource.Penis)
 		GM.pc.addSkillExperience(Skill.SexSlave, 20)
 	if(_action == "allowFullAndendthescene"):
-		GM.main.removeDynamicCharacter(npcID)
+		# print("bug3")
+		# GM.main.removeDynamicCharacter(npcID)
 		endScene()
 		return
 
@@ -678,7 +687,7 @@ func _react_scene_end(_tag, _result):
 	if(_tag == "computerhack"):
 		print(_result)
 		if(_result[0] == true):
-			GM.pc.addSkillExperience("NanoENGR", 20)
+			GM.pc.addSkillExperience("NanoENGR", 70)
 			addMessage("You get more familiar with nano androids.")
 			if (!GM.main.getModuleFlag(MODULE_ID, "NanoUnlockQuickHack",false)):
 				addMessage("Quick hack unlocked, you can change android's mode instantly after defeating the android")

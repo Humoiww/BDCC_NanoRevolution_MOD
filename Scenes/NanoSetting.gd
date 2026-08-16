@@ -148,7 +148,7 @@ func _run():
 
 		addButton("Datapad?","How can an inmate have this?","keep_ask")
 	if(state == "keep_ask"):
-		saynn("[say=humoi]This datapad? It’s for my part-time job with the medical department, checking on inmates' psychological status.[/say]")
+		saynn("[say=humoi]This datapad? It's for my part-time job with the medical department, checking on inmates' psychological status.[/say]")
 
 		saynn("[say=pc]Psychological status?[/say]")
 
@@ -164,6 +164,8 @@ func _run():
 
 		saynn("Well, maybe that's why she suggested a questionnaire solution to the medic.")
 
+		saynn("[say=humoi]Oh, by the way, you look like someone who gets things done. Come and see me in my lilac cell after this, I've got a [tornado radius=2.0 freq=1.0][rainbow]special gift[/rainbow][/tornado] for you.[/say]")
+		
 		addButton("Certainly","I can do that. \n(Note: this questionnaire actually is an in-game setting scene for you to adjust the nano android spawning rule.)","Start_survey")
 		addButton("Nope","I don't care about android settings. Default is just fine","no_change")
 		addButton("Sex?","Check if the survey is really necessary.","skip_and_sex")
@@ -203,7 +205,12 @@ func _run():
 
 		addButton("Certainly","Do the survey","Start_survey")
 		addButton("Sex?","You just come here for sex","skip_and_sex")
-		addButton("Talk","You want to understand more about her.","talkandendscene")
+
+		var module = GlobalRegistry.getModule("NanoRevolutionModule")
+		if module.hasEmergyWithHumoi():
+			addButton("Talk(!)","You've got some emergency stuff with her.","talkEmergencyAndendscene")
+		else:
+			addButton("Talk","You want to understand more about her.","talkandendscene")
 		addButton("Leave","Sorry, wrong cell","endthescene")
 		# addButton("Debug","comment this","test_effects")
 	if(state == "test_effects"):
@@ -439,7 +446,7 @@ func _run():
 		add_panel()
 
 		saynn("Question 4:")
-		# saynn("[color=red]This question is no longer valid since the last cell update, but we’ve decided to keep this part for future development. \n --Humoi (∠・ω<)[/color]")
+		# saynn("[color=red]This question is no longer valid since the last cell update, but we've decided to keep this part for future development. \n --Humoi (∠・ω<)[/color]")
 		# saynn("While walking around the cell area, you have a "+  probability +" chance of being frisked by a nano guard.")
 		var prob = GM.main.getModuleFlag(MODULE_ID, "NanoCheckChance", 0.1)
 		saynn("If you haven't been searched today, the NanoGuard has a [color=red]" + str(prob*100) + "%[/color] chance to frisk you during each encounter.")
@@ -495,12 +502,17 @@ func _run():
 		addButtonAt(14,"Done","Save changes","Q4")
 	if(state == "Q5"):
 		add_panel()
-		saynn("[color=red]Please note that since 0.5.0 update, this option is no longer avalaible[/color]")
-		saynn("Now, imagine you’re the manager of this program. Here are some actions the androids might take with inmates. You have the authority to enable or disable these events. Toggle your choices, and click \"Next\" when you’re satisfied.")
+		# saynn("[color=red]Please note that since 0.5.0 update, this option is no longer avalaible[/color]")
+		saynn("Now, here's some preference setting (ﾉ>ω<)ﾉ! You have the authority to enable or disable these events. Toggle your choices, and click \"Next\" when you're satisfied.")
 		
-		var flag = "NanoToughEnable"
-		showEventState("The android guard will enforce tough anus punishment if an inmate’s refusal times exceeds 10.",flag)
-		addButton("Tough Punish","toggle this","Q5_change",[flag])
+		# var flag = "NanoToughEnable"
+		# showEventState("The android guard will enforce tough anus punishment if an inmate's refusal times exceeds 10.","NanoToughEnable")
+		# addButton("Tough Punish","toggle this","Q5_change",["NanoToughEnable"]) 
+
+		showEventState("The UI theme will change based on your contamination level. (Note: you need to restart game to restore the original UI)","NanoEnableThemeChangeByContamination")
+		addButton("Dynamic Theme","toggle this","Q5_change",["NanoEnableThemeChangeByContamination"]) 
+
+
 		addButtonAt(10,"Next","go to the last question","Q_end")
 		addButtonAt(11,"Last","I want to review the last question","Q4")
 		addButtonAt(12,"Menu","Back to main menu","menu")
@@ -542,7 +554,7 @@ func _run():
 		if(!getModuleFlag(MODULE_ID, "NanoMeetHumoi", false)):
 			saynn("[say=humoi]Looks like someone is waiting for {pc.hisHer} rewards... Oh, I almost forgot. Here, take this controller. Next time, if you want to adjust your response, you can use this instead of tracking me down.[/say]")
 
-			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
+			saynn("She hands you a pad-like item. For some reason, you can't resist taking it.")
 		else:
 			saynn("[say=humoi]Looks like someone is waiting for {pc.hisHer} rewards~[/say]")
 		addButtonWithChecks("Sex!", "Time to fuck them!", "startsexasdom", [], [ButtonChecks.CanStartSex])
@@ -553,9 +565,9 @@ func _run():
 
 		saynn("Humoi chuckles and grabs the datapad back.")
 		if !(getModuleFlag(MODULE_ID,"NanoMeetHumoi",false)):
-			saynn("[say=humoi]It’s fine. Just remember, you’re always free to find me and change your options. I’m lilac, so you’ll know where to find me. Also, here, take this controller. You can use it to change your response instead of hunting me down. See you around~[/say]")
+			saynn("[say=humoi]It's fine. Just remember, you're always free to find me and change your options. I'm lilac, so you'll know where to find me. Also, here, take this controller. You can use it to change your response instead of hunting me down. See you around~[/say]")
 
-			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
+			saynn("She hands you a pad-like item. For some reason, you can't resist taking it.")
 		else:
 			saynn("[say=humoi]It's fine. See you then~[/say]")
 		addButton("Leave","Maybe next time","endthescene")
@@ -564,8 +576,8 @@ func _run():
 		saynn("Humoi giggles and put the datapad beside.")
 
 		if !(getModuleFlag(MODULE_ID,"NanoMeetHumoi",false)):
-			saynn("[say=humoi]You don’t want to take the survey? That’s totally fine. Just take this controller, so you can respond whenever you’re ready.[/say]")
-			saynn("She hands you a pad-like item. For some reason, you can’t resist taking it.")
+			saynn("[say=humoi]You don't want to take the survey? That's totally fine. Just take this controller, so you can respond whenever you're ready.[/say]")
+			saynn("She hands you a pad-like item. For some reason, you can't resist taking it.")
 			saynn("[say=humoi]Now, make me~[/say]")
 		else:
 			saynn("[say=humoi]Looks like someone is pretty horny today. Yes, use me as an useless sextoy~[/say]")
@@ -630,10 +642,6 @@ func _react(_action: String, _args):
 		endScene()
 		return
 		
-	if(_action == "ask_key_second"):
-		runScene("HumoiSecondKeyScene")
-		endScene()
-		return
 
 	if(_action == "Q4_edit"):
 		if(_args.size() > 0):
@@ -681,6 +689,13 @@ func _react(_action: String, _args):
 	if(_action == "Q5_change"):
 		toggleFlag(_args[0])
 		setState("Q5")
+		return
+
+	if(_action == "talkEmergencyAndendscene"):
+		if GM.main.getModuleFlag(MODULE_ID, "NanoChapter1_contamination_start", false) and not GM.main.getModuleFlag(MODULE_ID, "NanoChapter1_contamination_start_find_humoi", false):
+			GM.main.setModuleFlag(MODULE_ID, "NanoChapter1_contamination_start_find_humoi", true)
+			runScene("NanoChapter1HumoiTalkAboutContaminationScene")
+		endScene()
 		return
 
 	# if you make setting through controller

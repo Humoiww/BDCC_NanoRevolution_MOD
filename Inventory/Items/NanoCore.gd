@@ -30,6 +30,11 @@ func useInCombat(_attacker, _receiver):
 		_attacker.addPain(100000)
 		_attacker.addStamina(-1000)
 		_attacker.addLust(100000)
+	# add contamination
+	desc += "\n taste like nano goo"
+	var module = GlobalRegistry.getModule("NanoRevolutionModule")
+	if module != null:
+		module.addContamination(_attacker, 30)
 	removeXOrDestroy(1)
 	return desc
 

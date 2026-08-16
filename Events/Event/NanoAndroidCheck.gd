@@ -9,6 +9,8 @@ func registerTriggers(es):
 	es.addTrigger(self, Trigger.EnteringRoom)
 
 func updateEverything():
+	# GlobalRegistry.getModule("NanoRevolutionModule").updateThemeByContamination() #lagging
+
 	# update occurance
 	var weighEvents = GM.ES.eventTriggers[Trigger.HighExposureInmateEvent]	
 	for i in range(weighEvents.events.size()):
@@ -55,23 +57,49 @@ func run(_triggerID, _args):
 
 	# addButton("DEBUG GEN","generate_android pawn????","generate_android")
 
-	addButton("DEBUG THEME","switch current theme????","switch_scene")
-	addButton("DEBUG CONTAMINATION", "Add 20 contamination to player", "add_contamination")
-	addButton("DEBUG WALK", "Force walk to Humoi's cell", "force_walk")
+	# addButton("DEBUG THEME","switch current theme????","switch_scene")
+	# addButton("DEBUG CONTAMINATION", "Add 20 contamination to player", "add_contamination")
+	# addButton("DEBUG DeCONTAMINATION", "Sub 20 contamination to player", "sub_contamination")
+	# addButton("DEBUG WALK", "Force walk to Humoi's cell", "force_walk")
+	# addButton("DEBUG SKIN", "Store player skin colors", "store_skin")
+	# addButton("DEBUG RESTORE SKIN", "Restore player skin colors", "restore_skin")
+	# addButton("DEBUG Cot SKIN", "Restore player skin colors", "cot_skin")
 	
 
 func getPriority():
 	return 1
 
 func onButton(_method, _args):
+	if(_method == "cot_skin"):
+		var module = GlobalRegistry.getModule("NanoRevolutionModule")
+		if module != null:
+			module.updatePlayerSkinByContamination()
+		return
+	if(_method == "restore_skin"):
+		var module = GlobalRegistry.getModule("NanoRevolutionModule")
+		if module != null:
+			module.restorePlayerSkinColors()
+		return
+
+	if(_method == "store_skin"):
+		var module = GlobalRegistry.getModule("NanoRevolutionModule")
+		if module != null:
+			module.storePlayerSkinColors()
+		return
+
 	if(_method == "generate_android"):
 		generateAndroidBaseCount(1)
 
 	if(_method == "add_contamination"):
 		var module = GlobalRegistry.getModule("NanoRevolutionModule")
 		if module != null:
-			module.addContamination(GM.pc, 20)
+			module.addContamination(GM.pc, 5)
 	
+	if(_method == "sub_contamination"):
+		var module = GlobalRegistry.getModule("NanoRevolutionModule")
+		if module != null:
+			module.addContamination(GM.pc, -5)
+
 	if(_method == "force_walk"):
 		GM.main.IS.startInteraction("ForceWalkToHumoiInteraction", {main = "pc"})
 		# emit_signal("triggered")

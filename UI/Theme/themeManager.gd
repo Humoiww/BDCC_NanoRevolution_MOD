@@ -4,8 +4,10 @@ class_name ThemeManager
 
 
 # Change the entire UI theme to the given color (default: SkyBlue)
-static func change_theme(panelcolor: Color = Color8(25, 25, 35)) -> void:
+static func change_theme(panelcolor: Color = Color8(25, 25, 35), backgroundColor: Color = Color8(5, 5, 5)) -> void:
 	var _DEFAULT_PANEL_COLOR = Color8(53,34,93)
+	var _DEFAULT_BACKGROUND_COLOR = Color8(63,62,125)
+	
 	# build a fresh Theme
 	# 1) Build the SkyBlue theme
 	var path = "res://GlobalTheme.tres"
@@ -34,7 +36,7 @@ static func change_theme(panelcolor: Color = Color8(25, 25, 35)) -> void:
 	_apply_theme_recursively(root_vp, t)
 	# recolor_game_ui_panels(Color8(25, 25, 35))
 	recolor_game_ui_panels(panelcolor)
-	VisualServer.set_default_clear_color(Color.black)
+	VisualServer.set_default_clear_color(backgroundColor)
 
 
 

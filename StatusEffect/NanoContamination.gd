@@ -23,10 +23,22 @@ func initArgs(_args = []):
 	
 func processTime(_seconds: int):
 	# if is already an android,  prevent natrol fall off
+	var hours = (_seconds / 3600.0)
 	if(!isNanoAndroid()):
-		var hours = (_seconds / 3600.0)
+
 
 		stacks = stacks - hours
+		if(!character):
+			return
+		if(character == GM.pc):
+			var module = GlobalRegistry.getModule("NanoRevolutionModule")
+			if module != null:
+				module.addContamination(GM.pc, 0)
+			return
+	else:
+		# if is android, progressly generate nano android goo, resource for future
+		stacks = stacks + hours
+
 	# clampOrRemove()
 
 # func onSleeping():

@@ -20,6 +20,8 @@ func useInCombat(_attacker, _receiver):
 	var desc
 	desc = _attacker.getName() + "read the manual, and learn how to use the controller to hack android."
 	GM.pc.getSkillsHolder().addPerk("NanoSexMode")
+	GM.pc.addSkillExperience("NanoENGR", 110)
+	GM.main.setModuleFlag(MODULE_ID, "NanoHaveReadManual", true)
 	removeXOrDestroy(1)
 	return desc
 

@@ -20,8 +20,8 @@ func sayCharater(ch,text):
 
 func addBackStoryButton():
 	addButton("Crime","How did she get here?","what_crime")
-	addButton("Energetic","She seems so upbeat—it’s not something you’d expect in a place like this.","why_positive")
-	addButton("Engineering","She’s incredibly skilled in nano engineering. What was her job before she ended up in prison?","why_engineer")
+	addButton("Energetic","She seems so upbeat—it's not something you'd expect in a place like this.","why_positive")
+	addButton("Engineering","She's incredibly skilled in nano engineering. What was her job before she ended up in prison?","why_engineer")
 	# addDisabledButton("Alex","What's the deal with her and Alex? They seem pretty familiar with each other. (Not implemented qwq, waiting for next big update)")
 	addButton("Leave","Enough talk","endthescene")
 
@@ -77,7 +77,9 @@ func suggestionRun():
 									"Welcome back, Doc...Sorry! Wrong Dimension!",
 									"Unexpected ERROR! humoi.os will update in 3! 2! 1! 0!!!! just kiding.",
 									"Coding nightmere: \n ！!？?；;，,：: \n ",
-									"Hm, I heard someone jave paused updating their project for a year long, guess who is it?"
+									"Hm, I heard someone jave paused updating their project for a year long, guess who is it?",
+									"[rainbow freq=1.0 sat=0.8 val=0.8]Sorry keep you waiting~[/rainbow] \n (insert a strange anime style video here)",
+									"X X XXX O O OOO"
 									]))
 		addSuggestionButton()
 
@@ -87,21 +89,13 @@ func _run():
 		
 		addCharacter("humoi")
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
-		saynn("[say=humoi]So, you want to chat? Awesome! What’s on your mind?[/say]")
+		saynn("[say=humoi]So, you want to chat? Awesome! What's on your mind?[/say]")
 
 		addDisabledButton("Daily Tasks", "Daily tasks are under construction! I'm preparing some super fun (and maybe a little naughty) surprises for you, so stay tuned! ☆⌒(ゝ。∂)")
 		addButton("Herself","Backstory?","humoi_self")
 		addButton("Suggestion","Some suggestion relate to those nano stuffs.","suggestion")
-		if GM.main.getModuleFlag(MODULE_ID, "Milestone1_WaitedOneDay", false):
-			addButton("Report Analysis", "Ask Humoi about the analysis results.", "report_milestone_1")
-		elif !GM.main.getModuleFlag(MODULE_ID, "Chapter1_Started", false):
-			addButton("A Spark of Revolution", "Ask about the basics of Nano Cores.", "start_milestone_1")
-			
-		if GM.main.getModuleFlag(MODULE_ID, "NanoTriggerKeyQuest", false):
-			if !GM.main.getModuleFlag(MODULE_ID, "NanoAskHumoiKey", false):
-				addButton("Key?","Does she know anything about android key?","ask_key")
-			elif !GM.main.getModuleFlag(MODULE_ID, "NanoAskAlexKey", false):
-				addButton("Key","Review some key information","ask_key")
+
+
 		
 		if GM.pc.hasPerk("NanoCraftingT1"):
 			addButton("Blueprint","Ask about available blueprint for nano core crafting","blueprint")
@@ -109,28 +103,24 @@ func _run():
 		if (!GM.pc.getInventory().hasItemID("NanoController")):
 			addButton("Controller!","You accidentally lose your controller. (Probably you stack it somewhere, no worries, you can get a new one)","new_controller")
 		else:
-			addDisabledButton("Controller!","If you don’t have the controller in your inventory, just press this button, and I’ll give you a new one. \n(Note: You can store the controller in your cell and get as many as you want, but remember that the extra controllers are useless, so you’ll only be wasting your time X3)")
+			addDisabledButton("Controller!","If you don't have the controller in your inventory, just press this button, and I'll give you a new one. \n(Note: You can store the controller in your cell and get as many as you want, but remember that the extra controllers are useless, so you'll only be wasting your time X3)")
+
+		
 		addButton("Leave","I think that's it","endthescene")
 
-	elif state == "start_milestone_1":
-		sayCharater("humoi", "So you want to know about Nano Cores? They're the building blocks of all this cool nano-tech! You can get them from... well, from 'decommissioning' androids. This is just the beginning of your journey. Come back tomorrow, and I should have something for you.")
-		addButton("Continue", "...", "")
-	
-	elif state == "report_milestone_1":
-		sayCharater("humoi", "Ah, you're back! The preliminary analysis is done. It seems these cores have some... interesting properties. Here, take this one. It's a sample. We'll be able to do a lot more with these soon.")
-		addButton("Continue", "...", "")
+
 
 	if(state == "humoi_self"):
 		sayCharater("humoi","Yay, backstory time! What would you like to know?")
 		addBackStoryButton()
 
 	if(state == "what_crime"):
-		sayCharater("pc","What's your crime? I know it must be some sex related, but I’m curious to hear the details.")
+		sayCharater("pc","What's your crime? I know it must be some sex related, but I'm curious to hear the details.")
 		sayCharater("humoi","Oh, my crime? Well, according to the prison record, I lead a massive, unauthorized orgy on the entire space station, Celestial Nexus. Not sure if you've heard of it.")
 		sayCharater("pc","The whole station?! How on earth did you pull that off?")
 		sayCharater("humoi","Simple: hacked into the station's system, played some hypnosis music, adding some heating gas, and voilà!")
-		saynn("Simple? That’s like saying putting a spaceship in a refrigerator is easy. A look of skepticism crosses your face.")
-		sayCharater("humoi","Don’t buy it? Hey, if you’ve got a better story to explain how I pulled it off, go ahead and use that one. I'm all ears!")
+		saynn("Simple? That's like saying putting a spaceship in a refrigerator is easy. A look of skepticism crosses your face.")
+		sayCharater("humoi","Don't buy it? Hey, if you've got a better story to explain how I pulled it off, go ahead and use that one. I'm all ears!")
 		saynn("Humoi chuckles, leaving you with little choice but to take her word... for now.")
 
 		addButton("Why?","Why did she do that","why_crime")
@@ -146,12 +136,12 @@ func _run():
 
 	
 	if(state == "why_positive"):
-		sayCharater("pc","Why are you so upbeat? It’s unusual to see anyone this positive in a place like this. Aren’t you bothered by being in prison?")
+		sayCharater("pc","Why are you so upbeat? It's unusual to see anyone this positive in a place like this. Aren't you bothered by being in prison?")
 		sayCharater("humoi","First, obviously, as an liliac, people alreadly treat you as a their sex toy, no need to hypnosis or some other extra movement, which is perfect. Besides...")
 		saynn("Humoi smiles and gestures towards an android guard patrolling near the cell.")
 		sayCharater("humoi","Have you noticed those androids?")
-		sayCharater("pc","Those android guards? Yes. They actually make me uncomfortable… It’s like being under constant surveillance, all the time, everywhere.")
-		sayCharater("humoi","Yeah, they are. But the way they work is super fascinating. With some hacking skills, I can control them and make stuff you just can't find anywhere else. Kind of nerdy, but really interesting. Hey, just a tip—if you’re looking to craft something with nano cores, come find me. I’ve got some great deals for you!")
+		sayCharater("pc","Those android guards? Yes. They actually make me uncomfortable… It's like being under constant surveillance, all the time, everywhere.")
+		sayCharater("humoi","Yeah, they are. But the way they work is super fascinating. With some hacking skills, I can control them and make stuff you just can't find anywhere else. Kind of nerdy, but really interesting. Hey, just a tip—if you're looking to craft something with nano cores, come find me. I've got some great deals for you!")
 		addBackStoryButton()
 
 	if(state == "why_engineer"):
@@ -173,13 +163,13 @@ func _run():
 		if GM.main.getModuleFlag(MODULE_ID, "NanoAskHumoiKey", false):
 			sayCharater("humoi","Need more information? Sure, just ask anything you want!")
 		else:
-			sayCharater("humoi","So, you’ve found the backdoor software I created for these androids? Nice work! But if you want key... I have a small quest for you.")
+			sayCharater("humoi","So, you've found the backdoor software I created for these androids? Nice work! But if you want key... I have a small quest for you.")
 		
 		addButton("Quest","Then what quest?","why_key")
 		addButton("Back", "...", "")
 		# say good bye to alex!
 		# addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
-		# addButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?","why_me")
+		# addButton("Why me?","So, she must have been designing this software for a while. Why didn't she find the key herself?","why_me")
 		addButton("Leave","OK then","endthescene")
 
 	if(state == "why_key"):
@@ -188,30 +178,30 @@ func _run():
 		sayCharater("humoi","Unfortunately, this simulator will temporarily block the user's free will, since it build from the basic android type, the sex doll one.")
 		sayCharater("humoi","I need a volunteer, to test this device. All you need to do is wear this one day, and after that I will help you take off it.")
 
-		addDisabledButton("Strange","She designed the software but doesn’t have the key to access it? Why?")
+		addDisabledButton("Strange","She designed the software but doesn't have the key to access it? Why?")
 		addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
-		addButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?","why_me")
+		addButton("Why me?","So, she must have been designing this software for a while. Why didn't she find the key herself?","why_me")
 		addButton("Leave","OK then","endthescene")
 	if(state == "why_alex"):
-		sayCharater("humoi","So, Alex is a very ambitious fox working in engineering. He’s put a lot of effort into this project for some reason, so if you want more information about the nano androids, you should check with him.")
+		sayCharater("humoi","So, Alex is a very ambitious fox working in engineering. He's put a lot of effort into this project for some reason, so if you want more information about the nano androids, you should check with him.")
 		saynn("She sighs a little.")
-		sayCharater("humoi","Though I strongly suggest you avoid asking too much about why he put so much effort into this project until he brings it up himself. It’s not a story with a happy ending. Just keep an eye on this fox, alright? He’s been through a lot, and it’d mean a lot to me if you looked out for him. Think of it as a favor.")
+		sayCharater("humoi","Though I strongly suggest you avoid asking too much about why he put so much effort into this project until he brings it up himself. It's not a story with a happy ending. Just keep an eye on this fox, alright? He's been through a lot, and it'd mean a lot to me if you looked out for him. Think of it as a favor.")
 		
 		
-		addButton("Strange","She designed the software but doesn’t have the key to access it? Why?","why_key")
+		addButton("Strange","She designed the software but doesn't have the key to access it? Why?","why_key")
 		addDisabledButton("Alex?","Why does she think Alex might have a clue about the key?")
-		addButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?","why_me")
+		addButton("Why me?","So, she must have been designing this software for a while. Why didn't she find the key herself?","why_me")
 		addButton("Leave","OK then","endthescene")	
 
 
 	if(state == "why_me"):
-		sayCharater("pc","Why don’t you go ask him about the key? You’re more familiar with him and the androids, so you might get better clues than I can provide.")
-		sayCharater("humoi","There are two reasons. First, he knows me too well, so he probably won’t spill any clues about the key since he knows I could use it to mess things up. Second, getting chummy with Alex could really help you if you want to dig deeper into the nano androids.")
+		sayCharater("pc","Why don't you go ask him about the key? You're more familiar with him and the androids, so you might get better clues than I can provide.")
+		sayCharater("humoi","There are two reasons. First, he knows me too well, so he probably won't spill any clues about the key since he knows I could use it to mess things up. Second, getting chummy with Alex could really help you if you want to dig deeper into the nano androids.")
 
 
-		addButton("Strange","She designed the software but doesn’t have the key to access it? Why?","why_key")
+		addButton("Strange","She designed the software but doesn't have the key to access it? Why?","why_key")
 		addButton("Alex?","Why does she think Alex might have a clue about the key?","why_alex")
-		addDisabledButton("Why me?","So, she must have been designing this software for a while. Why didn’t she find the key herself?")
+		addDisabledButton("Why me?","So, she must have been designing this software for a while. Why didn't she find the key herself?")
 		addButton("Leave","OK then","endthescene")
 
 
@@ -219,19 +209,19 @@ func _run():
 	if(state == "debug_message_state"):
 		addCharacter("humoi")
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
-		saynn("[say=humoi]So, you want to know more about me? You’re so sweet! But for now, sorry for breaking the fourth wall—I have to tell you that this scene hasn’t been implemented yet. This is the only part you’ll see for now.[/say]")
+		saynn("[say=humoi]So, you want to know more about me? You're so sweet! But for now, sorry for breaking the fourth wall—I have to tell you that this scene hasn't been implemented yet. This is the only part you'll see for now.[/say]")
 		
 		saynn("Humoi playfully made a pouty face, tilting her head slightly.")
 
-		saynn("[say=humoi]But I can give you a hint about what to expect in the future. It doesn’t make much sense for you to learn how to craft something with nano cores by kicking those androids' asses, right? You can get familiar with them, sure, but you’ll need to learn some techniques from others. That’s why I’m here—to offer advice and blueprints related to those nano things.[/say]")
+		saynn("[say=humoi]But I can give you a hint about what to expect in the future. It doesn't make much sense for you to learn how to craft something with nano cores by kicking those androids' asses, right? You can get familiar with them, sure, but you'll need to learn some techniques from others. That's why I'm here—to offer advice and blueprints related to those nano things.[/say]")
 
 		saynn("Humoi paused for a moment, thinking, then continued speaking.")
 
-		saynn("[say=humoi]In this mod, I initially thought about having Alex teach you these things. But then I realized it would be out of character for him to teach something dangerous, like nano weapons or anything like that. So, there needs to be a “bad guy” to offer some forbidden knowledge for a bit of fun. That’s where I come in. In the next update, you’ll be able to get some really cool stuff from me. And if you have any great ideas, just remember there’s an issue option in the survey part.[/say]")
+		saynn("[say=humoi]In this mod, I initially thought about having Alex teach you these things. But then I realized it would be out of character for him to teach something dangerous, like nano weapons or anything like that. So, there needs to be a “bad guy” to offer some forbidden knowledge for a bit of fun. That's where I come in. In the next update, you'll be able to get some really cool stuff from me. And if you have any great ideas, just remember there's an issue option in the survey part.[/say]")
 		
 		saynn("Humoi flashed a mischievous grin.")
 		
-		saynn("[say=humoi]Well, since this scene is set up, let’s do a little test. See that Trade button? You can click it to give me one core, and I’ll give you 3 credits. Great deal, isn’t it?~[/say]")
+		saynn("[say=humoi]Well, since this scene is set up, let's do a little test. See that Trade button? You can click it to give me one core, and I'll give you 3 credits. Great deal, isn't it?~[/say]")
 		var coreAmount = GM.pc.getInventory().getAmountOf("NanoCore")
 		displayCoreCount(coreAmount)
 		if(coreAmount >= 1):
@@ -258,21 +248,9 @@ func _react(_action: String, _args):
 		endScene()
 		return
 
-	if(_action == "ask_key"):
-		if !GM.main.getModuleFlag(MODULE_ID, "NanoAskHumoiKey", false):
-			GM.main.setModuleFlag(MODULE_ID, "NanoAskHumoiKey", true)
-			GM.main.addMessage("Updated: Figure out key quest")
 
-	if(_action == "start_milestone_1"):
-		GM.main.setModuleFlag(MODULE_ID, "Chapter1_Started", true)
-		GM.main.setModuleFlag(MODULE_ID, "Milestone1_IsWaiting", true)
-		GM.main.addMessage("New quest: A Spark of Revolution")
 
-	if(_action == "report_milestone_1"):
-		GM.pc.getInventory().addXOfItemID("NanoCore", 1)
-		GM.main.addMessage("You received 1x NanoCore.")
-		GM.main.setModuleFlag(MODULE_ID, "Milestone1_WaitedOneDay", false)
-		GM.main.setModuleFlag(MODULE_ID, "Chapter1_Completed", true)
+
 
 	if(_action == "blueprint"):
 		runScene("NanoBlueprintHumoi")

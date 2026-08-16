@@ -136,3 +136,8 @@ func getLootTable(_battleName):
 
 func getDefaultEquipment():
 	return ["inmatecollar", "inmateuniformSexDeviant"]
+
+
+func loadData(data):
+	.loadData(data)
+	GlobalRegistry.getModule("NanoRevolutionModule").updateThemeByContamination()
