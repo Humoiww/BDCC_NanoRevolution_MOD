@@ -12,13 +12,13 @@ func getProgress():
 	var result = []
 	var found_humoi_about_contamination = GM.main.getModuleFlag(MODULE_ID, "NanoChapter1_contamination_start_find_humoi", false)
 
-	if GM.main.getModuleFlag(MODULE_ID, "NanoMeetHumoi", false) and not GM.main.getModuleFlag(MODULE_ID, "NanoHaveReadManual", false):
-		result.append("- That frisky dragon Humoi mentioned a 'gift'. Maybe you should check the lilac cell? She probably left some weird stuff for you there... (/ />/ ▽ /</ /) \n- Also, she gave you a book, maybe you should read it first?")
+	if GM.main.getModuleFlag(MODULE_ID, "NanoMeetHumoi", false) and not GM.main.getModuleFlag(MODULE_ID, "NanoKnowAndroidKey", false):
+		result.append("- That frisky dragon Humoi mentioned a 'gift'. Maybe you should check the lilac cell? She probably left some weird stuff for you there... (/ />/ ▽ /</ /) ")
 	
-	if GM.main.getModuleFlag(MODULE_ID, "NanoHaveReadManual", false) and not GM.main.getModuleFlag(MODULE_ID, "NanoKnowAndroidKey", false):
-		result.append("- Now that you have mastered the basic of Nano ENGR, you should totally go grab some of their cores! For science, of course. Definitely not for anything kinky. Hehe.")
+	if GM.main.getModuleFlag(MODULE_ID, "NanoKnowAndroidKey", false) and not GM.main.getModuleFlag(MODULE_ID, "NanoHaveReadManual", false):
+		result.append("- She gave you a book, maybe you should read it first?")
 
-	if GM.main.getModuleFlag(MODULE_ID, "NanoKnowAndroidKey", false) and not found_humoi_about_contamination:
+	if GM.main.getModuleFlag(MODULE_ID, "NanoHaveReadManual", false) and not found_humoi_about_contamination:
 		result.append("- Now that you know the secret to neutralizing those androids, you should totally go grab some of their cores! For science, of course. Definitely not for anything kinky. Hehe.")
 	
 	if GM.main.getModuleFlag(MODULE_ID, "NanoChapter1_contamination_start", false) and not found_humoi_about_contamination:

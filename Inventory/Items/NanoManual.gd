@@ -18,7 +18,7 @@ func canUseInCombat():
 
 func useInCombat(_attacker, _receiver):
 	var desc
-	desc = _attacker.getName() + "read the manual, and learn how to use the controller to hack android."
+	desc = _attacker.getName() + " read the manual, and learn how to use the controller to hack android.\n [i]Hint: During the android fight, press [Special] → [Hack] to defeat the nano android.[/i]"
 	GM.pc.getSkillsHolder().addPerk("NanoSexMode")
 	GM.pc.addSkillExperience("NanoENGR", 110)
 	GM.main.setModuleFlag(MODULE_ID, "NanoHaveReadManual", true)

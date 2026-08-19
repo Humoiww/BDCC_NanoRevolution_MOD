@@ -94,11 +94,13 @@ func _run():
 		saynn("Your hot sticky liquid flux into {npc.name}'s mouth. Your fingers clamp down on {npc.hisHer} nose, forcing an involuntary swallow.")
 		saynn("[say=npc]What... what is this? I can feel it... moving inside me...[/say]")
 		# saynn("[say=pc]You're going to be magnificent. Embrace it.[/say]")
+
+		GlobalRegistry.getModule("NanoRevolutionModule").addContamination(GlobalRegistry.getCharacter(npcID), 60)
 		
 		addButton("Wait", "See their transformation.", "start_transform")
 
 	if(state == "start_transform"):
-
+		GlobalRegistry.getModule("NanoRevolutionModule").addContamination(GlobalRegistry.getCharacter(npcID), 60)
 		saynn("You stand aside, waiting ({npc.hisHer} change.")
 
 		saynn("{npc.name}'s skin begins to shimmer, a metallic sheen creeping across its surface. {npc.hisHer} cloths melt down, becoming part of {npc.hisHer} new body.")

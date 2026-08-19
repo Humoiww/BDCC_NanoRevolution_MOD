@@ -36,7 +36,8 @@ func getDescription():
 	desc += "\n Recharge to full every morning."
 	return "A portable version Nano Controller with limited function." + desc
 
-
+func canUseInCombat():
+	return true
 
 func useInCombat(_attacker, _receiver):
 	if(GM.main.getModuleFlag(MODULE_ID, "NanoControllerRemainCharge", 1) >= 3):

@@ -75,6 +75,7 @@ func suggestionRun():
 									"♪ Never gonna say goodbye~ Unless the server crashes~ ♪ By the way, did you backup your work today?",
 									"The cake is a lie... You can's get Portal 3 but 3 portal panties xwx.",
 									"Welcome back, Doc...Sorry! Wrong Dimension!",
+									"Welcome back, Endmin...Sorry! Wrong Dimension Again!",
 									"Unexpected ERROR! humoi.os will update in 3! 2! 1! 0!!!! just kiding.",
 									"Coding nightmere: \n ！!？?；;，,：: \n ",
 									"Hm, I heard someone jave paused updating their project for a year long, guess who is it?",
@@ -91,7 +92,7 @@ func _run():
 		playAnimation(StageScene.Duo, "stand", {npc="humoi"})
 		saynn("[say=humoi]So, you want to chat? Awesome! What's on your mind?[/say]")
 
-		addDisabledButton("Daily Tasks", "Daily tasks are under construction! I'm preparing some super fun (and maybe a little naughty) surprises for you, so stay tuned! ☆⌒(ゝ。∂)")
+		addDisabledButton("Daily Tasks", "Daily tasks are under construction! I'm preparing some super fun (and maybe a little naughty) surprises for you, so stay tuned! (∠・ω< )⌒★")
 		addButton("Herself","Backstory?","humoi_self")
 		addButton("Suggestion","Some suggestion relate to those nano stuffs.","suggestion")
 

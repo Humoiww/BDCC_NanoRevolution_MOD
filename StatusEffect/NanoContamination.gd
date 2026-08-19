@@ -1,6 +1,7 @@
 extends StatusEffectBase
 
 var stacks := 0.0
+var seconds_stack := 0.0
 
 func _init():
 	id = "Nano_Contamination"
@@ -22,25 +23,29 @@ func initArgs(_args = []):
 # 	clampOrRemove()
 	
 func processTime(_seconds: int):
-	# if is already an android,  prevent natrol fall off
-	var hours = (_seconds / 3600.0)
+	seconds_stack += _seconds
+	
+	if(seconds_stack < 3600):
+		return
+	print("Hello")
+	var hours_to_process = floor(seconds_stack / 3600.0)
+	seconds_stack = 0
+	if (stacks <= 0):
+		return
 	if(!isNanoAndroid()):
-
-
-		stacks = stacks - hours
 		if(!character):
 			return
 		if(character == GM.pc):
 			var module = GlobalRegistry.getModule("NanoRevolutionModule")
 			if module != null:
-				module.addContamination(GM.pc, 0)
-			return
+				module.addContamination(GM.pc, -hours_to_process)
+		else:
+			stacks = stacks - hours_to_process
 	else:
 		# if is android, progressly generate nano android goo, resource for future
-		stacks = stacks + hours
-
-	# clampOrRemove()
-
+		stacks = stacks + hours_to_process
+	if (stacks <= 0):
+		stacks = 0.0
 # func onSleeping():
 # 	stacks = min(stacks, 25)
 	
@@ -57,7 +62,7 @@ func getEffectDesc():
 	if isNanoAndroid():
 		if OS.has_feature("editor"):
 			return "Android." + "\n\n(" + str(ceil(stacks)) + "%)"
-		return "Your nanite-infused android body grants you enhanced resistance to physical and thermal damage, but at the cost of permanent infertility."
+		return "Your nanite-infused android body grants you enhanced resistance to physical and thermal damage, but at the cost of permanent infertility. \n\nNano Goo Load:"+ "(" + str(ceil(stacks)) + "%)"
 
 	var text
 	if stacks <= 20:
@@ -115,10 +120,12 @@ func combine(_args = []):
 func saveData():
 	return {
 		"stacks": stacks,
+		"seconds_stack": seconds_stack,
 	}
 	
 func loadData(_data):
 	stacks = SAVE.loadVar(_data, "stacks", 0)
+	seconds_stack = SAVE.loadVar(_data, "seconds_stack", 0.0)
 	
 # func clampOrRemove():
 # 	var maximum = 100.0

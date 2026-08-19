@@ -334,7 +334,6 @@ func _run():
 	if(state == "extract_core"):
 		playAnimation(StageScene.SexFisting, "sex", {
 			pc="pc", npc=npcID, 
-			bodyState={exposedCrotch=true,hard=true},
 			npcBodyState={exposedCrotch=true,hard=true},
 		})
 		if(GM.pc.hasPerk("BetterExtration")):
@@ -365,7 +364,7 @@ func _run():
 			saynn("You have a feeling that you will never meet {npc.name} again")
 			print("bug1")
 			GM.main.removeDynamicCharacterFromAllPools(npcID)
-			addButton("Done", "Weird", "allowFullAndendthescene")
+			addButton("Done", "Weird", "removeNpcAndEndTheScene")
 
 
 	if(state == "extract_continue"):
@@ -374,7 +373,6 @@ func _run():
 		if RNG.chance(possibility):
 			playAnimation(StageScene.SexFisting, "fast", {
 				pc="pc", npc=npcID, 
-				bodyState={exposedCrotch=true,hard=true},
 				npcBodyState={exposedCrotch=true,hard=true},
 			})
 			extractAmount += 1	
@@ -398,7 +396,6 @@ func _run():
 	if(state == "extract_end"):
 		playAnimation(StageScene.SexFisting, "tease", {
 				pc="pc", npc=npcID, npcCum=true,
-				bodyState={exposedCrotch=true,hard=true},
 				npcBodyState={exposedCrotch=true,hard=true},
 		})
 		var anEgg = GlobalRegistry.createItem("NanoCore")
@@ -412,7 +409,7 @@ func _run():
 
 		saynn("You have a feeling that you will never meet {npc.name} again")
 		GM.main.removeDynamicCharacterFromAllPools(npcID)
-		addButton("Done", "Excellent", "allowFullAndendthescene")
+		addButton("Done", "Excellent", "removeNpcAndEndTheScene")
 
 	if(state == "convert_to_sex_mode"):
 		saynn("You successfully convert the android to sex mode.")
@@ -433,11 +430,10 @@ func _run():
 	if(state == "do_absorb"):
 		playAnimation(StageScene.Choking, "idle", {pc = "pc", npc=npcID})
 		saynn("You grab {npc.name}'s neck, absorb them through your hand.")
-		GM.main.removeDynamicCharacter(npcID)
-		addButton("Done...", "You need more...", "allowFullAndendthescene")
+		addButton("Done...", "You need more...", "removeNpcAndEndTheScene")
 
 func addWonButton():
-	addButton("Walk away", "You got your pass, you can just go", "allowFullAndendthescene")
+	addButton("Walk away", "You got your pass, you can just go", "leaveandendthescene")
 	# addButtonWithChecks("Catch anal", "Use the guy’s dick for your pleasure", "catch_anal", [], [ButtonChecks.NotHandsBlocked])
 	# addButtonWithChecks("Catch virginal", "Use the guy’s dick for your pleasure", "catch_virginal", [], [ButtonChecks.NotHandsBlocked])
 	# addButtonWithChecks("Catch oral", "Use the guy’s dick for your pleasure", "catch_oral", [], [ButtonChecks.NotHandsBlocked])
@@ -542,6 +538,11 @@ func _react(_action: String, _args):
 	if(_action == "mouth"):
 		GM.pc.cummedInMouthBy(npcID, FluidSource.Penis)
 		GM.pc.addSkillExperience(Skill.SexSlave, 20)
+	if(_action == "removeNpcAndEndTheScene"):
+		# print("bug3")
+		GM.main.removeDynamicCharacter(npcID)
+		endScene()
+		return
 	if(_action == "allowFullAndendthescene"):
 		# print("bug3")
 		# GM.main.removeDynamicCharacter(npcID)
@@ -580,14 +581,15 @@ func _react(_action: String, _args):
 	if(_action == "extract_core"):
 		GM.pc.addSkillExperience("NanoENGR", 25)
 		print("am I working?")
-		GM.pc.addEffect("Nano_Contamination",[5])
+		GlobalRegistry.getModule("NanoRevolutionModule").addContamination(GM.pc, 5)
+		# GM.pc.addEffect("Nano_Contamination",[5])
 
 	if(_action == "extract_continue"):
 		GM.pc.addSkillExperience("NanoENGR", 10)
-		GM.pc.addEffect("Nano_Contamination",[1])
+		GlobalRegistry.getModule("NanoRevolutionModule").addContamination(GM.pc, 1)
 
 	if(_action == "extract_fail"):
-		GM.pc.addEffect("Nano_Contamination",[10])
+		GlobalRegistry.getModule("NanoRevolutionModule").addContamination(GM.pc, 10)
 		endScene()
 		return
 	

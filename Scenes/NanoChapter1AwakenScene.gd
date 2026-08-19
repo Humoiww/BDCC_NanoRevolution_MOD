@@ -71,11 +71,11 @@ func _run():
 		saynn("[say=humoi]I saved you, silly! And gave you a spectacular upgrade in the process. You were a mindless doll, and now you're... well, you're YOU again. Mostly. But better![/say]")
 		saynn("She pokes your chest.")
 		saynn("[say=humoi]Welcome back to the world of the living, my dear. How does it feel to be my masterpiece?[/say]")
-		addButton("Need a moment.", "Try to process the impossible.", "need_a_moment")
+		addButton("ok", "You need some time to process the impossible.", "need_a_moment")
 
 	if state == "need_a_moment":
 		saynn("[say=pc]I... I need a moment to process all of this.[/say]")
-		saynn("[say=humoi]Me too! To be honest, Chapter 1 of the story ends here. I haven't finished writing what comes next! qwq[/say]")
+		saynn("[say=humoi]Me too! *Cough* Sorry for breaking the fourth wall again xwx. To be honest, Chapter 1 of the story ends here. I haven't finished writing what comes next.[/say]")
 		saynn("She gives you a playful wink.")
 		saynn("[say=humoi]But hey, you're a super cool nano-android now! Go test out your new powers. Beat up some bad guys, or maybe... convert them to our side? It might be a little OP, but we can worry about game balance later! For now, just have fun out there!~[/say]")
 		saynn("[say=humoi]Btw, thanks for your patience and for playing my mod! <3[/say]")

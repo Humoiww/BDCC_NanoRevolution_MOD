@@ -22,7 +22,7 @@ func canUseInCombat():
 func useInCombat(_attacker, _receiver):
 	var desc
 	if("nanoAndroid" in _attacker.getSpecies()):
-		desc = _attacker.getName() + "absorbs a nano core, restoring some energy."
+		desc = _attacker.getName() + " absorbs a nano core, restoring some energy."
 		_attacker.addPain(-40)
 		_attacker.addStamina(40)
 	else:
@@ -31,7 +31,7 @@ func useInCombat(_attacker, _receiver):
 		_attacker.addStamina(-1000)
 		_attacker.addLust(100000)
 	# add contamination
-	desc += "\n taste like nano goo"
+	desc += "\nTaste like nano goo"
 	var module = GlobalRegistry.getModule("NanoRevolutionModule")
 	if module != null:
 		module.addContamination(_attacker, 30)

@@ -203,8 +203,8 @@ func addContamination(character, amount):
 				GM.main.endCurrentScene()
 				GM.main.runScene("NanoFeelWrongScene")
 				return
-
-			if new_stacks >= 100:
+			var become_android =GM.main.getModuleFlag(id, "NanoChapter1_Completed", false)
+			if new_stacks >= 100 and not become_android:
 				GM.main.endCurrentScene()
 				GM.main.runScene("NanoTransformPCScene")
 
@@ -227,7 +227,6 @@ func _init():
 		"res://Modules/NanoRevolution/Scenes/NanoExposureForceCheckScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoSetting.gd",
 		"res://Modules/NanoRevolution/Scenes/HumoiTalkScene.gd",
-		"res://Modules/NanoRevolution/Scenes/NanoMeetSexDollScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoCallingScene.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoBlueprintHumoi.gd",
 		"res://Modules/NanoRevolution/Scenes/NanoAndroidFunction/NanoCharacterScene.gd",
@@ -480,6 +479,10 @@ func checkAndResyncSkin():
 	var actual_base_r = quantize_color(pc.pickedSkinRColor)
 	var actual_base_g = quantize_color(pc.pickedSkinGColor)
 	var actual_base_b = quantize_color(pc.pickedSkinBColor)
+	print(weight)
+	print(original_base_r)
+	print(actual_base_r)
+	print(quantize_color(expected_base_r))
 
 	# 3. Compare. If any channel doesn't match, player likely changed it.
 	# We MUST quantize the expected color to match the precision of the actual color,
